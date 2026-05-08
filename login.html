@@ -1,0 +1,435 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="description"
+        content="Acesse sua conta Empr-E | Marketplace B2B de Acessibilidade. Entre com seu e-mail e senha ou crie sua conta empresarial." />
+    <meta name="robots" content="noindex, nofollow" />
+    <meta name="theme-color" content="#F97316" />
+    <title>Entrar – Empr-E Marketplace de Acessibilidade</title>
+
+    <!-- Fontes -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+        href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap"
+        rel="stylesheet" />
+
+    <!-- CSS global do sistema -->
+    <link rel="stylesheet" href="style.css" />
+
+    <!-- CSS específico da tela de login -->
+    <link rel="stylesheet" href="login.css" />
+</head>
+
+<body class="pagina-login">
+
+    <!-- SKIP LINKS -->
+    <a href="#formulario-login" class="skip-link">Ir para o formulário de login</a>
+    <a href="#navegacao-principal" class="skip-link">Ir para a navegação</a>
+
+    <!-- BARRA DE ACESSIBILIDADE (reutilizada do index) -->
+    <div id="barra-acessibilidade" class="barra-acessibilidade" role="toolbar"
+        aria-label="Ferramentas de acessibilidade">
+        <div class="barra-acessibilidade__inner">
+            <span class="barra-acessibilidade__label" aria-hidden="true">Acessibilidade:</span>
+
+            <button id="btn-contraste" class="btn-acess" aria-pressed="false" aria-label="Alternar modo alto contraste">
+                <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <circle cx="12" cy="12" r="10" />
+                    <path d="M12 2v20" />
+                </svg>
+                <span>Contraste</span>
+            </button>
+
+            <button id="btn-aumentar-fonte" class="btn-acess" aria-label="Aumentar tamanho da fonte">
+                <span>A+</span>
+            </button>
+
+            <button id="btn-diminuir-fonte" class="btn-acess" aria-label="Diminuir tamanho da fonte">
+                <span>A-</span>
+            </button>
+
+            <button id="btn-layout" class="btn-acess" aria-pressed="false" aria-label="Alternar layout simplificado">
+                <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <rect x="3" y="3" width="18" height="18" rx="2" />
+                    <line x1="3" y1="9" x2="21" y2="9" />
+                    <line x1="3" y1="15" x2="21" y2="15" />
+                </svg>
+                <span>Simplificado</span>
+            </button>
+
+            <button id="btn-leitura" class="btn-acess" aria-pressed="false" aria-label="Alternar modo leitura">
+                <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M2 3h6a4 4 0 0 1 4 4v14a3 3 0 0 0-3-3H2z" />
+                    <path d="M22 3h-6a4 4 0 0 0-4 4v14a3 3 0 0 1 3-3h7z" />
+                </svg>
+                <span>Leitura</span>
+            </button>
+
+            <button id="btn-libras" class="btn-acess btn-acess--destaque" aria-pressed="false"
+                aria-label="Ativar tradução em Libras">
+                <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                    stroke="currentColor" stroke-width="2">
+                    <path d="M18 8h1a4 4 0 0 1 0 8h-1" />
+                    <path d="M2 8h16v9a4 4 0 0 1-4 4H6a4 4 0 0 1-4-4V8z" />
+                    <line x1="6" y1="1" x2="6" y2="4" />
+                    <line x1="10" y1="1" x2="10" y2="4" />
+                    <line x1="14" y1="1" x2="14" y2="4" />
+                </svg>
+                <span>Libras</span>
+            </button>
+        </div>
+    </div>
+
+    <!-- HEADER (reutilizado do index) -->
+    <header id="header" class="header" role="banner">
+        <div class="container header__inner">
+
+            <a href="index.html" class="header__logo" aria-label="Empr-EVoltar para página inicial">
+                <div class="header__logo-icon" aria-hidden="true">
+                </div>
+                <div class="header__logo-text">
+                    <span class="header__logo-name">Empr-E</span>
+                    <span class="header__logo-sub">Marketplace de Acessibilidade</span>
+                </div>
+            </a>
+
+            <nav id="navegacao-principal" class="nav" aria-label="Navegação principal">
+                <ul class="nav__list" role="list">
+                    <li><a href="index.html" class="nav__link">Início</a></li>
+                    <li><a href="produtos.html" class="nav__link">Produtos</a></li>
+                    <li><a href="empresas.html" class="nav__link">Empresas</a></li>
+                    <li><a href="index.html#sobre" class="nav__link">Sobre</a></li>
+                    <li><a href="index.html#contato" class="nav__link">Contato</a></li>
+                </ul>
+            </nav>
+
+            <div class="header__actions">
+                <a href="carrinho.html" class="btn-carrinho" aria-label="Ver carrinho de compras. 0 itens">
+                    <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 24 24" fill="none"
+                        stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                        <circle cx="9" cy="21" r="1" />
+                        <circle cx="20" cy="21" r="1" />
+                        <path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6" />
+                    </svg>
+                    <span class="btn-carrinho__badge" id="carrinho-count" aria-live="polite">0</span>
+                </a>
+                <a href="cadastro.html" class="btn btn--outline">Criar conta</a>
+            </div>
+
+            <button id="btn-menu-mobile" class="btn-menu-mobile" aria-expanded="false" aria-controls="menu-mobile"
+                aria-label="Abrir menu de navegação">
+                <span class="btn-menu-mobile__bar" aria-hidden="true"></span>
+                <span class="btn-menu-mobile__bar" aria-hidden="true"></span>
+                <span class="btn-menu-mobile__bar" aria-hidden="true"></span>
+            </button>
+        </div>
+
+        <div id="menu-mobile" class="menu-mobile" hidden aria-label="Menu de navegação mobile">
+            <nav aria-label="Navegação mobile">
+                <ul class="menu-mobile__list" role="list">
+                    <li><a href="index.html" class="menu-mobile__link">Início</a></li>
+                    <li><a href="produtos.html" class="menu-mobile__link">Produtos</a></li>
+                    <li><a href="empresas.html" class="menu-mobile__link">Empresas</a></li>
+                    <li><a href="index.html#sobre" class="menu-mobile__link">Sobre</a></li>
+                    <li><a href="index.html#contato" class="menu-mobile__link">Contato</a></li>
+                    <li class="menu-mobile__separator"></li>
+                    <li><a href="cadastro.html" class="menu-mobile__link menu-mobile__link--cta">Cadastrar empresa</a>
+                    </li>
+                </ul>
+            </nav>
+        </div>
+    </header>
+
+    <!-- TELA DE LOGIN -->
+    <main id="conteudo-principal" class="login-main" tabindex="-1">
+
+        <div class="login-layout">
+
+            <!-- PAINEL LATERAL INSTITUCIONAL -->
+            <aside class="login-lateral" aria-label="Informações sobre a Empr-E">
+
+                <div class="login-lateral__inner">
+
+                    <!-- Volta para a home -->
+                    <a href="index.html" class="login-lateral__voltar"
+                        aria-label="Voltar para a página inicial da Empr-E">
+                        <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none"
+                            stroke="currentColor" stroke-width="2.5" stroke-linecap="round">
+                            <path d="M19 12H5" />
+                            <path d="m12 5-7 7 7 7" />
+                        </svg>
+                        Página inicial
+                    </a>
+
+                    <!-- Conteúdo institucional -->
+                    <div class="login-lateral__conteudo">
+
+                        <h1 class="login-lateral__titulo">
+                            O ecossistema B2B<br />
+                            <span class="login-lateral__titulo-destaque">que conecta inclusão</span><br />
+                            a negócios reais.
+                        </h1>
+
+                        <p class="login-lateral__subtitulo">
+                            Acesse sua conta e gerencie seu catálogo, pedidos e conexões com empresas comprometidas com
+                            acessibilidade.
+                        </p>
+
+                        <!-- Diferenciais rápidos -->
+                        <ul class="login-lateral__diferenciais" role="list" aria-label="Diferenciais da plataforma">
+                            <li class="login-lateral__diferencial">
+                                <div class="login-lateral__diferencial-icone" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z" />
+                                        <path d="m9 12 2 2 4-4" />
+                                    </svg>
+                                </div>
+                                <span>Empresas verificadas e curadas</span>
+                            </li>
+                            <li class="login-lateral__diferencial">
+                                <div class="login-lateral__diferencial-icone" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <circle cx="12" cy="12" r="10" />
+                                        <path d="M2 12h20" />
+                                        <path
+                                            d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                                    </svg>
+                                </div>
+                                <span>WCAG 2.1 AA — plataforma 100% acessível</span>
+                            </li>
+                            <li class="login-lateral__diferencial">
+                                <div class="login-lateral__diferencial-icone" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <path d="M17 21v-2a4 4 0 0 0-4-4H5a4 4 0 0 0-4 4v2" />
+                                        <circle cx="9" cy="7" r="4" />
+                                        <path d="M23 21v-2a4 4 0 0 0-3-3.87" />
+                                        <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                                    </svg>
+                                </div>
+                                <span>+340 empresas no ecossistema</span>
+                            </li>
+                            <li class="login-lateral__diferencial">
+                                <div class="login-lateral__diferencial-icone" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2">
+                                        <rect x="2" y="3" width="20" height="14" rx="2" />
+                                        <path d="M8 21h8" />
+                                        <path d="M12 17v4" />
+                                    </svg>
+                                </div>
+                                <span>Suporte especializado em acessibilidade</span>
+                            </li>
+                        </ul>
+
+                    </div>
+
+                    <!-- Rodapé lateral com selos -->
+                    <div class="login-lateral__rodape">
+                        <div class="login-lateral__selos" aria-label="Certificações e conformidades">
+                            <span class="login-lateral__selo">WCAG 2.1 AA</span>
+                            <span class="login-lateral__selo">LBI Conforme</span>
+                            <span class="login-lateral__selo">ABNT NBR 9050</span>
+                        </div>
+                        <p class="login-lateral__tagline">
+                            Construído com acessibilidade em primeiro lugar.
+                        </p>
+                    </div>
+
+                </div>
+
+            </aside>
+
+            <!-- PAINEL DO FORMULÁRIO -->
+            <section class="login-painel" aria-labelledby="login-titulo-form">
+                <div class="login-painel__inner">
+
+                    <!-- Cabeçalho do formulário -->
+                    <div class="login-form-header">
+                        <h2 id="login-titulo-form" class="login-form-titulo">Bem-vindo de volta</h2>
+                        <p class="login-form-subtitulo">
+                            Insira suas credenciais para entrar.
+                        </p>
+                    </div>
+
+                    <!-- FORMULÁRIO DE LOGIN -->
+                    <form id="formulario-login" class="login-form" novalidate aria-label="Formulário de acesso à conta"
+                        autocomplete="on">
+
+                        <!-- Campo: E-mail -->
+                        <div class="campo-grupo" id="grupo-email">
+                            <label for="campo-email" class="campo-label">
+                                E-mail corporativo
+                                <span class="campo-obrigatorio" aria-hidden="true">*</span>
+                            </label>
+                            <div class="campo-wrapper">
+                                <span class="campo-icone campo-icone--esquerda" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <path
+                                            d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z" />
+                                        <polyline points="22,6 12,13 2,6" />
+                                    </svg>
+                                </span>
+                                <input type="email" id="campo-email" name="email" class="campo-input"
+                                    placeholder="empresa@exemplo.com.br" autocomplete="email" autocapitalize="none"
+                                    spellcheck="false" aria-required="true" aria-describedby="email-dica email-erro"
+                                    aria-invalid="false" />
+                            </div>
+                            <span id="email-dica" class="sr-only">Use o e-mail cadastrado pela sua empresa.</span>
+                            <span id="email-erro" class="campo-erro" role="alert" aria-live="polite" hidden></span>
+                        </div>
+
+                        <!-- Campo: Senha -->
+                        <div class="campo-grupo" id="grupo-senha">
+                            <label for="campo-senha" class="campo-label">
+                                Senha
+                                <span class="campo-obrigatorio" aria-hidden="true">*</span>
+                            </label>
+                            <div class="campo-wrapper">
+                                <span class="campo-icone campo-icone--esquerda" aria-hidden="true">
+                                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                        stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
+                                        <rect x="3" y="11" width="18" height="11" rx="2" ry="2" />
+                                        <path d="M7 11V7a5 5 0 0 1 10 0v4" />
+                                    </svg>
+                                </span>
+                                <input type="password" id="campo-senha" name="password"
+                                    class="campo-input campo-input--com-acao" placeholder="Sua senha de acesso"
+                                    autocomplete="current-password" aria-required="true" aria-describedby="senha-erro"
+                                    aria-invalid="false" minlength="8" />
+                                <button type="button" id="btn-mostrar-senha"
+                                    class="campo-icone campo-icone--direita campo-icone--botao"
+                                    aria-label="Mostrar senha" aria-pressed="false" title="Mostrar ou ocultar senha">
+                                    <!-- Ícone olho fechado (padrão) -->
+                                    <svg id="icone-senha-oculta" width="18" height="18" viewBox="0 0 24 24" fill="none"
+                                        stroke="currentColor" stroke-width="2" stroke-linecap="round"
+                                        stroke-linejoin="round" aria-hidden="true">
+                                        <path
+                                            d="M17.94 17.94A10.07 10.07 0 0 1 12 20c-7 0-11-8-11-8a18.45 18.45 0 0 1 5.06-5.94M9.9 4.24A9.12 9.12 0 0 1 12 4c7 0 11 8 11 8a18.5 18.5 0 0 1-2.16 3.19m-6.72-1.07a3 3 0 1 1-4.24-4.24" />
+                                        <line x1="1" y1="1" x2="23" y2="23" />
+                                    </svg>
+                                </button>
+                            </div>
+                            <span id="senha-erro" class="campo-erro" role="alert" aria-live="polite" hidden></span>
+
+                        </div>
+
+                        <!-- Linha: Lembrar-me + Esqueci senha -->
+                        <div class="login-form-opcoes">
+                            <label class="checkbox-label" for="lembrar-me">
+                                <input type="checkbox" id="lembrar-me" name="lembrar" class="checkbox-input"
+                                    aria-describedby="lembrar-dica" />
+                                <span class="checkbox-custom" aria-hidden="true"></span>
+                                <span class="checkbox-texto">Lembrar minha conta</span>
+                            </label>
+                            <span id="lembrar-dica" class="sr-only">Mantém sua sessão ativa neste dispositivo por 30
+                                dias.</span>
+
+                            <a href="esqueci-senha.html" class="login-link-esqueceu"
+                                aria-label="Esqueceu sua senha? Clique para recuperar">
+                                Esqueci minha senha
+                            </a>
+                        </div>
+
+                        <!-- Botão principal -->
+                        <button type="submit" id="btn-entrar" class="btn btn--primary btn--lg btn-login-submit"
+                            aria-describedby="btn-entrar-status">
+                            <span class="btn-login-submit__texto">Entrar na plataforma</span>
+                            <span class="btn-login-submit__loading" hidden aria-hidden="true">
+                                <svg class="loading-spinner" width="20" height="20" viewBox="0 0 24 24" fill="none"
+                                    stroke="currentColor" stroke-width="2.5">
+                                    <path d="M21 12a9 9 0 1 1-6.219-8.56" />
+                                </svg>
+                                Entrando...
+                            </span>
+                        </button>
+                        <span id="btn-entrar-status" class="sr-only" aria-live="polite"></span>
+
+                        <!-- Divisória -->
+                        <div class="login-divisoria" role="separator" aria-label="ou">
+                            <span class="login-divisoria__linha" aria-hidden="true"></span>
+                            <span class="login-divisoria__texto" aria-hidden="true">ou</span>
+                            <span class="login-divisoria__linha" aria-hidden="true"></span>
+                        </div>
+
+                        <!-- Botão secundário: Criar conta -->
+                        <a href="cadastro.html" class="btn btn--outline btn--lg btn-criar-conta"
+                            aria-label="Ainda não tem conta? Cadastre sua empresa gratuitamente">
+                            <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <path d="M16 21v-2a4 4 0 0 0-4-4H6a4 4 0 0 0-4 4v2" />
+                                <circle cx="9" cy="7" r="4" />
+                                <path d="M22 21v-2a4 4 0 0 0-1.5-3.07" />
+                                <path d="M16 3.13a4 4 0 0 1 0 7.75" />
+                            </svg>
+                            Cadastrar minha empresa
+                        </a>
+
+                        <!-- Texto de suporte -->
+                        <p class="login-suporte-texto">
+                            Ainda não tem conta?
+                            <a href="cadastro.html" class="login-link">Crie gratuitamente</a>
+                            · Dúvidas?
+                            <a href="index.html#contato" class="login-link">Fale conosco</a>
+                        </p>
+
+                    </form>
+
+                    <!-- Rodapé do painel -->
+                    <footer class="login-painel-rodape" role="contentinfo" aria-label="Informações legais">
+                        <p>
+                            Ao entrar, você concorda com nossos
+                            <a href="#" class="login-link">Termos de Uso</a>
+                            e
+                            <a href="#" class="login-link">Política de Privacidade</a>.
+                        </p>
+                        <p class="login-painel-rodape__acess">
+                            <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24"
+                                fill="none" stroke="currentColor" stroke-width="2">
+                                <circle cx="12" cy="12" r="10" />
+                                <path d="M2 12h20" />
+                                <path
+                                    d="M12 2a15.3 15.3 0 0 1 4 10 15.3 15.3 0 0 1-4 10 15.3 15.3 0 0 1-4-10 15.3 15.3 0 0 1 4-10z" />
+                            </svg>
+                            Plataforma certificada WCAG 2.1 AA
+                        </p>
+                    </footer>
+
+                </div>
+            </section>
+
+        </div><!-- /login-layout -->
+
+    </main>
+
+    <!-- WIDGET LIBRAS (simulação VLibras) -->
+    <div id="widget-libras" class="widget-libras" hidden aria-live="polite"
+        aria-label="Widget de tradução em Libras ativo">
+        <div class="widget-libras__inner">
+            <span aria-hidden="true">🤟</span>
+            <span>VLibras ativo</span>
+            <button id="btn-fechar-libras" class="widget-libras__fechar" aria-label="Fechar widget Libras">×</button>
+        </div>
+    </div>
+
+    <!-- TOAST NOTIFICATIONS -->
+    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true" role="status"></div>
+
+    <!-- JS global do sistema -->
+    <script src="script.js"></script>
+
+    <!-- JS específico do login -->
+    <script src="login.js"></script>
+</body>
+
+</html>
