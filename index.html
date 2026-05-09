@@ -13,7 +13,7 @@
   <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
 
   <!-- CSS principal -->
-  <link rel="stylesheet" href="style.css" />
+  <link rel="stylesheet" href="assets/css/style.css" />
 </head>
 <body>
 
@@ -103,7 +103,7 @@
     <div class="container header__inner">
 
       <!-- Logo -->
-      <a href="index.html" class="header__logo" aria-label="Empr-E Página inicial">
+      <a href="../index.html" class="header__logo" aria-label="Empr-E Página inicial">
         <div class="header__logo-icon" aria-hidden="true">
         </div>
         <div class="header__logo-text">
@@ -115,7 +115,7 @@
       <!-- Navegação principal -->
       <nav id="navegacao-principal" class="nav" aria-label="Navegação principal">
         <ul class="nav__list" role="list">
-          <li><a href="index.html" class="nav__link nav__link--active" aria-current="page">Início</a></li>
+          <li><a href="../index.html" class="nav__link nav__link--active" aria-current="page">Início</a></li>
           <li><a href="produtos.html" class="nav__link">Produtos</a></li>
           <li><a href="empresas.html" class="nav__link">Empresas</a></li>
           <li><a href="#sobre" class="nav__link">Sobre</a></li>
@@ -129,7 +129,7 @@
           <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
           <span class="btn-carrinho__badge" id="carrinho-count" aria-live="polite">0</span>
         </a>
-        <a href="login.html" class="btn btn--outline">Entrar</a>
+        <a href="pages\login.html" class="btn btn--outline">Entrar</a>
       </div>
 
       <!-- Botão menu mobile -->
@@ -156,7 +156,7 @@
           <li><a href="#sobre" class="menu-mobile__link">Sobre</a></li>
           <li><a href="#contato" class="menu-mobile__link">Contato</a></li>
           <li class="menu-mobile__separator"></li>
-          <li><a href="login.html" class="menu-mobile__link menu-mobile__link--cta">Entrar na plataforma</a></li>
+          <li><a href="pages\login.html" class="menu-mobile__link menu-mobile__link--cta">Entrar na plataforma</a></li>
           <li><a href="cadastro.html" class="menu-mobile__link menu-mobile__link--secondary">Cadastrar empresa</a></li>
         </ul>
       </nav>
@@ -197,30 +197,11 @@
               <svg aria-hidden="true" focusable="false" width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M5 12h14"/><path d="m12 5 7 7-7 7"/></svg>
             </a>
           </div>
-
-          <!-- Números de impacto -->
-          <div class="hero__numeros" role="list" aria-label="Números de impacto da plataforma">
-            <div class="hero__numero" role="listitem">
-              <strong class="hero__numero-valor" data-target="20">0</strong>
-              <span class="hero__numero-label">Empresas cadastradas</span>
-            </div>
-            <div class="hero__numero-divisor" aria-hidden="true"></div>
-            <div class="hero__numero" role="listitem">
-              <strong class="hero__numero-valor" data-target="10">0</strong>
-              <span class="hero__numero-label">Categorias acessíveis</span>
-            </div>
-            <div class="hero__numero-divisor" aria-hidden="true"></div>
-            <div class="hero__numero" role="listitem">
-              <strong class="hero__numero-valor" data-target="500">0</strong>
-              <span class="hero__numero-label">Projetos atendidos</span>
-            </div>
-          </div>
         </div>
 
         <!-- Ilustração hero -->
         <div class="hero__visual" aria-hidden="true">
           <div class="hero__card-flutuante hero__card-flutuante--1">
-            <div class="hero__card-icon">♿</div>
             <div>
               <div class="hero__card-nome">Rampa Modular Pro</div>
               <div class="hero__card-empresa">AcessTech Soluções</div>
@@ -229,16 +210,14 @@
           </div>
 
           <div class="hero__card-flutuante hero__card-flutuante--2">
-            <div class="hero__card-icon">🦻</div>
             <div>
-              <div class="hero__card-nome">Loop de Indução Magnética</div>
-              <div class="hero__card-empresa">SoundAcess Brasil</div>
+              <div class="hero__card-nome">Pisos Táteis</div>
+              <div class="hero__card-empresa">Klinker</div>
             </div>
             <div class="hero__card-badge">✓ Verificado</div>
           </div>
 
           <div class="hero__card-flutuante hero__card-flutuante--3">
-            <div class="hero__card-icon">💻</div>
             <div>
               <div class="hero__card-nome">Leitor de Tela Corporativo</div>
               <div class="hero__card-empresa">DigitalInclude</div>
@@ -247,9 +226,6 @@
           </div>
 
           <div class="hero__central">
-            <div class="hero__central-logo">
-              <svg width="48" height="48" viewBox="0 0 32 32" fill="none"><rect width="32" height="32" rx="8" fill="#F97316"/><circle cx="16" cy="11" r="3" fill="white"/><path d="M10 22c0-3.314 2.686-6 6-6s6 2.686 6 6" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M8 17l2 2" stroke="white" stroke-width="2" stroke-linecap="round"/><path d="M24 17l-2 2" stroke="white" stroke-width="2" stroke-linecap="round"/></svg>
-            </div>
             <div class="hero__central-texto">Empr-E</div>
             <div class="hero__central-sub">Ecossistema B2B</div>
           </div>
@@ -435,24 +411,6 @@
             </div>
           </article>
 
-          <article class="empresa-card" role="listitem" aria-label="SignalAcess – Sinalização Acessível">
-            <div class="empresa-card__topo">
-              <div class="empresa-card__logo empresa-card__logo--amarelo" aria-hidden="true">SI</div>
-              <div class="empresa-card__selo" aria-label="Empresa verificada pela Acessify">
-                <svg aria-hidden="true" focusable="false" width="14" height="14" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2l3.09 6.26L22 9.27l-5 4.87 1.18 6.88L12 17.77l-6.18 3.25L7 14.14 2 9.27l6.91-1.01L12 2z"/></svg>
-                Verificada
-              </div>
-            </div>
-            <div class="empresa-card__corpo">
-              <h3 class="empresa-card__nome">SignalAcess</h3>
-              <span class="empresa-card__categoria">Sinalização Acessível</span>
-              <p class="empresa-card__descricao">Pisos táteis, mapas em relevo, placas em Braille e sistemas de orientação para espaços públicos e privados.</p>
-            </div>
-            <div class="empresa-card__rodape">
-              <a href="empresas.html#signalacess" class="btn btn--ghost btn--sm">Ver empresa →</a>
-            </div>
-          </article>
-
           <article class="empresa-card empresa-card--cta" role="listitem" aria-label="Cadastre sua empresa na Acessify">
             <div class="empresa-card__cta-interno">
               <div class="empresa-card__cta-icone" aria-hidden="true">+</div>
@@ -598,7 +556,7 @@
           <h2 id="cta-titulo" class="cta-final__titulo">Pronto para tornar seu espaço mais inclusivo?</h2>
           <p class="cta-final__subtitulo">Cadastre sua empresa ou explore o catálogo de soluções acessíveis agora mesmo.</p>
           <div class="cta-final__acoes">
-            <a href="cadastro.html" class="btn btn--primary btn--lg">Cadastrar minha empresa</a>
+            <a href="../pages/cadastro.html" class="btn btn--primary btn--lg">Cadastrar minha empresa</a>
             <a href="produtos.html" class="btn btn--outline-claro btn--lg">Explorar o catálogo</a>
           </div>
         </div>
@@ -640,7 +598,7 @@
             <li><a href="produtos.html" class="footer__link">Produtos</a></li>
             <li><a href="empresas.html" class="footer__link">Empresas</a></li>
             <li><a href="cadastro.html" class="footer__link">Cadastrar empresa</a></li>
-            <li><a href="login.html" class="footer__link">Entrar</a></li>
+            <li><a href="pages\login.html" class="footer__link">Entrar</a></li>
             <li><a href="painel.html" class="footer__link">Painel do vendedor</a></li>
           </ul>
         </nav>
@@ -708,6 +666,6 @@
   <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true" role="status"></div>
 
   <!-- JS principal -->
-  <script src="script.js"></script>
+  <script src="assets/js/script.js"></script>
 </body>
 </html>

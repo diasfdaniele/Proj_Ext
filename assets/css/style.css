@@ -266,26 +266,21 @@ h1, h2, h3, h4, h5, h6 {
   line-height: 1.4;
 }
 
-.btn--primary {
+.btn--primary, .btn--outline {
   background: var(--laranja-vivo);
   color: var(--branco);
   border-color: var(--laranja-vivo);
   box-shadow: var(--sombra-laranja);
 }
 
-.btn--primary:hover,
+.btn--primary:hover, 
+.btn--outline:hover,
 .btn--primary:focus-visible {
   background: var(--laranja-escuro);
   border-color: var(--laranja-escuro);
   color: var(--branco);
   transform: translateY(-1px);
   box-shadow: 0 12px 28px rgba(249,115,22,0.35);
-}
-
-.btn--outline {
-  background: transparent;
-  color: var(--cinza-700);
-  border-color: var(--cinza-300);
 }
 
 .btn--outline:hover,
@@ -660,15 +655,14 @@ h1, h2, h3, h4, h5, h6 {
 .hero {
   position: relative;
   overflow: hidden;
-  padding: var(--espaco-4xl) 0 var(--espaco-3xl);
-  background: var(--cinza-50);
-}
+  padding: var(--espaco-2xl) 0;
+  background: linear-gradient(135deg, var(--azul-profundo) 0%, #1a3270 100%);}
 
 .hero__inner {
   position: relative;
   z-index: 1;
   display: grid;
-  grid-template-columns: 1fr 1fr;
+  grid-template-columns: 1.05fr 1fr;
   gap: var(--espaco-3xl);
   align-items: center;
 }
@@ -713,7 +707,7 @@ h1, h2, h3, h4, h5, h6 {
   font-weight: 800;
   letter-spacing: -0.03em;
   line-height: 1.1;
-  color: var(--cinza-900);
+  color: whitesmoke;
 }
 
 .hero__titulo-destaque {
@@ -724,7 +718,7 @@ h1, h2, h3, h4, h5, h6 {
 .hero__subtitulo {
   font-size: 1.1rem;
   line-height: 1.7;
-  color: var(--cinza-600);
+  color: whitesmoke;
   max-width: 500px;
 }
 
@@ -735,54 +729,22 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
 }
 
-/* Números de impacto */
-.hero__numeros {
-  display: flex;
-  align-items: center;
-  gap: var(--espaco-xl);
-  padding-top: var(--espaco-md);
-  border-top: 1px solid var(--cinza-200);
-  margin-top: var(--espaco-sm);
-}
-
-.hero__numero {
-  display: flex;
-  flex-direction: column;
-  gap: 0.125rem;
-}
-
-.hero__numero-valor {
-  font-family: var(--fonte-display);
-  font-size: 1.75rem;
-  font-weight: 800;
-  color: var(--cinza-900);
-  letter-spacing: -0.03em;
-  line-height: 1;
-}
-
-.hero__numero-label {
-  font-size: 0.78rem;
-  color: var(--cinza-500);
-  font-weight: 500;
-}
-
-.hero__numero-divisor {
-  width: 1px;
-  height: 40px;
-  background: var(--cinza-200);
-}
-
 /* Visual flutuante hero */
 .hero__visual {
   position: relative;
-  height: 420px;
   display: flex;
   align-items: center;
   justify-content: center;
+  overflow: visible;
+  min-height: 460px;
+  width: 100%;
 }
 
 .hero__central {
   position: absolute;
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
   display: flex;
   flex-direction: column;
   align-items: center;
@@ -835,21 +797,22 @@ h1, h2, h3, h4, h5, h6 {
 
 .hero__card-flutuante--1 {
   top: 10%;
-  left: -5%;
+  left: -6%;
   --duracao: 4s;
   --delay: 0s;
 }
 
 .hero__card-flutuante--2 {
-  bottom: 15%;
-  left: -8%;
+  bottom: 8%;
+  left: 2%;
   --duracao: 5s;
   --delay: 0.5s;
 }
 
 .hero__card-flutuante--3 {
-  top: 8%;
-  right: -5%;
+  top: 50%;
+  right: -18%;
+  margin-top: -28px;
   --duracao: 4.5s;
   --delay: 1s;
 }
@@ -887,42 +850,32 @@ h1, h2, h3, h4, h5, h6 {
 .hero__bg-deco {
   position: absolute;
   inset: 0;
-  overflow: hidden;
+  z-index: 0;
   pointer-events: none;
+  overflow: hidden;
 }
 
 .hero__bg-blob {
   position: absolute;
   border-radius: 50%;
-  filter: blur(60px);
-  opacity: 0.08;
+  filter: blur(80px);
+  opacity: 0.35;
 }
 
 .hero__bg-blob--1 {
-  width: 600px;
-  height: 600px;
-  background: var(--laranja-vivo);
-  top: -200px;
-  right: -100px;
+  display: none;
 }
 
 .hero__bg-blob--2 {
   width: 400px;
   height: 400px;
-  background: var(--azul-medio);
-  bottom: -100px;
-  left: -50px;
+  background: var(--azul-escuro);
+  bottom: -120px;
+  left: -80px;
 }
 
 .hero__bg-grid {
-  position: absolute;
-  inset: 0;
-  background-image:
-    linear-gradient(var(--cinza-200) 1px, transparent 1px),
-    linear-gradient(90deg, var(--cinza-200) 1px, transparent 1px);
-  background-size: 40px 40px;
-  opacity: 0.3;
-  mask-image: radial-gradient(ellipse at center, black 30%, transparent 80%);
+  display: none;
 }
 
 /* 11. SEÇÃO CATEGORIAS */
