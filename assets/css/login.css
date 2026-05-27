@@ -696,6 +696,16 @@ body.pagina-login .header {
   gap: 0.25rem;
 }
 
+.login-painel-rodape__logo {
+  align-self: center;
+  text-decoration: none;
+  margin-bottom: 0.35rem;
+}
+
+.login-painel-rodape__logo .brand-logo {
+  width: 150px;
+}
+
 .login-painel-rodape p {
   font-size: 0.72rem;
   color: var(--cinza-400);

@@ -206,7 +206,7 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .section-header {
-  margin-bottom: var(--espaco-2xl);
+  margin-bottom: 1.9rem;
   display: flex;
   flex-direction: column;
   gap: 0.5rem;
@@ -442,9 +442,62 @@ h1, h2, h3, h4, h5, h6 {
 .header__logo {
   display: flex;
   align-items: center;
-  gap: 0.625rem;
+  gap: 0;
   text-decoration: none;
   flex-shrink: 0;
+}
+
+.brand-logo {
+  display: block;
+  width: 172px;
+  height: auto;
+}
+
+.brand-logo__hex,
+.brand-logo__dot-inner,
+.brand-logo__wordmark-accent {
+  fill: var(--laranja-vivo);
+}
+
+.brand-logo__dot-outer,
+.brand-logo__wordmark {
+  fill: var(--azul-profundo);
+  transition: fill var(--transicao-rapida);
+}
+
+.brand-logo__tagline {
+  fill: var(--cinza-400);
+  transition: fill var(--transicao-rapida);
+}
+
+.header__logo-icon {
+  width: 44px;
+  height: 44px;
+  border-radius: 14px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  background: linear-gradient(135deg, var(--laranja-vivo) 0%, var(--laranja-escuro) 100%);
+  border: 1px solid rgba(255, 255, 255, 0.22);
+  box-shadow: var(--sombra-laranja);
+  position: relative;
+  overflow: hidden;
+}
+
+.header__logo-icon::before {
+  content: 'E';
+  font-family: var(--fonte-display);
+  font-size: 1.15rem;
+  font-weight: 800;
+  color: var(--branco);
+  letter-spacing: -0.04em;
+}
+
+.footer__logo .header__logo-icon {
+  width: 38px;
+  height: 38px;
+  border-radius: 12px;
+  box-shadow: none;
 }
 
 .header__logo:hover .header__logo-name {
@@ -499,6 +552,57 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav__link::after {
+ .passo:hover {
+   border-color: var(--laranja-claro);
+   box-shadow: var(--sombra-md);
+ }
+ 
+ .passo__numero {
+   font-family: var(--fonte-display);
+   font-size: 0.7rem;
+   font-weight: 800;
+   color: var(--cinza-300);
+   letter-spacing: 0.1em;
+ }
+ 
+ .passo__icone {
+   width: 52px;
+   height: 52px;
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   background: var(--laranja-palido);
+   border-radius: var(--raio-md);
+   color: var(--laranja-vivo);
+ }
+ 
+ .passo__titulo {
+   font-family: var(--fonte-display);
+   font-size: 0.95rem;
+   font-weight: 700;
+   color: var(--cinza-800);
+ }
+ 
+ .passo__texto {
+   font-size: 0.82rem;
+   color: var(--cinza-500);
+   line-height: 1.65;
+ }
+ 
+ .passo__conector {
+   display: flex;
+   align-items: center;
+   justify-content: center;
+   padding: 1.5rem 0.5rem;
+   padding-top: 2.5rem;
+   font-size: 1.25rem;
+   color: var(--cinza-300);
+   font-weight: 300;
+ }
+ 
+ .como-funciona__cta {
+   text-align: center;
+ }
   content: '';
   position: absolute;
   bottom: 0;
@@ -655,7 +759,7 @@ h1, h2, h3, h4, h5, h6 {
 .hero {
   position: relative;
   overflow: hidden;
-  padding: var(--espaco-2xl) 0;
+  padding: 1.75rem 0 2rem;
   background: linear-gradient(135deg, var(--azul-profundo) 0%, #1a3270 100%);}
 
 .hero__inner {
@@ -663,14 +767,14 @@ h1, h2, h3, h4, h5, h6 {
   z-index: 1;
   display: grid;
   grid-template-columns: 1.05fr 1fr;
-  gap: var(--espaco-3xl);
+  gap: 2.25rem;
   align-items: center;
 }
 
 .hero__content {
   display: flex;
   flex-direction: column;
-  gap: var(--espaco-lg);
+  gap: 0.9rem;
 }
 
 .hero__badge {
@@ -736,7 +840,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   justify-content: center;
   overflow: visible;
-  min-height: 460px;
+  min-height: 360px;
   width: 100%;
 }
 
@@ -752,7 +856,7 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--branco);
   border: 2px solid var(--cinza-200);
   border-radius: var(--raio-xl);
-  padding: 1.5rem 2rem;
+  padding: 1.15rem 1.6rem;
   box-shadow: var(--sombra-lg);
   z-index: 2;
 }
@@ -782,12 +886,11 @@ h1, h2, h3, h4, h5, h6 {
   background: var(--branco);
   border: 1.5px solid var(--cinza-200);
   border-radius: var(--raio-lg);
-  padding: 0.75rem 1rem;
+  padding: 0.6rem 0.85rem;
   box-shadow: var(--sombra-md);
   max-width: 240px;
   z-index: 3;
-  animation: flutuar var(--duracao, 4s) ease-in-out infinite;
-  animation-delay: var(--delay, 0s);
+  animation: none;
 }
 
 @keyframes flutuar {
@@ -796,21 +899,21 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .hero__card-flutuante--1 {
-  top: 10%;
+  top: 8%;
   left: -6%;
   --duracao: 4s;
   --delay: 0s;
 }
 
 .hero__card-flutuante--2 {
-  bottom: 8%;
+  bottom: 4%;
   left: 2%;
   --duracao: 5s;
   --delay: 0.5s;
 }
 
 .hero__card-flutuante--3 {
-  top: 50%;
+  top: 48%;
   right: -18%;
   margin-top: -28px;
   --duracao: 4.5s;
@@ -880,7 +983,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* 11. SEÇÃO CATEGORIAS */
 .categorias {
-  padding: var(--espaco-3xl) 0;
+  padding: 2.5rem 0;
   background: var(--branco);
 }
 
@@ -944,14 +1047,14 @@ h1, h2, h3, h4, h5, h6 {
 
 /* 12. SEÇÃO SOBRE */
 .sobre {
-  padding: var(--espaco-4xl) 0;
+  padding: 3.25rem 0;
   background: var(--cinza-50);
 }
 
 .sobre__inner {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: var(--espaco-4xl);
+  gap: 2.75rem;
   align-items: start;
 }
 
@@ -1016,7 +1119,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* 13. SEÇÃO EMPRESAS PARCEIRAS */
 .empresas-parceiras {
-  padding: var(--espaco-4xl) 0;
+  padding: 3.25rem 0;
   background: var(--branco);
 }
 
@@ -1176,7 +1279,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* 14. COMO FUNCIONA */
 .como-funciona {
-  padding: var(--espaco-4xl) 0;
+  padding: 3.25rem 0;
   background: var(--cinza-50);
 }
 
@@ -1185,7 +1288,7 @@ h1, h2, h3, h4, h5, h6 {
   grid-template-columns: 1fr auto 1fr auto 1fr auto 1fr;
   gap: 0;
   align-items: start;
-  margin-bottom: var(--espaco-2xl);
+  margin-bottom: 1.75rem;
   counter-reset: none;
 }
 
@@ -1255,7 +1358,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* 15. DIFERENCIAIS */
 .diferenciais {
-  padding: var(--espaco-4xl) 0;
+  padding: 3.25rem 0;
   background: linear-gradient(135deg, var(--azul-profundo) 0%, #1a3270 100%);
   position: relative;
   overflow: hidden;
@@ -1328,7 +1431,7 @@ h1, h2, h3, h4, h5, h6 {
 
 /* 16. CTA FINAL */
 .cta-final {
-  padding: var(--espaco-4xl) 0;
+  padding: 3rem 0;
   background: var(--laranja-palido);
   border-top: 1px solid var(--laranja-claro);
 }
@@ -1387,8 +1490,21 @@ h1, h2, h3, h4, h5, h6 {
 .footer__logo {
   display: flex;
   align-items: center;
-  gap: 0.5rem;
+  gap: 0;
   text-decoration: none;
+}
+
+.footer__logo .brand-logo {
+  width: 160px;
+}
+
+.footer__logo .brand-logo__wordmark,
+.footer__logo .brand-logo__dot-outer {
+  fill: var(--branco);
+}
+
+.footer__logo .brand-logo__tagline {
+  fill: var(--cinza-400);
 }
 
 .footer__logo-nome {
@@ -1618,21 +1734,26 @@ h1, h2, h3, h4, h5, h6 {
 /* Alto contraste */
 body.modo-alto-contraste {
   --cor-fundo: #000000;
-  --cor-fundo-alt: #111111;
+  --cor-fundo-alt: #0a0a0a;
   --cor-texto: #FFFFFF;
-  --cor-texto-suave: #000000;
+  --cor-texto-suave: #F3F4F6;
   --cor-borda: #FFFFFF;
-  --laranja-vivo: #FFB347;
-  --laranja-palido: #1A0A00;
-  --laranja-claro: #FF8C00;
-  --cinza-50: #111111;
-  --cinza-100: #1A0A00;
-  --cinza-200: #200d00;
-  --cinza-900: #200e01;
-  --cinza-800: #050505;
-  --cinza-700: #f8f8f8;
-  --cinza-600: #ffffff;
-  --cinza-500: #020202;
+  --laranja-vivo: #F97316;
+  --laranja-palido: #1A1200;
+  --laranja-claro: #FB923C;
+  --cinza-50: #050505;
+  --cinza-100: #101010;
+  --cinza-200: #1A1A1A;
+  --cinza-900: #FFFFFF;
+  --cinza-800: #F5F5F5;
+  --cinza-700: #E5E7EB;
+  --cinza-600: #D1D5DB;
+  --cinza-500: #C7CAD1;
+  --sombra-sm: none;
+  --sombra-md: none;
+  --sombra-lg: none;
+  --sombra-xl: none;
+  --sombra-laranja: none;
 }
 
 body.modo-alto-contraste .header {
@@ -1640,18 +1761,366 @@ body.modo-alto-contraste .header {
   border-color: #FFFFFF;
 }
 
+body.modo-alto-contraste.pagina-catalogo,
+body.modo-alto-contraste.pagina-catalogo main,
+body.modo-alto-contraste.pagina-catalogo .catalogo-produtos {
+  background: #0A0A0A !important;
+}
+
+body.modo-alto-contraste.pagina-catalogo .catalogo-hero,
+body.modo-alto-contraste.pagina-catalogo .catalogo-hero__content {
+  background: #111111 !important;
+}
+
+body.modo-alto-contraste.pagina-pagamento,
+body.modo-alto-contraste.pagina-pagamento main,
+body.modo-alto-contraste.pagina-pagamento .pagamento-section {
+  background: #0A0A0A !important;
+}
+
+body.modo-alto-contraste.pagina-pagamento .pagamento-hero,
+body.modo-alto-contraste.pagina-pagamento .pagamento-hero__content {
+  background: #111111 !important;
+}
+
 body.modo-alto-contraste .hero {
   background: #111111;
 }
 
+body.modo-alto-contraste,
+body.modo-alto-contraste main,
+body.modo-alto-contraste section,
+body.modo-alto-contraste footer,
+body.modo-alto-contraste .login-painel,
+body.modo-alto-contraste .catalogo-hero__content,
+body.modo-alto-contraste .carrinho-hero__content,
+body.modo-alto-contraste .pagamento-hero__content,
+body.modo-alto-contraste .carrinho-shell,
+body.modo-alto-contraste .carrinho-resumo,
+body.modo-alto-contraste .pagamento-shell,
+body.modo-alto-contraste .pagamento-resumo,
+body.modo-alto-contraste .pagamento-bloco,
+body.modo-alto-contraste .pagamento-metodo,
+body.modo-alto-contraste .pagamento-item,
+body.modo-alto-contraste .pagamento-vazio,
+body.modo-alto-contraste .pagamento-alerta,
+body.modo-alto-contraste .pagamento-boleto,
+body.modo-alto-contraste .pagamento-form__hint-box,
+body.modo-alto-contraste .pagamento-pix__qr-wrap,
+body.modo-alto-contraste .pagamento-metrica,
+body.modo-alto-contraste .carrinho-item,
+body.modo-alto-contraste .produto-card,
+body.modo-alto-contraste .filtros,
+body.modo-alto-contraste .form-secao,
+body.modo-alto-contraste .campo-input,
+body.modo-alto-contraste .campo-select,
+body.modo-alto-contraste .campo-textarea,
+body.modo-alto-contraste .login-lateral {
+  color: #FFFFFF;
+}
+
+body.modo-alto-contraste a,
+body.modo-alto-contraste .footer__link,
+body.modo-alto-contraste .nav__link,
+body.modo-alto-contraste .brand-logo__wordmark,
+body.modo-alto-contraste .brand-logo__dot-outer,
+body.modo-alto-contraste .brand-logo__tagline,
+body.modo-alto-contraste .header__logo-name,
+body.modo-alto-contraste .header__logo-sub,
+body.modo-alto-contraste .section-subtitulo,
+body.modo-alto-contraste .catalogo__subtitulo,
+body.modo-alto-contraste .catalogo__resultado,
+body.modo-alto-contraste .pagamento-shell__subtitulo,
+body.modo-alto-contraste .pagamento-resumo__texto,
+body.modo-alto-contraste .pagamento-bloco__texto,
+body.modo-alto-contraste .pagamento-form__hint-texto,
+body.modo-alto-contraste .pagamento-pix__status,
+body.modo-alto-contraste .pagamento-alerta p,
+body.modo-alto-contraste .pagamento-boleto p,
+body.modo-alto-contraste .pagamento-item__empresa,
+body.modo-alto-contraste .pagamento-item__meta,
+body.modo-alto-contraste .produto-card__descricao,
+body.modo-alto-contraste .carrinho-item__descricao,
+body.modo-alto-contraste .carrinho-item__empresa,
+body.modo-alto-contraste .carrinho-resumo__texto,
+body.modo-alto-contraste .carrinho-dica p,
+body.modo-alto-contraste .footer__descricao,
+body.modo-alto-contraste .footer__copy,
+body.modo-alto-contraste .campo-label,
+body.modo-alto-contraste .login-form-subtitulo,
+body.modo-alto-contraste .login-suporte-texto {
+  color: #FFFFFF;
+}
+
+body.modo-alto-contraste .btn-acess,
+body.modo-alto-contraste .btn-carrinho,
+body.modo-alto-contraste .btn,
+body.modo-alto-contraste .produto-card,
+body.modo-alto-contraste .filtros,
+body.modo-alto-contraste .carrinho-shell,
+body.modo-alto-contraste .carrinho-resumo,
+body.modo-alto-contraste .carrinho-item,
+body.modo-alto-contraste .form-secao,
+body.modo-alto-contraste .campo-input,
+body.modo-alto-contraste .campo-select,
+body.modo-alto-contraste .campo-textarea,
+body.modo-alto-contraste .menu-mobile,
+body.modo-alto-contraste .footer,
+body.modo-alto-contraste .toast,
+body.modo-alto-contraste .catalogo__vazio,
+body.modo-alto-contraste .carrinho-vazio {
+  background: #000000 !important;
+  border-color: #FFFFFF !important;
+  box-shadow: none !important;
+}
+
+body.modo-alto-contraste .btn--primary,
+body.modo-alto-contraste .btn-acess[aria-pressed="true"],
+body.modo-alto-contraste .btn-acess--destaque,
+body.modo-alto-contraste .section-badge,
+body.modo-alto-contraste .produto-card__categoria,
+body.modo-alto-contraste .carrinho-item__categoria,
+body.modo-alto-contraste .carrinho-vazio__icone {
+  background: #F97316 !important;
+  color: #000000 !important;
+  border-color: #F97316 !important;
+}
+
+body.modo-alto-contraste .btn--outline,
+body.modo-alto-contraste .btn--ghost,
+body.modo-alto-contraste .menu-mobile__link,
+body.modo-alto-contraste .btn-acess,
+body.modo-alto-contraste .btn-carrinho,
+body.modo-alto-contraste .nav__link {
+  color: #FFFFFF !important;
+  border-color: #F97316 !important;
+}
+
+body.modo-alto-contraste .brand-logo__hex,
+body.modo-alto-contraste .brand-logo__dot-inner,
+body.modo-alto-contraste .brand-logo__wordmark-accent {
+  fill: #F97316 !important;
+}
+
+body.modo-alto-contraste .nav__link::after,
+body.modo-alto-contraste .menu-mobile__link--cta,
+body.modo-alto-contraste .btn--ghost,
+body.modo-alto-contraste .btn--outline,
+body.modo-alto-contraste .btn-carrinho {
+  color: #FFFFFF !important;
+}
+
+body.modo-alto-contraste .btn--outline:hover,
+body.modo-alto-contraste .btn--outline:focus-visible,
+body.modo-alto-contraste .btn--ghost:hover,
+body.modo-alto-contraste .btn--ghost:focus-visible,
+body.modo-alto-contraste .btn-carrinho:hover,
+body.modo-alto-contraste .nav__link:hover,
+body.modo-alto-contraste .nav__link--active,
+body.modo-alto-contraste .menu-mobile__link:hover,
+body.modo-alto-contraste .menu-mobile__link--cta {
+  color: #FFFFFF !important;
+  background: #F97316 !important;
+  border-color: #F97316 !important;
+}
+
+body.modo-alto-contraste .hero__titulo,
+body.modo-alto-contraste .hero__subtitulo,
+body.modo-alto-contraste .catalogo-hero__titulo,
+body.modo-alto-contraste .catalogo-hero__texto,
+body.modo-alto-contraste .carrinho-hero__titulo,
+body.modo-alto-contraste .carrinho-hero__texto,
+body.modo-alto-contraste .pagamento-hero__titulo,
+body.modo-alto-contraste .pagamento-hero__texto,
+body.modo-alto-contraste .pagamento-bloco__titulo,
+body.modo-alto-contraste .pagamento-form__hint,
+body.modo-alto-contraste .pagamento-item__nome,
+body.modo-alto-contraste .login-lateral__titulo,
+body.modo-alto-contraste .login-lateral__subtitulo,
+body.modo-alto-contraste .login-lateral__diferencial,
+body.modo-alto-contraste .login-lateral__selo,
+body.modo-alto-contraste .login-lateral__tagline,
+body.modo-alto-contraste .produto-card__empresa {
+  color: #FFFFFF !important;
+}
+
+body.modo-alto-contraste .produto-card__media,
+body.modo-alto-contraste .carrinho-item__media,
+body.modo-alto-contraste .login-lateral,
+body.modo-alto-contraste .catalogo-hero__content,
+body.modo-alto-contraste .carrinho-hero__content,
+body.modo-alto-contraste .pagamento-hero__content,
+body.modo-alto-contraste .pagamento-item__media,
+body.modo-alto-contraste .header__logo-icon {
+  background: #111111 !important;
+  border: 2px solid #FFFFFF !important;
+}
+
+body.modo-alto-contraste .header__logo-icon::before,
+body.modo-alto-contraste .produto-card__iniciais,
+body.modo-alto-contraste .carrinho-item__media,
+body.modo-alto-contraste .empresa-card__logo,
+body.modo-alto-contraste .pilar__icone,
+body.modo-alto-contraste .diferencial__icone,
+body.modo-alto-contraste .footer__rede,
+body.modo-alto-contraste .btn-carrinho__badge,
+body.modo-alto-contraste .hero__card-badge,
+body.modo-alto-contraste .empresa-card__selo,
+body.modo-alto-contraste .carrinho-item__quantidade button,
+body.modo-alto-contraste .carrinho-item__quantidade span {
+  color: #FFFFFF !important;
+  opacity: 1 !important;
+}
+
+body.modo-alto-contraste .produto-card__iniciais,
+body.modo-alto-contraste .empresa-card__logo,
+body.modo-alto-contraste .pilar__icone,
+body.modo-alto-contraste .diferencial__icone,
+body.modo-alto-contraste .footer__rede,
+body.modo-alto-contraste .carrinho-item__quantidade button {
+  background: #111111 !important;
+  border: 2px solid #F97316 !important;
+}
+
+body.modo-alto-contraste .hero__central,
+body.modo-alto-contraste .hero__card-flutuante,
+body.modo-alto-contraste .categoria-card,
+body.modo-alto-contraste .passo,
+body.modo-alto-contraste .empresa-card,
+body.modo-alto-contraste .pilar,
+body.modo-alto-contraste .diferencial,
+body.modo-alto-contraste .empresa-card__selo,
+body.modo-alto-contraste .hero__card-badge,
+body.modo-alto-contraste .carrinho-item__quantidade {
+  background: #000000 !important;
+  border-color: #F97316 !important;
+  color: #FFFFFF !important;
+}
+
+body.modo-alto-contraste .hero__card-badge,
+body.modo-alto-contraste .empresa-card__selo,
+body.modo-alto-contraste .btn-carrinho__badge,
+body.modo-alto-contraste .footer__rede:hover {
+  background: #F97316 !important;
+  border-color: #F97316 !important;
+  color: #000000 !important;
+}
+
+body.modo-alto-contraste .hero__central-texto,
+body.modo-alto-contraste .hero__central-sub,
+body.modo-alto-contraste .hero__card-nome,
+body.modo-alto-contraste .hero__card-empresa,
+body.modo-alto-contraste .categoria-card__nome,
+body.modo-alto-contraste .categoria-card__qtd,
+body.modo-alto-contraste .passo__numero,
+body.modo-alto-contraste .passo__titulo,
+body.modo-alto-contraste .passo__texto,
+body.modo-alto-contraste .passo__conector,
+body.modo-alto-contraste .empresa-card__nome,
+body.modo-alto-contraste .empresa-card__categoria,
+body.modo-alto-contraste .empresa-card__descricao,
+body.modo-alto-contraste .pilar__titulo,
+body.modo-alto-contraste .pilar__texto,
+body.modo-alto-contraste .diferencial__titulo,
+body.modo-alto-contraste .diferencial__texto,
+body.modo-alto-contraste .produto-card__titulo,
+body.modo-alto-contraste .produto-card__preco,
+body.modo-alto-contraste .carrinho-item__preco,
+body.modo-alto-contraste .footer__rede svg {
+  color: #FFFFFF !important;
+  fill: currentColor !important;
+  opacity: 1 !important;
+}
+
+body.modo-alto-contraste .hero__card-icon,
+body.modo-alto-contraste .categoria-card__icon,
+body.modo-alto-contraste .categoria-card__icon svg,
+body.modo-alto-contraste .passo__icone,
+body.modo-alto-contraste .passo__icone svg,
+body.modo-alto-contraste .produto-card__media svg,
+body.modo-alto-contraste .btn-carrinho svg,
+body.modo-alto-contraste .btn-acess svg,
+body.modo-alto-contraste .footer__rede svg,
+body.modo-alto-contraste .widget-libras__inner span[aria-hidden="true"] {
+  color: #FFFFFF !important;
+  stroke: currentColor !important;
+  fill: currentColor !important;
+  opacity: 1 !important;
+}
+
+body.modo-alto-contraste .categoria-card__link {
+  color: #FFFFFF !important;
+  background: #000000 !important;
+}
+
+body.modo-alto-contraste .categoria-card:hover,
+body.modo-alto-contraste .categoria-card:hover .categoria-card__link {
+  border-color: #F97316 !important;
+  background: #111111 !important;
+}
+
+body.modo-alto-contraste .categoria-card:hover .categoria-card__nome,
+body.modo-alto-contraste .categoria-card:hover .categoria-card__qtd,
+body.modo-alto-contraste .categoria-card:hover .categoria-card__icon,
+body.modo-alto-contraste .categoria-card:hover .categoria-card__icon svg {
+  color: #F97316 !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+
+body.modo-alto-contraste .passo {
+  background: #000000 !important;
+  border-color: #FFFFFF !important;
+}
+
+body.modo-alto-contraste .passo:hover {
+  background: #111111 !important;
+  border-color: #F97316 !important;
+}
+
+body.modo-alto-contraste .passo__icone {
+  background: #111111 !important;
+  border: 2px solid #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+body.modo-alto-contraste .passo__icone svg {
+  color: #FFFFFF !important;
+  stroke: currentColor !important;
+  fill: none !important;
+  opacity: 1 !important;
+}
+
+body.modo-alto-contraste .passo:hover .passo__titulo,
+body.modo-alto-contraste .passo:hover .passo__texto,
+body.modo-alto-contraste .passo:hover .passo__numero,
+body.modo-alto-contraste .passo:hover .passo__icone,
+body.modo-alto-contraste .passo:hover .passo__icone svg,
+body.modo-alto-contraste .passo__conector {
+  color: #F97316 !important;
+  stroke: currentColor !important;
+  opacity: 1 !important;
+}
+
+body.modo-alto-contraste .campo-input::placeholder,
+body.modo-alto-contraste .campo-erro,
+body.modo-alto-contraste .carrinho-item__meta,
+body.modo-alto-contraste .carrinho-shell__subtitulo {
+  color: #D1D5DB !important;
+}
+
 /* Modo leitura */
 body.modo-leitura {
-  --tamanho-fonte-base: 18px;
+  line-height: 1.8;
 }
 
 body.modo-leitura .hero__visual,
 body.modo-leitura .hero__bg-deco,
-body.modo-leitura .diferenciais::before {
+body.modo-leitura .diferenciais::before,
+body.modo-leitura .catalogo-hero__content::after,
+body.modo-leitura .carrinho-hero__content::after,
+body.modo-leitura .login-lateral__ornamentos {
   display: none;
 }
 
@@ -1661,9 +2130,30 @@ body.modo-leitura .hero__inner {
   margin-inline: auto;
 }
 
+body.modo-leitura .catalogo__cabecalho,
+body.modo-leitura .carrinho-shell__header,
+body.modo-leitura .produto-card__rodape,
+body.modo-leitura .carrinho-item__cabecalho,
+body.modo-leitura .carrinho-item__controles {
+  align-items: flex-start;
+}
+
+body.modo-leitura .produto-card,
+body.modo-leitura .carrinho-item,
+body.modo-leitura .filtros,
+body.modo-leitura .form-secao,
+body.modo-leitura .carrinho-shell,
+body.modo-leitura .carrinho-resumo,
+body.modo-leitura .login-painel__inner {
+  max-width: 72ch;
+}
+
 /* Layout simplificado */
 body.modo-simplificado .hero__visual,
-body.modo-simplificado .hero__bg-deco {
+body.modo-simplificado .hero__bg-deco,
+body.modo-simplificado .catalogo-hero__content::after,
+body.modo-simplificado .carrinho-hero__content::after,
+body.modo-simplificado .login-lateral__ornamentos {
   display: none;
 }
 
@@ -1673,9 +2163,27 @@ body.modo-simplificado .hero__inner {
 
 body.modo-simplificado .empresa-card,
 body.modo-simplificado .pilar,
-body.modo-simplificado .diferencial {
+body.modo-simplificado .diferencial,
+body.modo-simplificado .produto-card,
+body.modo-simplificado .filtros,
+body.modo-simplificado .carrinho-shell,
+body.modo-simplificado .carrinho-resumo,
+body.modo-simplificado .carrinho-item,
+body.modo-simplificado .form-secao,
+body.modo-simplificado .login-painel,
+body.modo-simplificado .login-lateral {
   box-shadow: none;
   border-width: 2px;
+}
+
+body.modo-simplificado .catalogo-hero__content,
+body.modo-simplificado .carrinho-hero__content,
+body.modo-simplificado .produto-card__media,
+body.modo-simplificado .carrinho-item__media,
+body.modo-simplificado .login-lateral,
+body.modo-simplificado .header__logo-icon {
+  background: var(--cinza-100) !important;
+  color: var(--cinza-900) !important;
 }
 
 body.modo-simplificado * {

@@ -9,6 +9,7 @@
     <meta name="robots" content="noindex, nofollow" />
     <meta name="theme-color" content="#F97316" />
     <title>Entrar – Empr-E Marketplace de Acessibilidade</title>
+    <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='20,6 44,6 56,26 44,46 20,46 8,26' fill='%23F97316'/%3E%3Crect x='19' y='16' width='5' height='20' rx='1.5' fill='white'/%3E%3Crect x='19' y='16' width='16' height='5' rx='1.5' fill='white'/%3E%3Crect x='19' y='25' width='12' height='4' rx='1.5' fill='white'/%3E%3Crect x='19' y='32' width='16' height='5' rx='1.5' fill='white'/%3E%3Ccircle cx='45' cy='11' r='5' fill='%231E293B'/%3E%3Ccircle cx='45' cy='11' r='2.5' fill='%23F97316'/%3E%3C/svg%3E" />
 
     <!-- Fontes -->
     <link rel="preconnect" href="https://fonts.googleapis.com" />
@@ -38,10 +39,10 @@
 
             <button id="btn-contraste" class="btn-acess" aria-pressed="false" aria-label="Alternar modo alto contraste">
                 <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none"
-                    stroke="currentColor" stroke-width="2">
+                    stroke="curre 2v20" />
+                </svg>ntColor" stroke-width="2">
                     <circle cx="12" cy="12" r="10" />
-                    <path d="M12 2v20" />
-                </svg>
+                    <path d="M12
                 <span>Contraste</span>
             </button>
 
@@ -91,27 +92,32 @@
     <header id="header" class="header" role="banner">
         <div class="container header__inner">
 
-            <a href="../index.html" class="header__logo" aria-label="Empr-EVoltar para página inicial">
-                <div class="header__logo-icon" aria-hidden="true">
-                </div>
-                <div class="header__logo-text">
-                    <span class="header__logo-name">Empr-E</span>
-                    <span class="header__logo-sub">Marketplace de Acessibilidade</span>
-                </div>
+            <a href="../index.html" class="header__logo" aria-label="Empr-E - Voltar para página inicial">
+                <svg class="brand-logo" width="110" height="36" viewBox="0 0 220 72" fill="none" aria-hidden="true">
+                    <polygon class="brand-logo__hex" points="28,4 52,4 64,24 52,44 28,44 16,24" fill="#F97316"/>
+                    <rect x="23" y="11" width="4" height="22" rx="1.5" fill="white"/>
+                    <rect x="23" y="11" width="16" height="4" rx="1.5" fill="white"/>
+                    <rect x="23" y="21" width="12" height="3.5" rx="1.5" fill="white"/>
+                    <rect x="23" y="29" width="16" height="4" rx="1.5" fill="white"/>
+                    <circle class="brand-logo__dot-outer" cx="52" cy="8" r="4" fill="#1E293B"/>
+                    <circle class="brand-logo__dot-inner" cx="52" cy="8" r="2" fill="#F97316"/>
+                    <text class="brand-logo__wordmark" x="74" y="32" font-family="'Plus Jakarta Sans',sans-serif" font-size="26" font-weight="800" fill="#1E293B" letter-spacing="-0.5">Empr<tspan class="brand-logo__wordmark-accent" fill="#F97316">-E</tspan></text>
+                    <text class="brand-logo__tagline" x="74" y="48" font-family="'Plus Jakarta Sans',sans-serif" font-size="9" font-weight="500" fill="#64748B" letter-spacing="0.3">Marketplace de Acessibilidade</text>
+                </svg>
             </a>
 
             <nav id="navegacao-principal" class="nav" aria-label="Navegação principal">
                 <ul class="nav__list" role="list">
                     <li><a href="../index.html" class="nav__link">Início</a></li>
-                    <li><a href="produtos.html" class="nav__link">Produtos</a></li>
-                    <li><a href="empresas.html" class="nav__link">Empresas</a></li>
+                    <li><a href="catalogo.html" class="nav__link">Produtos</a></li>
+                    <li><a href="../index.html#empresas" class="nav__link">Empresas</a></li>
                     <li><a href="../index.html#sobre" class="nav__link">Sobre</a></li>
                     <li><a href="../index.html#contato" class="nav__link">Contato</a></li>
                 </ul>
             </nav>
 
             <div class="header__actions">
-                <a href="carrinho.html" class="btn-carrinho" aria-label="Ver carrinho de compras. 0 itens">
+                <a href="carrinho.html" class="btn-carrinho" aria-label="Ir para o carrinho de produtos">
                     <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 24 24" fill="none"
                         stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round">
                         <circle cx="9" cy="21" r="1" />
@@ -135,8 +141,8 @@
             <nav aria-label="Navegação mobile">
                 <ul class="menu-mobile__list" role="list">
                     <li><a href="../index.html" class="menu-mobile__link">Início</a></li>
-                    <li><a href="produtos.html" class="menu-mobile__link">Produtos</a></li>
-                    <li><a href="empresas.html" class="menu-mobile__link">Empresas</a></li>
+                    <li><a href="catalogo.html" class="menu-mobile__link">Produtos</a></li>
+                    <li><a href="../index.html#empresas" class="menu-mobile__link">Empresas</a></li>
                     <li><a href="../index.html#sobre" class="menu-mobile__link">Sobre</a></li>
                     <li><a href="../index.html#contato" class="menu-mobile__link">Contato</a></li>
                     <li class="menu-mobile__separator"></li>
@@ -192,7 +198,7 @@
                                         <path d="m9 12 2 2 4-4" />
                                     </svg>
                                 </div>
-                                <span>Empresas verificadas e curadas</span>
+                                <span>Empresas verificadas</span>
                             </li>
                             <li class="login-lateral__diferencial">
                                 <div class="login-lateral__diferencial-icone" aria-hidden="true">
@@ -216,7 +222,7 @@
                                         <path d="M16 3.13a4 4 0 0 1 0 7.75" />
                                     </svg>
                                 </div>
-                                <span>+340 empresas no ecossistema</span>
+                                <span>Diferentes soluções para diferentes necessidades</span>
                             </li>
                             <li class="login-lateral__diferencial">
                                 <div class="login-lateral__diferencial-icone" aria-hidden="true">
@@ -335,7 +341,7 @@
                             <span id="lembrar-dica" class="sr-only">Mantém sua sessão ativa neste dispositivo por 30
                                 dias.</span>
 
-                            <a href="esqueci-senha.html" class="login-link-esqueceu"
+                            <a href="../index.html#contato" class="login-link-esqueceu"
                                 aria-label="Esqueceu sua senha? Clique para recuperar">
                                 Esqueci minha senha
                             </a>
@@ -387,6 +393,19 @@
 
                     <!-- Rodapé do painel -->
                     <footer class="login-painel-rodape" role="contentinfo" aria-label="Informações legais">
+                        <a href="../index.html" class="login-painel-rodape__logo" aria-label="Empr-E - Página inicial">
+                            <svg class="brand-logo" width="110" height="36" viewBox="0 0 220 72" fill="none" aria-hidden="true">
+                                <polygon class="brand-logo__hex" points="28,4 52,4 64,24 52,44 28,44 16,24" fill="#F97316"/>
+                                <rect x="23" y="11" width="4" height="22" rx="1.5" fill="white"/>
+                                <rect x="23" y="11" width="16" height="4" rx="1.5" fill="white"/>
+                                <rect x="23" y="21" width="12" height="3.5" rx="1.5" fill="white"/>
+                                <rect x="23" y="29" width="16" height="4" rx="1.5" fill="white"/>
+                                <circle class="brand-logo__dot-outer" cx="52" cy="8" r="4" fill="#1E293B"/>
+                                <circle class="brand-logo__dot-inner" cx="52" cy="8" r="2" fill="#F97316"/>
+                                <text class="brand-logo__wordmark" x="74" y="32" font-family="'Plus Jakarta Sans',sans-serif" font-size="26" font-weight="800" fill="#1E293B" letter-spacing="-0.5">Empr<tspan class="brand-logo__wordmark-accent" fill="#F97316">-E</tspan></text>
+                                <text class="brand-logo__tagline" x="74" y="48" font-family="'Plus Jakarta Sans',sans-serif" font-size="9" font-weight="500" fill="#64748B" letter-spacing="0.3">Marketplace de Acessibilidade</text>
+                            </svg>
+                        </a>
                         <p>
                             Ao entrar, você concorda com nossos
                             <a href="#" class="login-link">Termos de Uso</a>
@@ -429,7 +448,7 @@
     <script src="../assets/js/script.js"></script>
 
     <!-- JS específico do login -->
-    <script src="../assets/js/login.js"></script>
+    <script type="module" src="../assets/js/login.js"></script>
 </body>
 
 </html>
