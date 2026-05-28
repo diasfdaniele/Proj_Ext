@@ -19,6 +19,7 @@ const carrinhoBadges = [
   document.getElementById('carrinho-count'),
   document.getElementById('quantidadeCarrinho')
 ].filter(Boolean);
+const sessionStorageKey = 'empre:usuario-logado';
 
 const storageKeys = {
   carrinho: 'empre:carrinho',
@@ -30,6 +31,38 @@ const storageKeys = {
 };
 
 let tamanhoFonte = Number(localStorage.getItem(storageKeys.fonte)) || 16;
+
+function readSessionUser() {
+  try {
+    const parsed = JSON.parse(localStorage.getItem(sessionStorageKey) ?? 'null');
+    return parsed && typeof parsed.uid === 'string' ? parsed : null;
+  } catch {
+    return null;
+  }
+}
+
+function resolveInternalPagePath(fileName) {
+  const currentPath = window.location.pathname.toLowerCase();
+  const insidePagesFolder = currentPath.includes('/pages/');
+  return insidePagesFolder ? fileName : `pages/${fileName}`;
+}
+
+function updateAuthLinks() {
+  const user = readSessionUser();
+
+  if (!user) {
+    return;
+  }
+
+  const accountPath = resolveInternalPagePath('conta.html');
+  const authLinks = document.querySelectorAll('.header__actions a[href$="login.html"], .menu-mobile a[href$="login.html"]');
+
+  authLinks.forEach((link) => {
+    link.href = accountPath;
+    link.textContent = 'Minha conta';
+    link.setAttribute('aria-label', 'Acessar minha conta');
+  });
+}
 
 function readCartItems() {
   try {
@@ -205,6 +238,7 @@ setPressedState(btnLayout, body.classList.contains('modo-simplificado'));
 setPressedState(btnLeitura, body.classList.contains('modo-leitura'));
 applyFontSize(tamanhoFonte);
 syncCartCountFromItems();
+updateAuthLinks();
 
 if (btnContraste) {
   btnContraste.addEventListener('click', () => {
@@ -312,3 +346,4 @@ window.removerItemDoCarrinho = removeCartItem;
 window.atualizarQuantidadeCarrinho = updateCartItemQuantity;
 window.limparCarrinho = clearCart;
 window.mostrarToast = mostrarToast;
+window.obterUsuarioLogado = readSessionUser;

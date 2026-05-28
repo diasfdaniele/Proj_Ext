@@ -1,10 +1,15 @@
 'use strict';
 
-import { auth, isFirebaseConfigured } from './firebase.js';
+import { auth, db, isFirebaseConfigured } from './firebase.js';
 
 import {
   signInWithEmailAndPassword
 } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+
+import {
+  doc,
+  getDoc
+} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
 
 const form = document.getElementById('formulario-login');
 const email = document.getElementById('campo-email');
@@ -12,6 +17,15 @@ const senha = document.getElementById('campo-senha');
 const botaoEntrar = document.getElementById('btn-entrar');
 const textoBotaoEntrar = botaoEntrar?.querySelector('.btn-login-submit__texto');
 const loadingBotaoEntrar = botaoEntrar?.querySelector('.btn-login-submit__loading');
+const sessionStorageKey = 'empre:usuario-logado';
+
+function normalizeRole(value) {
+  return value === 'administrador' ? 'administrador' : 'usuario-comum';
+}
+
+function saveUserSession(user) {
+  localStorage.setItem(sessionStorageKey, JSON.stringify(user));
+}
 
 function setLoadingState(isLoading) {
   if (!botaoEntrar || !textoBotaoEntrar || !loadingBotaoEntrar) {
@@ -35,16 +49,29 @@ if (form && email && senha) {
       return;
     }
 
-    if (!isFirebaseConfigured || !auth) {
+    if (!isFirebaseConfigured || !auth || !db) {
       alert('Configure o Firebase em assets/js/firebase.js antes de usar o login.');
       return;
     }
 
     try {
       setLoadingState(true);
-      await signInWithEmailAndPassword(auth, emailValor, senhaValor);
+      const credential = await signInWithEmailAndPassword(auth, emailValor, senhaValor);
+      const profileSnapshot = await getDoc(doc(db, 'usuarios', credential.user.uid));
+
+      const profile = profileSnapshot.exists() ? profileSnapshot.data() : {};
+      const role = normalizeRole(profile.role);
+
+      saveUserSession({
+        email: credential.user.email ?? emailValor,
+        nomeResponsavel: profile.nomeResponsavel ?? '',
+        razaoSocial: profile.razaoSocial ?? '',
+        role,
+        uid: credential.user.uid
+      });
+
       alert('Login realizado com sucesso.');
-      window.location.href = '../index.html';
+      window.location.href = role === 'administrador' ? 'catalogo.html?painel=admin' : 'catalogo.html';
     } catch (erro) {
       console.error(erro);
       alert('Email ou senha invalidos.');

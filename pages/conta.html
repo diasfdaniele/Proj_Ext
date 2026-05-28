@@ -1,0 +1,223 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="description" content="Acompanhe favoritos, interações e informações da sua conta na Empr-E." />
+  <title>Minha conta - Empr-E Marketplace de Acessibilidade</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='20,6 44,6 56,26 44,46 20,46 8,26' fill='%23F97316'/%3E%3Crect x='19' y='16' width='5' height='20' rx='1.5' fill='white'/%3E%3Crect x='19' y='16' width='16' height='5' rx='1.5' fill='white'/%3E%3Crect x='19' y='25' width='12' height='4' rx='1.5' fill='white'/%3E%3Crect x='19' y='32' width='16' height='5' rx='1.5' fill='white'/%3E%3Ccircle cx='45' cy='11' r='5' fill='%231E293B'/%3E%3Ccircle cx='45' cy='11' r='2.5' fill='%23F97316'/%3E%3C/svg%3E" />
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
+  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <link rel="stylesheet" href="../assets/css/style.css" />
+  <link rel="stylesheet" href="../assets/css/conta.css" />
+</head>
+<body class="pagina-conta">
+  <a href="#conteudo-principal" class="skip-link">Ir para o conteudo principal</a>
+  <a href="#navegacao-principal" class="skip-link">Ir para a navegacao</a>
+
+  <div id="barra-acessibilidade" class="barra-acessibilidade" role="toolbar" aria-label="Ferramentas de acessibilidade">
+    <div class="barra-acessibilidade__inner">
+      <span class="barra-acessibilidade__label" aria-hidden="true">Acessibilidade:</span>
+      <button id="btn-contraste" class="btn-acess" aria-pressed="false" aria-label="Alternar modo alto contraste"><span>Contraste</span></button>
+      <button id="btn-aumentar-fonte" class="btn-acess" aria-label="Aumentar tamanho da fonte"><span>A+</span></button>
+      <button id="btn-diminuir-fonte" class="btn-acess" aria-label="Diminuir tamanho da fonte"><span>A-</span></button>
+      <button id="btn-layout" class="btn-acess" aria-pressed="false" aria-label="Alternar layout simplificado"><span>Simplificado</span></button>
+      <button id="btn-leitura" class="btn-acess" aria-pressed="false" aria-label="Alternar modo leitura"><span>Leitura</span></button>
+      <button id="btn-libras" class="btn-acess btn-acess--destaque" aria-pressed="false" aria-label="Ativar traducao em Libras"><span>Libras</span></button>
+    </div>
+  </div>
+
+  <header id="header" class="header" role="banner">
+    <div class="container header__inner">
+      <a href="../index.html" class="header__logo" aria-label="Empr-E - Pagina inicial">
+        <svg class="brand-logo" width="110" height="36" viewBox="0 0 220 72" fill="none" aria-hidden="true">
+          <polygon class="brand-logo__hex" points="28,4 52,4 64,24 52,44 28,44 16,24" fill="#F97316"/>
+          <rect x="23" y="11" width="4" height="22" rx="1.5" fill="white"/>
+          <rect x="23" y="11" width="16" height="4" rx="1.5" fill="white"/>
+          <rect x="23" y="21" width="12" height="3.5" rx="1.5" fill="white"/>
+          <rect x="23" y="29" width="16" height="4" rx="1.5" fill="white"/>
+          <circle class="brand-logo__dot-outer" cx="52" cy="8" r="4" fill="#1E293B"/>
+          <circle class="brand-logo__dot-inner" cx="52" cy="8" r="2" fill="#F97316"/>
+          <text class="brand-logo__wordmark" x="74" y="32" font-family="'Plus Jakarta Sans',sans-serif" font-size="26" font-weight="800" fill="#1E293B" letter-spacing="-0.5">Empr<tspan class="brand-logo__wordmark-accent" fill="#F97316">-E</tspan></text>
+          <text class="brand-logo__tagline" x="74" y="48" font-family="'Plus Jakarta Sans',sans-serif" font-size="9" font-weight="500" fill="#64748B" letter-spacing="0.3">Marketplace de Acessibilidade</text>
+        </svg>
+      </a>
+
+      <nav id="navegacao-principal" class="nav" aria-label="Navegacao principal">
+        <ul class="nav__list" role="list">
+          <li><a href="../index.html" class="nav__link">Inicio</a></li>
+          <li><a href="catalogo.html" class="nav__link">Produtos</a></li>
+          <li><a href="conta.html" class="nav__link nav__link--active" aria-current="page">Minha conta</a></li>
+          <li><a href="../index.html#sobre" class="nav__link">Sobre</a></li>
+          <li><a href="../index.html#contato" class="nav__link">Contato</a></li>
+        </ul>
+      </nav>
+
+      <div class="header__actions d-flex align-items-center gap-3">
+        <a href="carrinho.html" class="btn-carrinho" aria-label="Ver itens do carrinho">
+          <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
+          <span class="btn-carrinho__badge" id="quantidadeCarrinho" aria-live="polite">0</span>
+        </a>
+        <a href="conta.html" class="btn btn--outline">Minha conta</a>
+      </div>
+
+      <button id="btn-menu-mobile" class="btn-menu-mobile" aria-expanded="false" aria-controls="menu-mobile" aria-label="Abrir menu de navegacao">
+        <span class="btn-menu-mobile__bar" aria-hidden="true"></span>
+        <span class="btn-menu-mobile__bar" aria-hidden="true"></span>
+        <span class="btn-menu-mobile__bar" aria-hidden="true"></span>
+      </button>
+    </div>
+
+    <div id="menu-mobile" class="menu-mobile" hidden>
+      <nav aria-label="Navegacao mobile">
+        <ul class="menu-mobile__list" role="list">
+          <li><a href="../index.html" class="menu-mobile__link">Inicio</a></li>
+          <li><a href="catalogo.html" class="menu-mobile__link">Produtos</a></li>
+          <li><a href="conta.html" class="menu-mobile__link" aria-current="page">Minha conta</a></li>
+          <li><a href="../index.html#sobre" class="menu-mobile__link">Sobre</a></li>
+          <li><a href="../index.html#contato" class="menu-mobile__link">Contato</a></li>
+          <li class="menu-mobile__separator"></li>
+          <li><a href="carrinho.html" class="menu-mobile__link">Carrinho</a></li>
+        </ul>
+      </nav>
+    </div>
+  </header>
+
+  <main id="conteudo-principal" tabindex="-1">
+    <section class="conta-hero" aria-labelledby="conta-titulo">
+      <div class="container">
+        <div class="conta-hero__content">
+          <span class="section-badge">Area do usuario</span>
+          <h1 id="conta-titulo" class="conta-hero__titulo">Minha conta</h1>
+          <p id="conta-hero-texto" class="conta-hero__texto">Acompanhe favoritos, interacoes e informacoes do seu perfil em um unico lugar.</p>
+        </div>
+      </div>
+    </section>
+
+    <section class="conta-section" aria-labelledby="conta-resumo-titulo">
+      <div class="container">
+        <div class="row g-4 align-items-start">
+          <div class="col-lg-4">
+            <aside class="conta-resumo" aria-labelledby="conta-resumo-titulo">
+              <span class="conta-resumo__eyebrow">Perfil</span>
+              <h2 id="conta-resumo-titulo" class="conta-resumo__titulo">Resumo da conta</h2>
+              <p id="conta-resumo-texto" class="conta-resumo__texto">Entre com sua conta para visualizar sua area personalizada.</p>
+
+              <dl class="conta-metricas">
+                <div class="conta-metrica">
+                  <dt>Favoritos</dt>
+                  <dd id="conta-total-favoritos">0</dd>
+                </div>
+                <div class="conta-metrica">
+                  <dt>Interacoes</dt>
+                  <dd id="conta-total-interacoes">0</dd>
+                </div>
+                <div class="conta-metrica">
+                  <dt>Perfil</dt>
+                  <dd id="conta-tipo-usuario">Visitante</dd>
+                </div>
+              </dl>
+
+              <div class="conta-resumo__acoes">
+                <a id="conta-login-link" href="login.html" class="btn btn--primary btn--lg w-100">Entrar</a>
+                <a href="catalogo.html" class="btn btn--outline btn--lg w-100">Explorar catalogo</a>
+                <button id="btn-sair-conta" type="button" class="btn btn--outline w-100" hidden>Sair da conta</button>
+              </div>
+            </aside>
+          </div>
+
+          <div class="col-lg-8">
+            <section class="conta-shell" aria-labelledby="conta-favoritos-titulo">
+              <div class="conta-shell__header">
+                <div>
+                  <h2 id="conta-favoritos-titulo" class="conta-shell__titulo">Produtos favoritados</h2>
+                  <p id="conta-favoritos-texto" class="conta-shell__subtitulo">Seus favoritos salvos aparecem aqui.</p>
+                </div>
+                <a href="catalogo.html" class="btn btn--ghost">Voltar ao catalogo</a>
+              </div>
+
+              <div id="conta-favoritos-lista" class="conta-favoritos-lista" aria-live="polite"></div>
+            </section>
+
+            <section class="conta-shell conta-shell--secundario" aria-labelledby="conta-interacoes-titulo">
+              <div class="conta-shell__header">
+                <div>
+                  <h2 id="conta-interacoes-titulo" class="conta-shell__titulo">Historico de interacoes</h2>
+                  <p id="conta-interacoes-texto" class="conta-shell__subtitulo">Acompanhe as mensagens registradas no marketplace.</p>
+                </div>
+              </div>
+
+              <div id="conta-interacoes-lista" class="conta-interacoes-lista" aria-live="polite"></div>
+            </section>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+
+  <footer id="rodape" class="footer" role="contentinfo">
+    <div class="container">
+      <div class="footer__grid">
+        <div class="footer__col footer__col--marca">
+          <a href="../index.html" class="footer__logo" aria-label="Empr-E - Pagina inicial">
+            <svg class="brand-logo" width="110" height="36" viewBox="0 0 220 72" fill="none" aria-hidden="true">
+              <polygon class="brand-logo__hex" points="28,4 52,4 64,24 52,44 28,44 16,24" fill="#F97316"/>
+              <rect x="23" y="11" width="4" height="22" rx="1.5" fill="white"/>
+              <rect x="23" y="11" width="16" height="4" rx="1.5" fill="white"/>
+              <rect x="23" y="21" width="12" height="3.5" rx="1.5" fill="white"/>
+              <rect x="23" y="29" width="16" height="4" rx="1.5" fill="white"/>
+              <circle class="brand-logo__dot-outer" cx="52" cy="8" r="4" fill="#1E293B"/>
+              <circle class="brand-logo__dot-inner" cx="52" cy="8" r="2" fill="#F97316"/>
+              <text class="brand-logo__wordmark" x="74" y="32" font-family="'Plus Jakarta Sans',sans-serif" font-size="26" font-weight="800" fill="#1E293B" letter-spacing="-0.5">Empr<tspan class="brand-logo__wordmark-accent" fill="#F97316">-E</tspan></text>
+              <text class="brand-logo__tagline" x="74" y="48" font-family="'Plus Jakarta Sans',sans-serif" font-size="9" font-weight="500" fill="#64748B" letter-spacing="0.3">Marketplace de Acessibilidade</text>
+            </svg>
+          </a>
+          <p class="footer__descricao">Area da conta com favoritos e historico de interacoes vinculados ao usuario autenticado.</p>
+        </div>
+
+        <nav class="footer__col" aria-label="Links da plataforma">
+          <h3 class="footer__col-titulo">Plataforma</h3>
+          <ul class="footer__links" role="list">
+            <li><a href="catalogo.html" class="footer__link">Produtos</a></li>
+            <li><a href="conta.html" class="footer__link">Minha conta</a></li>
+            <li><a href="carrinho.html" class="footer__link">Carrinho</a></li>
+            <li><a href="pagamento.html" class="footer__link">Pagamento</a></li>
+          </ul>
+        </nav>
+
+        <nav class="footer__col" aria-label="Suporte">
+          <h3 class="footer__col-titulo">Suporte</h3>
+          <ul class="footer__links" role="list">
+            <li><a href="../index.html#sobre" class="footer__link">Sobre a Empr-E</a></li>
+            <li><a href="../index.html#contato" class="footer__link">Fale conosco</a></li>
+            <li><a href="../index.html#contato" class="footer__link">Acessibilidade</a></li>
+          </ul>
+        </nav>
+
+        <div class="footer__col">
+          <h3 class="footer__col-titulo">Contato</h3>
+          <address class="footer__contato">
+            <p><a href="mailto:contato@empr-e.com.br" class="footer__link">contato@empr-e.com.br</a></p>
+            <p>Campinas - SP</p>
+          </address>
+        </div>
+      </div>
+    </div>
+  </footer>
+
+  <div id="widget-libras" class="widget-libras" hidden aria-live="polite">
+    <div class="widget-libras__inner">
+      <span aria-hidden="true">L</span>
+      <span>Traducao em Libras ativa</span>
+      <button id="btn-fechar-libras" class="widget-libras__fechar" aria-label="Fechar widget Libras">x</button>
+    </div>
+  </div>
+
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true" role="status"></div>
+
+  <script src="../assets/js/script.js"></script>
+  <script type="module" src="../assets/js/conta.js"></script>
+</body>
+</html>

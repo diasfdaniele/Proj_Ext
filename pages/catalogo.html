@@ -137,6 +137,23 @@
                   <option value="digital">Acessibilidade digital</option>
                 </select>
               </div>
+
+              <div class="filtro-box">
+                <label for="filtro-empresa" class="filtro-label">Empresa</label>
+                <select id="filtro-empresa" class="form-select">
+                  <option value="">Todas as empresas</option>
+                </select>
+              </div>
+
+              <div class="filtro-box">
+                <label for="filtro-modalidade" class="filtro-label">Modalidade</label>
+                <select id="filtro-modalidade" class="form-select">
+                  <option value="">Todas as modalidades</option>
+                  <option value="compra-imediata">Compra imediata</option>
+                  <option value="sob-consulta">Sob consulta</option>
+                  <option value="projeto-personalizado">Projeto personalizado</option>
+                </select>
+              </div>
             </aside>
           </div>
 
@@ -148,7 +165,69 @@
               <p id="catalogo-resultado" class="catalogo__resultado" aria-live="polite"></p>
             </div>
 
+            <section id="catalogo-painel-usuario" class="catalogo-painel-usuario" aria-live="polite">
+              <div>
+                <span class="catalogo-painel-usuario__eyebrow">Sessao</span>
+                <h3 class="catalogo-painel-usuario__titulo">Acesse para salvar favoritos e interacoes</h3>
+                <p id="catalogo-painel-texto" class="catalogo-painel-usuario__texto">Usuarios comuns salvam apenas suas mensagens e favoritos. Administradores conseguem acompanhar todas as interacoes registradas.</p>
+              </div>
+              <a id="catalogo-painel-link" href="login.html" class="btn btn--outline btn--sm">Entrar para interagir</a>
+            </section>
+
             <div id="catalogo-lista" class="catalogo__grid" aria-live="polite"></div>
+
+            <section class="catalogo-interacao" aria-labelledby="catalogo-interacao-titulo">
+              <div class="catalogo-interacao__header">
+                <div>
+                  <span class="section-badge">Interacao persistente</span>
+                  <h2 id="catalogo-interacao-titulo" class="catalogo__titulo">Contato e interesse em produtos</h2>
+                  <p class="catalogo__subtitulo">Envie uma mensagem vinculada ao seu login. Os dados ficam gravados no banco para acompanhamento.</p>
+                </div>
+              </div>
+
+              <div class="row g-4 align-items-start">
+                <div class="col-lg-6">
+                  <form id="interacao-form" class="catalogo-interacao__form" novalidate>
+                    <div class="mb-3">
+                      <label for="interacao-produto" class="filtro-label">Produto de interesse</label>
+                      <select id="interacao-produto" class="form-select" required>
+                        <option value="">Selecione um produto</option>
+                      </select>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="interacao-tipo" class="filtro-label">Tipo de interacao</label>
+                      <select id="interacao-tipo" class="form-select" required>
+                        <option value="">Selecione</option>
+                        <option value="orcamento">Solicitar orcamento</option>
+                        <option value="contato-comercial">Contato comercial</option>
+                        <option value="duvida-tecnica">Duvida tecnica</option>
+                      </select>
+                    </div>
+
+                    <div class="mb-3">
+                      <label for="interacao-mensagem" class="filtro-label">Mensagem</label>
+                      <textarea id="interacao-mensagem" class="form-control catalogo-interacao__textarea" rows="5" placeholder="Descreva sua necessidade, prazo ou duvida sobre este produto." required></textarea>
+                    </div>
+
+                    <div class="d-flex flex-wrap gap-2 align-items-center">
+                      <button type="submit" class="btn btn--primary btn--sm">Salvar interacao</button>
+                      <span id="interacao-status" class="catalogo-interacao__status" aria-live="polite"></span>
+                    </div>
+                  </form>
+                </div>
+
+                <div class="col-lg-6">
+                  <div class="catalogo-interacao__lista-shell">
+                    <div class="catalogo-interacao__lista-header">
+                      <h3 class="catalogo-interacao__lista-titulo">Historico de interacoes</h3>
+                      <p id="interacao-lista-texto" class="catalogo-interacao__lista-texto">Entre com sua conta para visualizar suas interacoes salvas.</p>
+                    </div>
+                    <div id="interacao-lista" class="catalogo-interacao__lista" aria-live="polite"></div>
+                  </div>
+                </div>
+              </div>
+            </section>
           </div>
         </div>
       </div>
