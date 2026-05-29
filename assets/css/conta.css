@@ -134,8 +134,17 @@ body.pagina-conta {
   gap: 1rem;
 }
 
+.conta-produto-form {
+  min-height: 100%;
+  padding: 1rem;
+  border: 1px solid var(--cinza-200);
+  border-radius: var(--raio-lg);
+  background: var(--cinza-50);
+}
+
 .conta-favorito,
 .conta-interacao,
+.conta-produto,
 .conta-vazio {
   padding: 1rem;
   border: 1px solid var(--cinza-200);
@@ -164,7 +173,8 @@ body.pagina-conta {
 }
 
 .conta-favorito__topo,
-.conta-interacao__topo {
+.conta-interacao__topo,
+.conta-produto__topo {
   display: flex;
   align-items: flex-start;
   justify-content: space-between;
@@ -185,7 +195,8 @@ body.pagina-conta {
 }
 
 .conta-favorito__descricao,
-.conta-interacao__mensagem {
+.conta-interacao__mensagem,
+.conta-produto__descricao {
   margin-top: 0.75rem;
   line-height: 1.65;
 }
@@ -203,8 +214,101 @@ body.pagina-conta {
   margin-top: 1rem;
 }
 
+.conta-produto__meta {
+  margin-top: 0.45rem;
+  color: var(--cor-texto-suave);
+  font-size: 0.84rem;
+}
+
+.conta-produto__acoes {
+  display: flex;
+  gap: 0.6rem;
+  flex-wrap: wrap;
+  margin-top: 0.9rem;
+}
+
 .conta-interacao__mensagem {
   color: var(--cinza-700);
+}
+
+body.modo-alto-contraste.pagina-conta {
+  background: #000000 !important;
+}
+
+body.modo-alto-contraste .conta-hero__content,
+body.modo-alto-contraste .conta-resumo,
+body.modo-alto-contraste .conta-shell,
+body.modo-alto-contraste .conta-metrica,
+body.modo-alto-contraste .conta-produto-form,
+body.modo-alto-contraste .conta-favorito,
+body.modo-alto-contraste .conta-interacao,
+body.modo-alto-contraste .conta-produto,
+body.modo-alto-contraste .conta-vazio {
+  background: #000000 !important;
+  border-color: #F97316 !important;
+  box-shadow: none !important;
+  color: #FFFFFF !important;
+  backdrop-filter: none !important;
+}
+
+body.modo-alto-contraste .conta-hero__titulo,
+body.modo-alto-contraste .conta-hero__texto,
+body.modo-alto-contraste .conta-resumo__eyebrow,
+body.modo-alto-contraste .conta-resumo__titulo,
+body.modo-alto-contraste .conta-resumo__texto,
+body.modo-alto-contraste .conta-metrica dt,
+body.modo-alto-contraste .conta-metrica dd,
+body.modo-alto-contraste .conta-shell__titulo,
+body.modo-alto-contraste .conta-shell__subtitulo,
+body.modo-alto-contraste .conta-favorito__empresa,
+body.modo-alto-contraste .conta-favorito__meta,
+body.modo-alto-contraste .conta-favorito__descricao,
+body.modo-alto-contraste .conta-interacao__meta,
+body.modo-alto-contraste .conta-interacao__mensagem,
+body.modo-alto-contraste .conta-produto__meta,
+body.modo-alto-contraste .conta-produto__descricao,
+body.modo-alto-contraste .conta-vazio p,
+body.modo-alto-contraste #produto-status,
+body.modo-alto-contraste .conta-produto-form .campo-label {
+  color: #FFFFFF !important;
+}
+
+body.modo-alto-contraste .conta-resumo__eyebrow,
+body.modo-alto-contraste .conta-favorito__media {
+  background: #F97316 !important;
+  color: #000000 !important;
+  border-color: #F97316 !important;
+}
+
+body.modo-alto-contraste .conta-produto-form .campo-input,
+body.modo-alto-contraste .conta-produto-form .campo-select,
+body.modo-alto-contraste .conta-produto-form .campo-textarea {
+  background: #111111 !important;
+  border-color: #FFFFFF !important;
+  color: #FFFFFF !important;
+}
+
+body.modo-alto-contraste .conta-produto-form .campo-input::placeholder,
+body.modo-alto-contraste .conta-produto-form .campo-textarea::placeholder {
+  color: rgba(255, 255, 255, 0.75) !important;
+}
+
+body.modo-alto-contraste .conta-shell .btn,
+body.modo-alto-contraste .conta-resumo .btn,
+body.modo-alto-contraste .conta-produto__acoes .btn,
+body.modo-alto-contraste .conta-favorito__acoes .btn {
+  border-color: #F97316 !important;
+  color: #FFFFFF !important;
+}
+
+body.modo-alto-contraste .conta-shell .btn:hover,
+body.modo-alto-contraste .conta-shell .btn:focus-visible,
+body.modo-alto-contraste .conta-resumo .btn:hover,
+body.modo-alto-contraste .conta-resumo .btn:focus-visible,
+body.modo-alto-contraste .conta-produto__acoes .btn:hover,
+body.modo-alto-contraste .conta-favorito__acoes .btn:hover {
+  background: #F97316 !important;
+  color: #000000 !important;
 }
 
 @media (max-width: 991px) {

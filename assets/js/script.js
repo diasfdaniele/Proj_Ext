@@ -27,7 +27,8 @@ const storageKeys = {
   contraste: 'empre:contraste',
   fonte: 'empre:fonte',
   layout: 'empre:layout',
-  leitura: 'empre:leitura'
+  leitura: 'empre:leitura',
+  produtosMarketplace: 'empre:produtos-marketplace'
 };
 
 let tamanhoFonte = Number(localStorage.getItem(storageKeys.fonte)) || 16;
@@ -76,6 +77,46 @@ function readCartItems() {
   } catch {
     return [];
   }
+}
+
+function readMarketplaceProducts() {
+  try {
+    const storedItems = JSON.parse(localStorage.getItem(storageKeys.produtosMarketplace) ?? '[]');
+
+    if (!Array.isArray(storedItems)) {
+      return [];
+    }
+
+    return storedItems.filter((item) => item && typeof item.id === 'string' && typeof item.sellerId === 'string');
+  } catch {
+    return [];
+  }
+}
+
+function saveMarketplaceProducts(items) {
+  localStorage.setItem(storageKeys.produtosMarketplace, JSON.stringify(items));
+}
+
+function saveMarketplaceProduct(product) {
+  if (!product || typeof product.id !== 'string') {
+    return;
+  }
+
+  const items = readMarketplaceProducts();
+  const existingIndex = items.findIndex((item) => item.id === product.id);
+
+  if (existingIndex >= 0) {
+    items[existingIndex] = product;
+  } else {
+    items.push(product);
+  }
+
+  saveMarketplaceProducts(items);
+}
+
+function removeMarketplaceProduct(productId, sellerId) {
+  const items = readMarketplaceProducts().filter((item) => !(item.id === productId && item.sellerId === sellerId));
+  saveMarketplaceProducts(items);
 }
 
 let itensCarrinho = 0;
@@ -347,3 +388,6 @@ window.atualizarQuantidadeCarrinho = updateCartItemQuantity;
 window.limparCarrinho = clearCart;
 window.mostrarToast = mostrarToast;
 window.obterUsuarioLogado = readSessionUser;
+window.obterProdutosMarketplace = readMarketplaceProducts;
+window.salvarProdutoMarketplace = saveMarketplaceProduct;
+window.removerProdutoMarketplace = removeMarketplaceProduct;

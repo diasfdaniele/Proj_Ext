@@ -63,6 +63,7 @@ if (form && email && senha) {
       const role = normalizeRole(profile.role);
 
       saveUserSession({
+        accountType: profile.sellerType ?? 'comprador',
         email: credential.user.email ?? emailValor,
         nomeResponsavel: profile.nomeResponsavel ?? '',
         razaoSocial: profile.razaoSocial ?? '',
@@ -71,7 +72,7 @@ if (form && email && senha) {
       });
 
       alert('Login realizado com sucesso.');
-      window.location.href = role === 'administrador' ? 'catalogo.html?painel=admin' : 'catalogo.html';
+      window.location.href = 'conta.html';
     } catch (erro) {
       console.error(erro);
       alert('Email ou senha invalidos.');

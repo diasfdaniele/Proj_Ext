@@ -53,6 +53,7 @@ if (formCadastro) {
     const nomeResponsavel = readValue('nome-responsavel');
     const cargo = readValue('cargo');
     const cpf = readValue('cpf');
+    const tipoConta = readValue('tipo-conta') || 'comprador';
     const perfilAcesso = readValue('perfil-acesso') || 'usuario-comum';
     const email = readValue('email');
     const senha = readValue('senha');
@@ -100,6 +101,7 @@ if (formCadastro) {
         nomeResponsavel,
         perfil: 'empresa',
         razaoSocial,
+        sellerType: tipoConta,
         role: perfilAcesso,
         site,
         telefone,
@@ -110,6 +112,7 @@ if (formCadastro) {
       await setDoc(doc(db, 'usuarios', credential.user.uid), userProfile);
 
       saveUserSession({
+        accountType: tipoConta,
         email,
         nomeResponsavel,
         razaoSocial,

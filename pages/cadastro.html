@@ -374,6 +374,24 @@
           </legend>
 
           <div class="campo-grupo">
+            <label for="tipo-conta" class="campo-label">
+              Objetivo na plataforma <span class="campo-obrigatorio" aria-hidden="true">*</span>
+            </label>
+            <select
+              id="tipo-conta"
+              name="tipo_conta"
+              class="campo-input campo-select"
+              aria-required="true"
+              aria-describedby="tipo-conta-erro"
+              aria-invalid="false"
+            >
+              <option value="comprador">Quero comprar</option>
+              <option value="vendedor">Quero vender</option>
+            </select>
+            <span id="tipo-conta-erro" class="campo-erro" role="alert" hidden></span>
+          </div>
+
+          <div class="campo-grupo">
             <label for="perfil-acesso" class="campo-label">
               Perfil de acesso <span class="campo-obrigatorio" aria-hidden="true">*</span>
             </label>

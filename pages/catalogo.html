@@ -175,59 +175,6 @@
             </section>
 
             <div id="catalogo-lista" class="catalogo__grid" aria-live="polite"></div>
-
-            <section class="catalogo-interacao" aria-labelledby="catalogo-interacao-titulo">
-              <div class="catalogo-interacao__header">
-                <div>
-                  <span class="section-badge">Interacao persistente</span>
-                  <h2 id="catalogo-interacao-titulo" class="catalogo__titulo">Contato e interesse em produtos</h2>
-                  <p class="catalogo__subtitulo">Envie uma mensagem vinculada ao seu login. Os dados ficam gravados no banco para acompanhamento.</p>
-                </div>
-              </div>
-
-              <div class="row g-4 align-items-start">
-                <div class="col-lg-6">
-                  <form id="interacao-form" class="catalogo-interacao__form" novalidate>
-                    <div class="mb-3">
-                      <label for="interacao-produto" class="filtro-label">Produto de interesse</label>
-                      <select id="interacao-produto" class="form-select" required>
-                        <option value="">Selecione um produto</option>
-                      </select>
-                    </div>
-
-                    <div class="mb-3">
-                      <label for="interacao-tipo" class="filtro-label">Tipo de interacao</label>
-                      <select id="interacao-tipo" class="form-select" required>
-                        <option value="">Selecione</option>
-                        <option value="orcamento">Solicitar orcamento</option>
-                        <option value="contato-comercial">Contato comercial</option>
-                        <option value="duvida-tecnica">Duvida tecnica</option>
-                      </select>
-                    </div>
-
-                    <div class="mb-3">
-                      <label for="interacao-mensagem" class="filtro-label">Mensagem</label>
-                      <textarea id="interacao-mensagem" class="form-control catalogo-interacao__textarea" rows="5" placeholder="Descreva sua necessidade, prazo ou duvida sobre este produto." required></textarea>
-                    </div>
-
-                    <div class="d-flex flex-wrap gap-2 align-items-center">
-                      <button type="submit" class="btn btn--primary btn--sm">Salvar interacao</button>
-                      <span id="interacao-status" class="catalogo-interacao__status" aria-live="polite"></span>
-                    </div>
-                  </form>
-                </div>
-
-                <div class="col-lg-6">
-                  <div class="catalogo-interacao__lista-shell">
-                    <div class="catalogo-interacao__lista-header">
-                      <h3 class="catalogo-interacao__lista-titulo">Historico de interacoes</h3>
-                      <p id="interacao-lista-texto" class="catalogo-interacao__lista-texto">Entre com sua conta para visualizar suas interacoes salvas.</p>
-                    </div>
-                    <div id="interacao-lista" class="catalogo-interacao__lista" aria-live="polite"></div>
-                  </div>
-                </div>
-              </div>
-            </section>
           </div>
         </div>
       </div>
@@ -256,13 +203,13 @@
           </a>
           <p class="footer__descricao">Marketplace B2B especializado em produtos e soluções de acessibilidade. Conectando empresas que acreditam na inclusão.</p>
           <div class="footer__redes" aria-label="Redes sociais">
-            <a href="#" class="footer__rede" aria-label="LinkedIn da Acessify">
+            <a href="#" class="footer__rede" aria-label="LinkedIn da Empr-E">
               <svg aria-hidden="true" focusable="false" width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"/><rect x="2" y="9" width="4" height="12"/><circle cx="4" cy="4" r="2"/></svg>
             </a>
-            <a href="#" class="footer__rede" aria-label="Instagram da Acessify">
+            <a href="#" class="footer__rede" aria-label="Instagram da Empr-E">
               <svg aria-hidden="true" focusable="false" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="2" width="20" height="20" rx="5"/><path d="M16 11.37A4 4 0 1 1 12.63 8 4 4 0 0 1 16 11.37z"/><line x1="17.5" y1="6.5" x2="17.51" y2="6.5"/></svg>
             </a>
-            <a href="#" class="footer__rede" aria-label="YouTube da Acessify">
+            <a href="#" class="footer__rede" aria-label="YouTube da Empr-E">
               <svg aria-hidden="true" focusable="false" width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22.54 6.42a2.78 2.78 0 0 0-1.94-1.96C18.88 4 12 4 12 4s-6.88 0-8.6.46a2.78 2.78 0 0 0-1.94 1.96A29 29 0 0 0 1 12a29 29 0 0 0 .46 5.58A2.78 2.78 0 0 0 3.4 19.54C5.12 20 12 20 12 20s6.88 0 8.6-.46a2.78 2.78 0 0 0 1.94-1.96A29 29 0 0 0 23 12a29 29 0 0 0-.46-5.58z"/><polygon points="9.75,15.02 15.5,12 9.75,8.98 9.75,15.02" fill="currentColor" stroke="none"/></svg>
             </a>
           </div>
@@ -298,7 +245,7 @@
           <address class="footer__contato">
             <p>
               <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg>
-              <a href="mailto:contato@acessify.com.br" class="footer__link">contato@empr-e.com.br</a>
+              <a href="mailto:contato@empr-e.com.br" class="footer__link">contato@empr-e.com.br</a>
             </p>
             <p>
               <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M22 16.92v3a2 2 0 0 1-2.18 2 19.79 19.79 0 0 1-8.63-3.07A19.5 19.5 0 0 1 4.69 13a19.79 19.79 0 0 1-3.07-8.67A2 2 0 0 1 3.6 2h3a2 2 0 0 1 2 1.72 12.84 12.84 0 0 0 .7 2.81 2 2 0 0 1-.45 2.11L8.09 9.91a16 16 0 0 0 6 6l1.27-1.27a2 2 0 0 1 2.11-.45 12.84 12.84 0 0 0 2.81.7A2 2 0 0 1 22 16.92z"/></svg>

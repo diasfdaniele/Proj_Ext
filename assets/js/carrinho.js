@@ -2,9 +2,8 @@
 
 const cartList = document.getElementById('lista-carrinho');
 const cartSummaryText = document.getElementById('carrinho-resumo-texto');
-const totalItemsElement = document.getElementById('resumo-total-itens');
-const totalUniqueElement = document.getElementById('resumo-produtos-unicos');
-const summaryModeElement = document.getElementById('resumo-modalidade');
+const totalQuantityElement = document.getElementById('resumo-quantidade');
+const totalValueElement = document.getElementById('resumo-valor');
 const clearCartButton = document.getElementById('btn-limpar-carrinho');
 const finalizeCartButton = document.getElementById('btn-finalizar-carrinho');
 const proceedToPaymentLink = document.getElementById('btn-ir-pagamento');
@@ -19,6 +18,24 @@ function getCartItems() {
 
 function getTotalQuantity(items) {
   return items.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
+}
+
+function parsePriceValue(price) {
+  const normalizedPrice = String(price ?? '').replace(/\./g, '').replace(',', '.');
+  const matchedValue = normalizedPrice.match(/r\$\s*(\d+(?:\.\d+)?)/i);
+
+  if (!matchedValue) {
+    return null;
+  }
+
+  return Number(matchedValue[1]);
+}
+
+function formatCurrency(value) {
+  return new Intl.NumberFormat('pt-BR', {
+    currency: 'BRL',
+    style: 'currency'
+  }).format(value);
 }
 
 function createEmptyState() {
@@ -70,19 +87,21 @@ function createCartItem(item) {
 }
 
 function updateSummary(items) {
-  const totalItems = getTotalQuantity(items);
-  const uniqueItems = items.length;
-  const hasConsultiveItems = items.some((item) => {
-    const price = (item.price || '').toLowerCase();
-    return price.includes('consulta') || price.includes('plano') || price.includes('licenca') || price.includes('projeto') || price.includes('sob');
-  });
+  const totalQuantity = getTotalQuantity(items);
+  const pricedItems = items.map((item) => ({
+    quantity: Number(item.quantity) || 1,
+    value: parsePriceValue(item.price)
+  }));
+  const hasNonPricedItems = pricedItems.some((item) => item.value === null);
+  const numericTotal = pricedItems.reduce((sum, item) => sum + ((item.value ?? 0) * item.quantity), 0);
 
-  totalItemsElement.textContent = String(totalItems);
-  totalUniqueElement.textContent = String(uniqueItems);
-  summaryModeElement.textContent = hasConsultiveItems ? 'Orcamento consultivo' : 'Selecao direta';
-  cartSummaryText.textContent = uniqueItems
-    ? `${totalItems} item(ns) salvos localmente para a sua empresa.`
-    : 'Seus produtos ficam salvos localmente neste navegador.';
+  totalQuantityElement.textContent = String(totalQuantity);
+  totalValueElement.textContent = hasNonPricedItems
+    ? (numericTotal > 0 ? `A partir de ${formatCurrency(numericTotal)}` : 'Sob consulta')
+    : formatCurrency(numericTotal);
+  cartSummaryText.textContent = items.length
+    ? `${totalQuantity} item(ns) selecionado(s) para revisão da sua empresa.`
+    : 'Revise os itens escolhidos antes de solicitar um orçamento ou seguir para o pagamento.';
 }
 
 function bindCartActions(items) {
