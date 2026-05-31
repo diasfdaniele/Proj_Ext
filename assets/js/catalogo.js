@@ -1,7 +1,6 @@
 'use strict';
 
-import { auth, db } from './firebase.js';
-// import { collection, deleteDoc, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+// Usa window.auth e window.db definidos em firebase.js
 // O Firestore já é exportado de ./firebase.js, então não precisa importar diretamente aqui.
 
 const searchInput = document.getElementById('campo-busca');
@@ -13,9 +12,10 @@ const catalogGrid = document.getElementById('catalogo-lista');
 const userPanel = document.getElementById('catalogo-painel-usuario');
 const userPanelText = document.getElementById('catalogo-painel-texto');
 const userPanelLink = document.getElementById('catalogo-painel-link');
-const sessionStorageKey = 'empre:usuario-logado';
+// Usa window.sessionStorageKey global
 const favoriteIds = new Set();
 
+// ESTRUTURA PARA PRODUTOS - NÃO EXCLUIR POR ENQUANTO 
 const baseProducts = [
   {
     id: 'solucoes-software',

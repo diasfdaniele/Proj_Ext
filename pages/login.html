@@ -456,11 +456,17 @@
     <!-- TOAST NOTIFICATIONS -->
     <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true" role="status"></div>
 
+    <!-- Firebase compat CDN (deve vir antes do login.js) -->
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+    <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+    <script src="../assets/js/firebase.js"></script>
+
     <!-- JS global do sistema -->
     <script src="../assets/js/script.js"></script>
 
-    <!-- JS específico do login -->
-    <script type="module" src="../assets/js/login.js"></script>
+    <!-- JS específico do login (NÃO usar type=module) -->
+    <script src="../assets/js/login.js"></script>
 </body>
 
 </html>

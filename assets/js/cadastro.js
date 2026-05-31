@@ -1,28 +1,11 @@
-'use strict';
-
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getAuth, createUserWithEmailAndPassword } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { getFirestore, doc, setDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
-// Configuração do Firebase (copie do seu firebase.js se necessário)
-const firebaseConfig = {
-  apiKey: "AIzaSyC-YG19WRKIUFE__7608NYqrrehSWr8Zd0",
-  authDomain: "empr-e.firebaseapp.com",
-  projectId: "empr-e",
-  storageBucket: "empr-e.appspot.com",
-  messagingSenderId: "196840931732",
-  appId: "1:196840931732:web:d316628d34006a8e37cf81"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+// Firebase já está inicializado via firebase.js
+// Usa window.auth e window.db
 
 const formCadastro = document.getElementById('formulario-cadastro');
 const botaoCadastro = document.getElementById('btn-cadastrar');
 const textoBotaoCadastro = botaoCadastro?.querySelector('.btn-texto');
 const loadingBotaoCadastro = botaoCadastro?.querySelector('.btn-loading');
-const sessionStorageKey = 'empre:usuario-logado';
+// Usa window.sessionStorageKey global
 
 function readValue(id) {
   return document.getElementById(id)?.value.trim() ?? '';
@@ -87,7 +70,7 @@ if (formCadastro) {
       return;
     }
 
-    if (!auth || !db) {
+    if (!window.auth || !window.db) {
       alert('Firebase não está configurado corretamente.');
       return;
     }
@@ -95,7 +78,7 @@ if (formCadastro) {
     try {
       setLoadingState(true);
 
-      const credential = await createUserWithEmailAndPassword(auth, email, senha);
+      const credential = await window.auth.createUserWithEmailAndPassword(email, senha);
 
       const userProfile = {
         cargo,
@@ -116,7 +99,7 @@ if (formCadastro) {
         uid: credential.user.uid
       };
 
-      await setDoc(doc(db, 'usuarios', credential.user.uid), userProfile);
+      await window.db.collection('usuarios').doc(credential.user.uid).set(userProfile);
 
       saveUserSession({
         accountType: tipoConta,

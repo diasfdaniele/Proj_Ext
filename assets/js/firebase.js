@@ -1,3 +1,5 @@
+// Definir sessionStorageKey global para evitar conflitos
+window.sessionStorageKey = 'empre:usuario-logado';
 
 // Firebase compatível com uso via CDN (firebase-compat)
 // Certifique-se de incluir os scripts CDN no HTML:
@@ -16,6 +18,6 @@ const firebaseConfig = {
 };
 
 firebase.initializeApp(firebaseConfig);
-const db = firebase.firestore();
-const auth = firebase.auth();
+window.db = firebase.firestore();
+window.auth = firebase.auth();
 

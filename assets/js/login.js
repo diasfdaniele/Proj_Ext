@@ -1,40 +1,27 @@
-'use strict';
+// 'use strict';
+// Versão compatível com Firebase compat (CDN)
+// Firebase já está inicializado via firebase.js
+// Usa window.firebase
 
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getAuth, signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { getFirestore, doc, getDoc } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
-// Configuração do Firebase (copie do seu firebase.js se necessário)
-const firebaseConfig = {
-  apiKey: "AIzaSyC-YG19WRKIUFE__7608NYqrrehSWr8Zd0",
-  authDomain: "empr-e.firebaseapp.com",
-  projectId: "empr-e",
-  storageBucket: "empr-e.appspot.com",
-  messagingSenderId: "196840931732",
-  appId: "1:196840931732:web:d316628d34006a8e37cf81"
-};
-
-const app = initializeApp(firebaseConfig);
-const auth = getAuth(app);
-const db = getFirestore(app);
+// Usa auth e db globais definidos em firebase.js
 const googleLoginButton = document.getElementById('btn-google-login');
-// Login com Google
+// Login com Google (compat)
 if (googleLoginButton) {
   googleLoginButton.addEventListener('click', async () => {
-    if (!auth || !db) {
+    if (!window.auth || !window.db) {
       alert('Firebase não está configurado corretamente.');
       return;
     }
     try {
       setLoadingState(true);
-      const provider = new GoogleAuthProvider();
-      const result = await signInWithPopup(auth, provider);
+      const provider = new firebase.auth.GoogleAuthProvider();
+      const result = await window.auth.signInWithPopup(provider);
       const user = result.user;
       // Busca perfil adicional no Firestore, se existir
       let profile = {};
       try {
-        const profileSnapshot = await getDoc(doc(db, 'usuarios', user.uid));
-        if (profileSnapshot.exists()) {
+        const profileSnapshot = await window.db.collection('usuarios').doc(user.uid).get();
+        if (profileSnapshot.exists) {
           profile = profileSnapshot.data();
         }
       } catch {}
@@ -64,7 +51,7 @@ const senha = document.getElementById('campo-senha');
 const botaoEntrar = document.getElementById('btn-entrar');
 const textoBotaoEntrar = botaoEntrar?.querySelector('.btn-login-submit__texto');
 const loadingBotaoEntrar = botaoEntrar?.querySelector('.btn-login-submit__loading');
-const sessionStorageKey = 'empre:usuario-logado';
+// Usa window.sessionStorageKey global
 
 function normalizeRole(value) {
   return value === 'administrador' ? 'administrador' : 'usuario-comum';
@@ -104,17 +91,23 @@ if (form && email && senha) {
       return;
     }
 
-    if (!auth || !db) {
+    if (!window.auth || !window.db) {
       alert('Firebase não está configurado corretamente.');
       return;
     }
 
     try {
       setLoadingState(true);
-      const credential = await signInWithEmailAndPassword(auth, emailValor, senhaValor);
-      const profileSnapshot = await getDoc(doc(db, 'usuarios', credential.user.uid));
-
-      const profile = profileSnapshot.exists() ? profileSnapshot.data() : {};
+      // Login compatível
+      const credential = await window.auth.signInWithEmailAndPassword(emailValor, senhaValor);
+      // Buscar perfil adicional no Firestore compat
+      let profile = {};
+      try {
+        const profileSnapshot = await window.db.collection('usuarios').doc(credential.user.uid).get();
+        if (profileSnapshot.exists) {
+          profile = profileSnapshot.data();
+        }
+      } catch {}
       const role = normalizeRole(profile.role);
 
       saveUserSession({

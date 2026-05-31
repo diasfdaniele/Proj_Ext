@@ -78,15 +78,15 @@ function requireAuthenticationState() {
   const user = readSessionUser();
 
   if (!user) {
-    summaryText.textContent = 'Entre com sua conta para acessar seus favoritos e historico de interacoes.';
-    heroText.textContent = 'Acesse sua conta para visualizar seus produtos favoritos, carrinho, historico e recursos personalizados do marketplace.';
+    summaryText.textContent = 'Entre com sua conta para acessar seus favoritos e histórico de interações.';
+    heroText.textContent = 'Acesse sua conta para visualizar seus produtos favoritos, carrinho, histórico e recursos personalizados.';
     if (heroTitle) heroTitle.textContent = 'Minha conta';
-    favoritesText.textContent = 'Seus favoritos aparecerao aqui apos o login.';
+    favoritesText.textContent = 'Seus favoritos aparecerão aqui após o login.';
     cartText.textContent = 'Entre com sua conta para acompanhar o carrinho e continuar sua compra.';
-    interactionsText.textContent = 'Entre com sua conta para acompanhar suas interacoes.';
-    renderEmptyState(favoritesList, 'Nenhum favorito disponivel. Faca login e favorite produtos no catalogo.');
-    renderEmptyState(cartList, 'Nenhum item disponivel. Faca login e adicione produtos ao carrinho.');
-    renderEmptyState(interactionsList, 'Nenhuma interacao disponivel. Faca login para visualizar seu historico.');
+    interactionsText.textContent = 'Entre com sua conta para acompanhar suas interações.';
+    renderEmptyState(favoritesList, 'Nenhum favorito disponível. Faça login e favorite produtos no catálogo.');
+    renderEmptyState(cartList, 'Nenhum item disponível. Faça login e adicione produtos ao carrinho.');
+    renderEmptyState(interactionsList, 'Nenhuma interação disponível. Faça login para visualizar seu histórico.');
     updateSummary(0, 0);
     logoutButton.hidden = true;
     sellerShell.hidden = true;
@@ -98,11 +98,11 @@ function requireAuthenticationState() {
   let nomeUsuario = user.nome || user.displayName || user.razaoSocial || user.email || 'Usuário';
   if (heroTitle) heroTitle.textContent = `Olá, ${nomeUsuario}`;
   summaryText.textContent = user.accountType === 'vendedor'
-    ? `Conta de vendedor ativa para ${user.razaoSocial || user.email}. Alem dos favoritos e interacoes, voce pode gerenciar seus produtos de venda.`
-    : `Conta de comprador ativa para ${user.razaoSocial || user.email}. Seus favoritos, carrinho e interacoes ficam organizados abaixo.`;
+    ? `Conta de vendedor ativa para ${user.razaoSocial || user.email}. Gerencie suas vendas, compras e interações.`
+    : `Conta de comprador ativa para ${user.razaoSocial || user.email}. Seus favoritos, carrinho e interações ficam organizados abaixo.`;
   heroText.textContent = user.accountType === 'vendedor'
-    ? 'Gerencie sua vitrine, acompanhe contatos recebidos e continue comprando pelo marketplace quando precisar.'
-    : 'Acompanhe seus produtos favoritos, carrinho atual e o historico de relacionamento com o marketplace.';
+    ? 'Anuncie seus produtos, acompanhe suas vendas e compre de outros vendedores. Tudo em um só lugar.'
+    : 'Acompanhe seus produtos favoritos, carrinho e interações.';
   favoritesText.textContent = 'Produtos favoritados ficam salvos no banco e reaparecem aqui.';
   cartText.textContent = user.accountType === 'vendedor'
     ? 'Mesmo como vendedor, voce continua com acesso ao seu carrinho e ao fluxo de compra.'

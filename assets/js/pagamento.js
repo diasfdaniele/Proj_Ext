@@ -2,7 +2,7 @@
 'use strict';
 
 // Importa o firebase.js para uso futuro de integração de pagamentos reais
-import { db } from './firebase.js';
+// Usa window.db definido em firebase.js
 // (Se desejar salvar pagamentos no Firestore, importar e usar funções do Firestore aqui)
 
 const paymentForm = document.getElementById('pagamento-form');

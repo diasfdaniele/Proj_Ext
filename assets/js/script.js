@@ -41,7 +41,7 @@ const carrinhoBadges = [
   document.getElementById('carrinho-count'),
   document.getElementById('quantidadeCarrinho')
 ].filter(Boolean);
-const sessionStorageKey = 'empre:usuario-logado';
+// Usa window.sessionStorageKey global
 
 const storageKeys = {
   carrinho: 'empre:carrinho',
