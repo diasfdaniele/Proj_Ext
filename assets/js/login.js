@@ -57,7 +57,6 @@ if (googleLoginButton) {
     }
   });
 }
-import { doc, getDoc } from 'firebase/firestore';
 
 const form = document.getElementById('formulario-login');
 const email = document.getElementById('campo-email');

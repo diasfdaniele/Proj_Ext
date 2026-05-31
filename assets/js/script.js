@@ -1,3 +1,25 @@
+// Toast acessível e reutilizável
+window.mostrarToast = function (mensagem, tipo = 'info', tempo = 3000) {
+  let container = document.getElementById('toast-container');
+  if (!container) {
+    container = document.createElement('div');
+    container.id = 'toast-container';
+    container.className = 'toast-container';
+    container.setAttribute('aria-live', 'polite');
+    container.setAttribute('aria-atomic', 'true');
+    document.body.appendChild(container);
+  }
+  const toast = document.createElement('div');
+  toast.className = `toast toast--${tipo}`;
+  toast.setAttribute('role', 'status');
+  toast.setAttribute('tabindex', '0');
+  toast.innerText = mensagem;
+  container.appendChild(toast);
+  setTimeout(() => {
+    toast.classList.add('toast--hide');
+    setTimeout(() => toast.remove(), 400);
+  }, tempo);
+};
 'use strict';
 
 const body = document.body;

@@ -1,13 +1,10 @@
 
 'use strict';
 
-// Importa o firebase.js e funções do Firestore
-import { db } from './firebase.js';
-import { collection, addDoc } from 'firebase/firestore';
-// Função para salvar o carrinho no Firestore
+// Função para salvar o carrinho no Firestore usando compat
 async function salvarCarrinhoNoFirebase(items) {
   try {
-    await addDoc(collection(db, 'carrinhos'), {
+    await firebase.firestore().collection('carrinhos').add({
       itens: items,
       criadoEm: new Date()
     });

@@ -1,3 +1,48 @@
+/* --- AJUSTES PARA FORMULÁRIO DE PRODUTO (PAINEL GERENCIAL) --- */
+.conta-produto-form .campo-label {
+  font-weight: 600;
+  color: var(--cor-texto);
+  margin-bottom: 0.25rem;
+  display: block;
+}
+
+.conta-produto-form .campo-input,
+.conta-produto-form .campo-select,
+.conta-produto-form .campo-textarea {
+  width: 100%;
+  padding: 0.65rem 1rem;
+  border: 1.5px solid var(--cinza-200);
+  border-radius: var(--raio-md, 8px);
+  background: var(--branco);
+  font-size: 1rem;
+  color: var(--cor-texto);
+  margin-bottom: 1rem;
+  transition: border-color 0.2s;
+}
+
+.conta-produto-form .campo-input:focus,
+.conta-produto-form .campo-select:focus,
+.conta-produto-form .campo-textarea:focus {
+  border-color: var(--laranja-vivo);
+  outline: none;
+}
+
+.conta-produto-form button[type="submit"] {
+  margin-top: 0.5rem;
+}
+
+#produto-status {
+  margin-left: 0.75rem;
+  font-size: 0.98rem;
+  color: var(--cor-sucesso);
+  font-weight: 500;
+}
+
+@media (max-width: 991px) {
+  .conta-produto-form {
+    margin-bottom: 1.5rem;
+  }
+}
 body.pagina-conta {
   background: linear-gradient(180deg, var(--cinza-50) 0%, #ffffff 24%, var(--cinza-50) 100%);
 }

@@ -1,11 +1,9 @@
 'use strict';
 
-import { auth, db } from './firebase.js';
-import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
-import { signOut } from 'firebase/auth';
 
-const sessionStorageKey = 'empre:usuario-logado';
+
 const heroText = document.getElementById('conta-hero-texto');
+const heroTitle = document.getElementById('conta-titulo');
 const summaryText = document.getElementById('conta-resumo-texto');
 const totalFavorites = document.getElementById('conta-total-favoritos');
 const totalInteractions = document.getElementById('conta-total-interacoes');
@@ -82,6 +80,7 @@ function requireAuthenticationState() {
   if (!user) {
     summaryText.textContent = 'Entre com sua conta para acessar seus favoritos e historico de interacoes.';
     heroText.textContent = 'Acesse sua conta para visualizar seus produtos favoritos, carrinho, historico e recursos personalizados do marketplace.';
+    if (heroTitle) heroTitle.textContent = 'Minha conta';
     favoritesText.textContent = 'Seus favoritos aparecerao aqui apos o login.';
     cartText.textContent = 'Entre com sua conta para acompanhar o carrinho e continuar sua compra.';
     interactionsText.textContent = 'Entre com sua conta para acompanhar suas interacoes.';
@@ -95,6 +94,9 @@ function requireAuthenticationState() {
   }
 
   logoutButton.hidden = false;
+  // Preferência: nome do usuário, depois razão social, depois email
+  let nomeUsuario = user.nome || user.displayName || user.razaoSocial || user.email || 'Usuário';
+  if (heroTitle) heroTitle.textContent = `Olá, ${nomeUsuario}`;
   summaryText.textContent = user.accountType === 'vendedor'
     ? `Conta de vendedor ativa para ${user.razaoSocial || user.email}. Alem dos favoritos e interacoes, voce pode gerenciar seus produtos de venda.`
     : `Conta de comprador ativa para ${user.razaoSocial || user.email}. Seus favoritos, carrinho e interacoes ficam organizados abaixo.`;
@@ -240,7 +242,7 @@ function renderFavorites(items) {
       const productId = button.getAttribute('data-remove-favorite');
       const user = readSessionUser();
 
-      if (!productId || !user || !db || !isFirebaseConfigured) {
+      if (!productId || !user || !db) {
         return;
       }
 
@@ -286,7 +288,7 @@ async function loadAccountData() {
     return;
   }
 
-  if (!isFirebaseConfigured || !db) {
+  if (!db) {
     renderEmptyState(favoritesList, 'Configure o Firebase para visualizar favoritos persistidos.');
     renderEmptyState(interactionsList, 'Configure o Firebase para visualizar o historico persistido.');
     renderCartItems(readCartItems());
@@ -299,20 +301,24 @@ async function loadAccountData() {
 
   const isAdmin = user.role === 'administrador';
 
+
   try {
-    const favoritesSnapshot = await getDocs(query(collection(db, 'favoritos'), where('userId', '==', user.uid)));
-    const favorites = favoritesSnapshot.docs
-      .map((docSnapshot) => docSnapshot.data())
-      .sort((first, second) => new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime());
+    // Favoritos compat
+    const favoritesSnapshot = await db.collection('favoritos').where('userId', '==', user.uid).get();
+    const favorites = [];
+    favoritesSnapshot.forEach(doc => favorites.push(doc.data()));
+    favorites.sort((first, second) => new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime());
 
-    const interactionsQuery = isAdmin
-      ? collection(db, 'interacoes')
-      : query(collection(db, 'interacoes'), where('userId', '==', user.uid));
-
-    const interactionsSnapshot = await getDocs(interactionsQuery);
-    const interactions = interactionsSnapshot.docs
-      .map((docSnapshot) => docSnapshot.data())
-      .sort((first, second) => new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime());
+    // Interações compat
+    let interactionsSnapshot;
+    if (isAdmin) {
+      interactionsSnapshot = await db.collection('interacoes').get();
+    } else {
+      interactionsSnapshot = await db.collection('interacoes').where('userId', '==', user.uid).get();
+    }
+    const interactions = [];
+    interactionsSnapshot.forEach(doc => interactions.push(doc.data()));
+    interactions.sort((first, second) => new Date(second.createdAt).getTime() - new Date(first.createdAt).getTime());
 
     updateSummary(favorites.length, interactions.length);
     renderFavorites(favorites);
@@ -398,7 +404,7 @@ sellerProductForm?.addEventListener('submit', (event) => {
 logoutButton?.addEventListener('click', async () => {
   localStorage.removeItem(sessionStorageKey);
 
-  if (isFirebaseConfigured && auth) {
+  if (auth) {
     try {
       await signOut(auth);
     } catch (error) {
