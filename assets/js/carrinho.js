@@ -1,4 +1,25 @@
+
 'use strict';
+
+// Importa o firebase.js e funções do Firestore
+import { db } from './firebase.js';
+import { collection, addDoc } from 'firebase/firestore';
+// Função para salvar o carrinho no Firestore
+async function salvarCarrinhoNoFirebase(items) {
+  try {
+    await addDoc(collection(db, 'carrinhos'), {
+      itens: items,
+      criadoEm: new Date()
+    });
+    if (typeof window.mostrarToast === 'function') {
+      window.mostrarToast('Carrinho salvo no Firebase!', 'sucesso');
+    }
+  } catch (e) {
+    if (typeof window.mostrarToast === 'function') {
+      window.mostrarToast('Erro ao salvar no Firebase.', 'erro');
+    }
+  }
+}
 
 const cartList = document.getElementById('lista-carrinho');
 const cartSummaryText = document.getElementById('carrinho-resumo-texto');
@@ -163,10 +184,16 @@ clearCartButton?.addEventListener('click', () => {
   }
 });
 
+
 finalizeCartButton?.addEventListener('click', () => {
-  if (typeof window.mostrarToast === 'function') {
-    window.mostrarToast('Solicitacao de orcamento preparada. Conecte este fluxo ao Firebase quando desejar.', 'sucesso');
+  const items = getCartItems();
+  if (!items.length) {
+    if (typeof window.mostrarToast === 'function') {
+      window.mostrarToast('Adicione itens ao carrinho antes de finalizar.', 'info');
+    }
+    return;
   }
+  salvarCarrinhoNoFirebase(items);
 });
 
 proceedToPaymentLink?.addEventListener('click', (event) => {

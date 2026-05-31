@@ -1,31 +1,25 @@
-import { initializeApp } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-app.js";
-import { getFirestore } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-import { getAuth } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-import { getStorage } from "https://www.gstatic.com/firebasejs/11.0.0/firebase-storage.js";
 
+// Import only from npm packages (after npm install firebase)
+import { initializeApp } from "firebase/app";
+import { getFirestore } from "firebase/firestore";
+import { getAuth } from "firebase/auth";
+import { getStorage } from "firebase/storage";
+
+// Your web app's Firebase configuration
 const firebaseConfig = {
-  apiKey: "SUA_API_KEY",
-  authDomain: "SEU_DOMINIO.firebaseapp.com",
-  projectId: "SEU_PROJECT_ID",
-  storageBucket: "SEU_BUCKET.appspot.com",
-  messagingSenderId: "SEU_SENDER_ID",
-  appId: "SEU_APP_ID"
+  apiKey: "AIzaSyC-YG19WRKIUFE__7608NYqrrehSWr8Zd0",
+  authDomain: "empr-e.firebaseapp.com",
+  projectId: "empr-e",
+  storageBucket: "empr-e.appspot.com", // Corrigido
+  messagingSenderId: "196840931732",
+  appId: "1:196840931732:web:d316628d34006a8e37cf81"
 };
 
-const isFirebaseConfigured = Object.values(firebaseConfig).every((value) => {
-  if (!value) {
-    return false;
-  }
-
-  return !value.startsWith("SUA_") && !value.startsWith("SEU_");
-});
-
-let app = null;
-let db = null;
-let auth = null;
-let storage = null;
-
-if (isFirebaseConfigured) {
+// Initialize Firebase
+const app = initializeApp(firebaseConfig);
+export const db = getFirestore(app);
+export const auth = getAuth(app);
+export const storage = getStorage(app);
   app = initializeApp(firebaseConfig);
   db = getFirestore(app);
   auth = getAuth(app);

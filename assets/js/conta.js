@@ -1,19 +1,8 @@
 'use strict';
 
-import { auth, db, isFirebaseConfigured } from './firebase.js';
-
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-  where
-} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
-
-import {
-  signOut
-} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
+import { auth, db } from './firebase.js';
+import { collection, deleteDoc, doc, getDocs, query, where } from 'firebase/firestore';
+import { signOut } from 'firebase/auth';
 
 const sessionStorageKey = 'empre:usuario-logado';
 const heroText = document.getElementById('conta-hero-texto');

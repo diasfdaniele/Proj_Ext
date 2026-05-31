@@ -1,16 +1,7 @@
 'use strict';
 
-import { auth, db, isFirebaseConfigured } from './firebase.js';
-
-import {
-  collection,
-  deleteDoc,
-  doc,
-  getDocs,
-  query,
-  setDoc,
-  where
-} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { auth, db } from './firebase.js';
+import { collection, deleteDoc, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
 
 const searchInput = document.getElementById('campo-busca');
 const categorySelect = document.getElementById('filtro-categoria');

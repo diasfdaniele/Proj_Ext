@@ -1,3 +1,25 @@
+/* Botão de login com Google */
+.btn-login-google, .btn--google {
+  background: #fff;
+  color: #1a202c;
+  border: 1px solid #d1d5db;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-weight: 600;
+  justify-content: center;
+  margin-bottom: 1rem;
+  transition: box-shadow 0.2s, border-color 0.2s;
+}
+.btn-login-google svg, .btn--google svg {
+  margin-right: 0.5rem;
+}
+.btn-login-google:focus, .btn-login-google:hover,
+.btn--google:focus, .btn--google:hover {
+  border-color: #4285f4;
+  box-shadow: 0 0 0 2px #4285f433;
+  color: #4285f4;
+}
 /* EMPR-E – login.css
    Estilos específicos da tela de login */
 

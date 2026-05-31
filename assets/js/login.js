@@ -1,15 +1,48 @@
 'use strict';
 
-import { auth, db, isFirebaseConfigured } from './firebase.js';
-
-import {
-  signInWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-
-import {
-  doc,
-  getDoc
-} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { auth, db } from './firebase.js';
+import { signInWithEmailAndPassword, GoogleAuthProvider, signInWithPopup } from 'firebase/auth';
+const googleLoginButton = document.getElementById('btn-google-login');
+// Login com Google
+if (googleLoginButton) {
+  googleLoginButton.addEventListener('click', async () => {
+    if (!auth || !db) {
+      alert('Firebase não está configurado corretamente.');
+      return;
+    }
+    try {
+      setLoadingState(true);
+      const provider = new GoogleAuthProvider();
+      const result = await signInWithPopup(auth, provider);
+      const user = result.user;
+      // Busca perfil adicional no Firestore, se existir
+      let profile = {};
+      try {
+        const profileSnapshot = await getDoc(doc(db, 'usuarios', user.uid));
+        if (profileSnapshot.exists()) {
+          profile = profileSnapshot.data();
+        }
+      } catch {}
+      const role = profile.role || 'usuario-comum';
+      saveUserSession({
+        accountType: profile.sellerType ?? 'comprador',
+        email: user.email,
+        nomeResponsavel: profile.nomeResponsavel ?? user.displayName ?? '',
+        razaoSocial: profile.razaoSocial ?? '',
+        role,
+        uid: user.uid
+      });
+      alert('Login com Google realizado com sucesso.');
+      window.location.href = 'conta.html';
+    } catch (erro) {
+      console.error(erro);
+      alert('Não foi possível fazer login com Google.');
+    } finally {
+      setLoadingState(false);
+    }
+  });
+}
+import { doc, getDoc } from 'firebase/firestore';
 
 const form = document.getElementById('formulario-login');
 const email = document.getElementById('campo-email');
@@ -49,8 +82,8 @@ if (form && email && senha) {
       return;
     }
 
-    if (!isFirebaseConfigured || !auth || !db) {
-      alert('Configure o Firebase em assets/js/firebase.js antes de usar o login.');
+    if (!auth || !db) {
+      alert('Firebase não está configurado corretamente.');
       return;
     }
 

@@ -1,15 +1,8 @@
 'use strict';
 
-import { auth, db, isFirebaseConfigured } from './firebase.js';
-
-import {
-  createUserWithEmailAndPassword
-} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-auth.js";
-
-import {
-  doc,
-  setDoc
-} from "https://www.gstatic.com/firebasejs/11.0.0/firebase-firestore.js";
+import { auth, db } from './firebase.js';
+import { createUserWithEmailAndPassword } from 'firebase/auth';
+import { doc, setDoc } from 'firebase/firestore';
 
 const formCadastro = document.getElementById('formulario-cadastro');
 const botaoCadastro = document.getElementById('btn-cadastrar');
@@ -80,8 +73,8 @@ if (formCadastro) {
       return;
     }
 
-    if (!isFirebaseConfigured || !auth || !db) {
-      alert('Configure o Firebase em assets/js/firebase.js antes de cadastrar usuarios.');
+    if (!auth || !db) {
+      alert('Firebase não está configurado corretamente.');
       return;
     }
 
