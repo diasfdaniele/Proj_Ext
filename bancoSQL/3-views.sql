@@ -30,5 +30,3 @@ left join enderecos en on e.id_empresa = en.fk_empresa
 left join contatos c on e.id_empresa = c.fk_empresa
 group by e.id_empresa, e.razao_social, en.cep, en.estado, en.cidade, en.bairro, en.logradouro, en.numero
 order by e.razao_social;
-
-select * from empresa_segura;
