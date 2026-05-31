@@ -75,6 +75,14 @@ function saveUserSession(user) {
   localStorage.setItem(sessionStorageKey, JSON.stringify(user));
 }
 
+function mostrarMensagemLoginSucesso() {
+  if (typeof window.mostrarToast === 'function') {
+    window.mostrarToast('Login realizado com sucesso!', 'sucesso');
+  } else {
+    alert('Login realizado com sucesso!');
+  }
+}
+
 function setLoadingState(isLoading) {
   if (!botaoEntrar || !textoBotaoEntrar || !loadingBotaoEntrar) {
     return;
@@ -119,8 +127,10 @@ if (form && email && senha) {
         uid: credential.user.uid
       });
 
-      alert('Login realizado com sucesso.');
-      window.location.href = 'conta.html';
+      mostrarMensagemLoginSucesso();
+      setTimeout(() => {
+        window.location.href = 'conta.html';
+      }, 900);
     } catch (erro) {
       console.error(erro);
       alert('Email ou senha invalidos.');

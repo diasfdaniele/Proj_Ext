@@ -3,62 +3,39 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <meta name="description" content="Explore o catálogo da Empr-E com produtos e soluções de acessibilidade para empresas." />
-  <title>Explore nossos produtos - Empr-E</title>
-  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Cpolygon points='20,6 44,6 56,26 44,46 20,46 8,26' fill='%23F97316'/%3E%3Crect x='19' y='16' width='5' height='20' rx='1.5' fill='white'/%3E%3Crect x='19' y='16' width='16' height='5' rx='1.5' fill='white'/%3E%3Crect x='19' y='25' width='12' height='4' rx='1.5' fill='white'/%3E%3Crect x='19' y='32' width='16' height='5' rx='1.5' fill='white'/%3E%3Ccircle cx='45' cy='11' r='5' fill='%231E293B'/%3E%3Ccircle cx='45' cy='11' r='2.5' fill='%23F97316'/%3E%3C/svg%3E" />
-
-  <link rel="preconnect" href="https://fonts.googleapis.com" />
-  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
-  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=DM+Sans:wght@400;500;700&display=swap" rel="stylesheet" />
-  <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css" rel="stylesheet" />
+  <title>Detalhes do Produto - Empr-E</title>
   <link rel="stylesheet" href="../assets/css/style.css" />
   <link rel="stylesheet" href="../assets/css/catalogo.css" />
-  <link rel="stylesheet" href="../assets/css/catalogo-ajuste-imagem.css" />
-  <link rel="stylesheet" href="../assets/css/catalogo-carousel.css" />
-
+  <link rel="stylesheet" href="../assets/css/detalhe-produto.css" />
   <!-- Firebase CDN compat scripts -->
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
   <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 </head>
-<body class="pagina-catalogo">
-  <a href="#catalogo-lista" class="skip-link">Ir para os produtos</a>
+<body class="pagina-detalhe-produto">
+  <!-- SKIP LINKS – Acessibilidade: navegação por teclado -->
+  <a href="#conteudo-principal" class="skip-link">Ir para o conteúdo principal</a>
   <a href="#navegacao-principal" class="skip-link">Ir para a navegação</a>
+  <a href="#rodape" class="skip-link">Ir para o rodapé</a>
 
+  <!-- BARRA DE ACESSIBILIDADE -->
   <div id="barra-acessibilidade" class="barra-acessibilidade" role="toolbar" aria-label="Ferramentas de acessibilidade">
     <div class="barra-acessibilidade__inner">
       <span class="barra-acessibilidade__label" aria-hidden="true">Acessibilidade:</span>
-
-      <button id="btn-contraste" class="btn-acess" aria-pressed="false" aria-label="Alternar modo alto contraste">
-        <span>Contraste</span>
-      </button>
-
-      <button id="btn-aumentar-fonte" class="btn-acess" aria-label="Aumentar tamanho da fonte">
-        <span>A+</span>
-      </button>
-
-      <button id="btn-diminuir-fonte" class="btn-acess" aria-label="Diminuir tamanho da fonte">
-        <span>A-</span>
-      </button>
-
-      <button id="btn-layout" class="btn-acess" aria-pressed="false" aria-label="Alternar layout simplificado">
-        <span>Simplificado</span>
-      </button>
-
-      <button id="btn-leitura" class="btn-acess" aria-pressed="false" aria-label="Alternar modo leitura">
-        <span>Leitura</span>
-      </button>
-
-      <button id="btn-libras" class="btn-acess btn-acess--destaque" aria-pressed="false" aria-label="Ativar traducao em Libras">
-        <span>Libras</span>
-      </button>
+      <button id="btn-contraste" class="btn-acess" aria-pressed="false" aria-label="Alternar modo alto contraste"><span>Contraste</span></button>
+      <button id="btn-aumentar-fonte" class="btn-acess" aria-label="Aumentar tamanho da fonte"><span>A+</span></button>
+      <button id="btn-diminuir-fonte" class="btn-acess" aria-label="Diminuir tamanho da fonte"><span>A-</span></button>
+      <button id="btn-layout" class="btn-acess" aria-pressed="false" aria-label="Alternar layout simplificado"><span>Simplificado</span></button>
+      <button id="btn-leitura" class="btn-acess" aria-pressed="false" aria-label="Alternar modo leitura"><span>Leitura</span></button>
+      <button id="btn-libras" class="btn-acess btn-acess--destaque" aria-pressed="false" aria-label="Ativar tradução em Libras"><span>Libras</span></button>
     </div>
   </div>
 
+  <!-- HEADER -->
   <header id="header" class="header" role="banner">
     <div class="container header__inner">
-      <a href="../index.html" class="header__logo" aria-label="Empr-E - Pagina inicial">
+      <a href="../index.html" class="header__logo" aria-label="Empr-E - Página inicial">
         <svg class="brand-logo" width="110" height="36" viewBox="0 0 220 72" fill="none" aria-hidden="true">
           <polygon class="brand-logo__hex" points="28,4 52,4 64,24 52,44 28,44 16,24" fill="#F97316"/>
           <rect x="23" y="11" width="4" height="22" rx="1.5" fill="white"/>
@@ -71,42 +48,40 @@
           <text class="brand-logo__tagline" x="74" y="48" font-family="'Plus Jakarta Sans',sans-serif" font-size="9" font-weight="500" fill="#64748B" letter-spacing="0.3">Marketplace de Acessibilidade</text>
         </svg>
       </a>
-
-      <nav id="navegacao-principal" class="nav" aria-label="Navegacao principal">
+      <nav id="navegacao-principal" class="nav" aria-label="Navegação principal">
         <ul class="nav__list" role="list">
-          <li><a href="../index.html" class="nav__link">Inicio</a></li>
-          <li><a href="catalogo.html" class="nav__link nav__link--active" aria-current="page">Produtos</a></li>
-          <li><a href="../index.html#empresas" class="nav__link">Empresas</a></li>
+          <li><a href="../index.html" class="nav__link">Início</a></li>
+          <li><a href="catalogo.html" class="nav__link">Produtos</a></li>
           <li><a href="../index.html#sobre" class="nav__link">Sobre</a></li>
+          <li><a href="../index.html#empresas" class="nav__link">Empresas</a></li>
           <li><a href="../index.html#contato" class="nav__link">Contato</a></li>
+          <li><a href="conta.html" class="nav__link">Minha conta</a></li>
         </ul>
       </nav>
-
-      <div class="header__actions">
+      <div class="header__actions d-flex align-items-center gap-3">
         <a href="carrinho.html" class="btn-carrinho" aria-label="Ver itens selecionados no carrinho">
           <svg aria-hidden="true" focusable="false" width="22" height="22" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><circle cx="9" cy="21" r="1"/><circle cx="20" cy="21" r="1"/><path d="M1 1h4l2.68 13.39a2 2 0 0 0 2 1.61h9.72a2 2 0 0 0 2-1.61L23 6H6"/></svg>
-          <span class="btn-carrinho__badge" id="quantidadeCarrinho" aria-live="polite">0</span>
+          <span class="btn-carrinho__badge" id="carrinho-count" aria-live="polite">0</span>
         </a>
         <a href="login.html" class="btn btn--outline">Entrar</a>
       </div>
-
-      <button id="btn-menu-mobile" class="btn-menu-mobile" aria-expanded="false" aria-controls="menu-mobile" aria-label="Abrir menu de navegacao">
+      <button id="btn-menu-mobile" class="btn-menu-mobile" aria-expanded="false" aria-controls="menu-mobile" aria-label="Abrir menu de navegação">
         <span class="btn-menu-mobile__bar" aria-hidden="true"></span>
         <span class="btn-menu-mobile__bar" aria-hidden="true"></span>
         <span class="btn-menu-mobile__bar" aria-hidden="true"></span>
       </button>
     </div>
-
-    <div id="menu-mobile" class="menu-mobile" hidden>
-      <nav aria-label="Navegacao mobile">
+    <div id="menu-mobile" class="menu-mobile" hidden aria-label="Menu de navegação mobile">
+      <nav aria-label="Navegação mobile">
         <ul class="menu-mobile__list" role="list">
-          <li><a href="../index.html" class="menu-mobile__link">Inicio</a></li>
-          <li><a href="catalogo.html" class="menu-mobile__link" aria-current="page">Produtos</a></li>
-          <li><a href="../index.html#empresas" class="menu-mobile__link">Empresas</a></li>
+          <li><a href="../index.html" class="menu-mobile__link">Início</a></li>
+          <li><a href="catalogo.html" class="menu-mobile__link">Produtos</a></li>
+          <li><a href="conta.html" class="menu-mobile__link">Minha conta</a></li>
           <li><a href="../index.html#sobre" class="menu-mobile__link">Sobre</a></li>
+          <li><a href="../index.html#empresas" class="menu-mobile__link">Empresas</a></li>
           <li><a href="../index.html#contato" class="menu-mobile__link">Contato</a></li>
           <li class="menu-mobile__separator"></li>
-          <li><a href="login.html" class="menu-mobile__link menu-mobile__link--cta">Entrar</a></li>
+          <li><a href="login.html" class="menu-mobile__link menu-mobile__link--cta">Entrar na plataforma</a></li>
           <li><a href="cadastro.html" class="menu-mobile__link menu-mobile__link--secondary">Cadastrar empresa</a></li>
         </ul>
       </nav>
@@ -114,71 +89,8 @@
   </header>
 
   <main id="conteudo-principal" tabindex="-1">
-    <section class="catalogo-hero" aria-labelledby="catalogo-titulo">
-      <div class="container">
-        <div class="catalogo-hero__content">
-          <span class="section-badge">Marketplace B2B</span>
-          <h1 id="catalogo-titulo" class="catalogo-hero__titulo">Catálogo de produtos acessiveis</h1>
-          <p class="catalogo-hero__texto">Descubra tecnologias e recursos acessíveis que conectam inclusão, autonomia e inovação para diferentes necessidades do cotidiano.</p>
-        </div>
-      </div>
-    </section>
-
-    <section class="catalogo-produtos" aria-labelledby="catalogo-lista-titulo">
-      <div class="container">
-        <div class="row g-4 align-items-start">
-          <div class="col-lg-3">
-            <aside class="catalogo__aside filtros" aria-label="Filtros do catalogo">
-              <h2 class="filtros__titulo">Filtros</h2>
-
-              <div class="filtro-box">
-                <label for="campo-busca" class="filtro-label">Buscar produto</label>
-                <input id="campo-busca" class="form-control" type="search" placeholder="Digite nome, empresa ou solucao" />
-              </div>
-
-              <div class="filtro-box">
-                <label for="filtro-categoria" class="filtro-label">Categoria</label>
-                <select id="filtro-categoria" class="form-select">
-                  <option value="">Todas as categorias</option>
-                  <option value="mobilidade">Mobilidade</option>
-                  <option value="visual">Deficiencia visual</option>
-                  <option value="digital">Acessibilidade digital</option>
-                </select>
-              </div>
-
-              <div class="filtro-box">
-                <label for="filtro-empresa" class="filtro-label">Empresa</label>
-                <select id="filtro-empresa" class="form-select">
-                  <option value="">Todas as empresas</option>
-                </select>
-              </div>
-
-              <div class="filtro-box">
-                <label for="filtro-modalidade" class="filtro-label">Modalidade</label>
-                <select id="filtro-modalidade" class="form-select">
-                  <option value="">Todas as modalidades</option>
-                  <option value="compra-imediata">Compra imediata</option>
-                  <option value="sob-consulta">Sob consulta</option>
-                  <option value="projeto-personalizado">Projeto personalizado</option>
-                </select>
-              </div>
-            </aside>
-          </div>
-
-          <div class="col-lg-9">
-            <div class="catalogo__cabecalho">
-              <div>
-                <h2 id="catalogo-lista-titulo" class="catalogo__titulo">Soluções em destaque</h2>
-              </div>
-              <p id="catalogo-resultado" class="catalogo__resultado" aria-live="polite"></p>
-            </div>
-
-            <!-- Painel de sessão removido para não interferir na exibição dos produtos -->
-
-            <div id="catalogo-lista" class="catalogo__grid" aria-live="polite"></div>
-          </div>
-        </div>
-      </div>
+    <section class="produto-detalhe" id="produto-detalhe">
+      <!-- Conteúdo dinâmico do produto será inserido aqui -->
     </section>
   </main>
 
@@ -186,10 +98,8 @@
   <footer id="rodape" class="footer" role="contentinfo">
     <div class="container">
       <div class="footer__grid">
-
-        <!-- Col 1: Marca -->
         <div class="footer__col footer__col--marca">
-          <a href="index.html" class="footer__logo" aria-label="Empr-E - Página inicial">
+          <a href="../index.html" class="footer__logo" aria-label="Empr-E - Página inicial">
             <svg class="brand-logo" width="110" height="36" viewBox="0 0 220 72" fill="none" aria-hidden="true">
               <polygon class="brand-logo__hex" points="28,4 52,4 64,24 52,44 28,44 16,24" fill="#F97316"/>
               <rect x="23" y="11" width="4" height="22" rx="1.5" fill="white"/>
@@ -215,20 +125,16 @@
             </a>
           </div>
         </div>
-
-        <!-- Col 2: Navegação -->
         <nav class="footer__col" aria-label="Links da plataforma">
           <h3 class="footer__col-titulo">Plataforma</h3>
           <ul class="footer__links" role="list">
-            <li><a href="pages/catalogo.html" class="footer__link">Produtos</a></li>
-            <li><a href="#empresas" class="footer__link">Empresas</a></li>
-            <li><a href="pages/cadastro.html" class="footer__link">Cadastrar empresa</a></li>
-            <li><a href="pages/login.html" class="footer__link">Entrar</a></li>
-            <li><a href="pages/login.html" class="footer__link">Painel do vendedor</a></li>
+            <li><a href="catalogo.html" class="footer__link">Produtos</a></li>
+            <li><a href="../index.html#empresas" class="footer__link">Empresas</a></li>
+            <li><a href="cadastro.html" class="footer__link">Cadastrar empresa</a></li>
+            <li><a href="login.html" class="footer__link">Entrar</a></li>
+            <li><a href="login.html" class="footer__link">Painel do vendedor</a></li>
           </ul>
         </nav>
-
-        <!-- Col 3: Suporte -->
         <nav class="footer__col" aria-label="Links de suporte">
           <h3 class="footer__col-titulo">Suporte</h3>
           <ul class="footer__links" role="list">
@@ -239,8 +145,6 @@
             <li><a href="#" class="footer__link">Acessibilidade</a></li>
           </ul>
         </nav>
-
-        <!-- Col 4: Contato -->
         <div id="contato" class="footer__col" aria-label="Informações de contato">
           <h3 class="footer__col-titulo">Contato</h3>
           <address class="footer__contato">
@@ -253,20 +157,12 @@
               <a href="tel:+551140042727" class="footer__link">(11) 4004-2727</a>
             </p>
           </address>
-
-          <!-- Botão reportar barreira -->
-          <button
-            id="btn-reportar"
-            class="btn-reportar"
-            aria-label="Reportar uma barreira de acessibilidade encontrada na plataforma"
-          >
+          <button id="btn-reportar" class="btn-reportar" aria-label="Reportar uma barreira de acessibilidade encontrada na plataforma">
             <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><path d="M10.29 3.86L1.82 18a2 2 0 0 0 1.71 3h16.94a2 2 0 0 0 1.71-3L13.71 3.86a2 2 0 0 0-3.42 0z"/><line x1="12" y1="9" x2="12" y2="13"/><line x1="12" y1="17" x2="12.01" y2="17"/></svg>
             Reportar barreira de acessibilidade
           </button>
         </div>
-
       </div>
-
       <div class="footer__rodape">
         <p class="footer__copy">© 2026 Empr-E. Todos os direitos reservados. Construído com acessibilidade em primeiro lugar.</p>
         <div class="footer__selos" aria-label="Selos e certificações de acessibilidade">
@@ -278,18 +174,22 @@
     </div>
   </footer>
 
-  <div id="widget-libras" class="widget-libras" hidden aria-live="polite">
+  <!-- WIDGET LIBRAS -->
+  <div id="widget-libras" class="widget-libras" hidden aria-live="polite" aria-label="Widget de tradução em Libras ativo">
     <div class="widget-libras__inner">
-      <span aria-hidden="true">L</span>
-      <span>Traducao em Libras ativa</span>
-      <button id="btn-fechar-libras" class="widget-libras__fechar" aria-label="Fechar widget Libras">x</button>
+      <span aria-hidden="true">🤟</span>
+      <span>VLibras ativo</span>
+      <button id="btn-fechar-libras" class="widget-libras__fechar" aria-label="Fechar widget Libras">×</button>
     </div>
   </div>
 
+  <!-- TOAST NOTIFICATIONS -->
   <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true" role="status"></div>
 
+  <!-- SCRIPTS -->
   <script src="../assets/js/script.js"></script>
-    <script src="../assets/js/produtos-local.js"></script>
-  <script type="module" src="../assets/js/catalogo.js"></script>
+  <script src="../assets/js/produtos-local.js"></script>
+  <script src="../assets/js/firebase.js"></script>
+  <script src="../assets/js/detalhe-produto.js"></script>
 </body>
 </html>

@@ -1,36 +1,23 @@
 
-// Import only from npm packages (after npm install firebase)
-import { initializeApp } from "firebase/app";
-import { getFirestore } from "firebase/firestore";
-import { getAuth } from "firebase/auth";
-import { getStorage } from "firebase/storage";
+// Firebase compatível com uso via CDN (firebase-compat)
+// Certifique-se de incluir os scripts CDN no HTML:
+// <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>
+// <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-auth-compat.js"></script>
+// <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-firestore-compat.js"></script>
+// <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-storage-compat.js"></script>
 
-// Your web app's Firebase configuration
 const firebaseConfig = {
   apiKey: "AIzaSyC-YG19WRKIUFE__7608NYqrrehSWr8Zd0",
   authDomain: "empr-e.firebaseapp.com",
   projectId: "empr-e",
-  storageBucket: "empr-e.appspot.com", // Corrigido
+  storageBucket: "empr-e.appspot.com",
   messagingSenderId: "196840931732",
   appId: "1:196840931732:web:d316628d34006a8e37cf81"
 };
 
-// Initialize Firebase
-const app = initializeApp(firebaseConfig);
-export const db = getFirestore(app);
-export const auth = getAuth(app);
-export const storage = getStorage(app);
-  app = initializeApp(firebaseConfig);
-  db = getFirestore(app);
-  auth = getAuth(app);
-  storage = getStorage(app);
-}
+firebase.initializeApp(firebaseConfig);
+const db = firebase.firestore();
+const auth = firebase.auth();
+const storage = firebase.storage();
 
-export {
-  app,
-  auth,
-  db,
-  firebaseConfig,
-  isFirebaseConfigured,
-  storage
-};
+export { db, auth, storage };

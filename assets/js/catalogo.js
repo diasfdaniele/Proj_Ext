@@ -1,7 +1,8 @@
 'use strict';
 
 import { auth, db } from './firebase.js';
-import { collection, deleteDoc, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+// import { collection, deleteDoc, doc, getDocs, query, setDoc, where } from 'firebase/firestore';
+// O Firestore já é exportado de ./firebase.js, então não precisa importar diretamente aqui.
 
 const searchInput = document.getElementById('campo-busca');
 const categorySelect = document.getElementById('filtro-categoria');
@@ -17,91 +18,44 @@ const favoriteIds = new Set();
 
 const baseProducts = [
   {
-    id: 'rampa-modular-pro',
-    initials: 'RM',
-    name: 'Rampa Modular Pro',
-    company: 'AcessTech Solucoes',
-    companySlug: 'acesstech-solucoes',
-    category: 'mobilidade',
-    categoryLabel: 'Mobilidade',
-    description: 'Rampa modular para eventos, acessos temporarios e retrofit de entradas comerciais.',
-    price: 'Sob consulta',
-    purchaseMode: 'sob-consulta',
-    purchaseModeLabel: 'Sob consulta'
-  },
-  {
-    id: 'piso-tatil-smart',
-    initials: 'PT',
-    name: 'Piso Tatil Smart',
-    company: 'Klinker',
-    companySlug: 'klinker',
-    category: 'visual',
-    categoryLabel: 'Deficiencia visual',
-    description: 'Sistema de sinalizacao tatil para rotas acessiveis em empresas, escolas e predios publicos.',
-    price: 'A partir de R$ 890',
-    purchaseMode: 'compra-imediata',
-    purchaseModeLabel: 'Compra imediata'
-  },
-  {
-    id: 'suite-wcag-enterprise',
-    initials: 'WC',
-    name: 'Suite WCAG Enterprise',
-    company: 'DigitalInclude',
-    companySlug: 'digitalinclude',
+    id: 'solucoes-software',
+    initials: 'SS',
+    name: 'Soluções de Software Acessível',
+    company: 'Acessify',
+    companySlug: 'acessify',
     category: 'digital',
     categoryLabel: 'Acessibilidade digital',
     description: 'Auditoria, monitoramento continuo e ajustes de acessibilidade para sistemas web corporativos.',
-    price: 'Plano mensal',
+    price: 'Plano recorrente a partir de R$ 1.000/mês',
     purchaseMode: 'projeto-personalizado',
     purchaseModeLabel: 'Projeto personalizado'
-  },
-  {
-    id: 'corrimao-safe-line',
-    initials: 'CS',
-    name: 'Corrimao Safe Line',
-    company: 'Inclui Engenharia',
-    companySlug: 'inclui-engenharia',
-    category: 'mobilidade',
-    categoryLabel: 'Mobilidade',
-    description: 'Corrimao tecnico com instalacao rapida para rotas internas e areas de grande circulacao.',
-    price: 'Sob medida',
-    purchaseMode: 'projeto-personalizado',
-    purchaseModeLabel: 'Projeto personalizado'
-  },
-  {
-    id: 'mapa-sensorial-3d',
-    initials: 'MS',
-    name: 'Mapa Sensorial 3D',
-    company: 'Visao Ativa',
-    companySlug: 'visao-ativa',
-    category: 'visual',
-    categoryLabel: 'Deficiencia visual',
-    description: 'Mapa tatil com legenda em braille para recepcoes, halls corporativos e centros de evento.',
-    price: 'Projeto personalizado',
-    purchaseMode: 'projeto-personalizado',
-    purchaseModeLabel: 'Projeto personalizado'
-  },
-  {
-    id: 'plugin-libras-flow',
-    initials: 'LF',
-    name: 'Plugin Libras Flow',
-    company: 'Sinal Digital',
-    companySlug: 'sinal-digital',
-    category: 'digital',
-    categoryLabel: 'Acessibilidade digital',
-    description: 'Camada de traducao em Libras, leitura assistida e ajustes de navegacao para portais B2B.',
-    price: 'Licenca anual',
-    purchaseMode: 'compra-imediata',
-    purchaseModeLabel: 'Compra imediata'
   }
 ];
+
+  // Garante que produtos locais sejam carregados mesmo se o script for importado depois
+  function getProdutosLocaisMarketplaceSafe() {
+    if (window.produtosLocaisMarketplace && Array.isArray(window.produtosLocaisMarketplace)) {
+      return window.produtosLocaisMarketplace;
+    }
+    return [];
+  }
+
+  function getProdutosMarketplaceCadastradosSafe() {
+    if (window.produtosMarketplaceCadastrados && Array.isArray(window.produtosMarketplaceCadastrados)) {
+      return window.produtosMarketplaceCadastrados;
+    }
+    return [];
+  }
 
 function getAllProducts() {
   const sellerProducts = typeof window.obterProdutosMarketplace === 'function'
     ? window.obterProdutosMarketplace()
     : [];
-
-  return baseProducts.concat(sellerProducts);
+  // Separa produtos locais dos cadastrados
+  const produtosLocais = sellerProducts.filter(p => p.sellerId === 'local');
+  const produtosCadastrados = sellerProducts.filter(p => p.sellerId !== 'local');
+  // Ordem: locais, base, cadastrados
+  return produtosLocais.concat(baseProducts, produtosCadastrados);
 }
 
 function readSessionUser() {
@@ -166,26 +120,36 @@ function getFilteredProducts() {
 
 function createProductCard(product) {
   const isFavorite = favoriteIds.has(product.id);
-
   return `
     <article class="produto-card" aria-label="${product.name} - ${product.company}">
-      <div class="produto-card__media">
-        <span class="produto-card__iniciais" aria-hidden="true">${product.initials}</span>
-        <span class="produto-card__empresa">${product.company}</span>
-      </div>
-      <div class="produto-card__conteudo">
-        <span class="produto-card__categoria">${product.categoryLabel}</span>
-        <h3 class="produto-card__titulo">${product.name}</h3>
-        <p class="produto-card__descricao">${product.description}</p>
-        <span class="produto-card__modalidade">${product.purchaseModeLabel}</span>
-        <div class="produto-card__rodape">
-          <span class="produto-card__preco">${product.price}</span>
-          <div class="produto-card__acoes">
-            <button type="button" class="btn btn--outline btn--sm produto-card__favorito ${isFavorite ? 'produto-card__favorito--ativo' : ''}" data-favorite="${product.id}" aria-pressed="${isFavorite ? 'true' : 'false'}">${isFavorite ? 'Favoritado' : 'Favoritar'}</button>
-            <button type="button" class="btn btn--primary btn--sm" data-add-cart="${product.id}">Adicionar</button>
+      <a href="detalhe-produto.html?id=${product.id}" class="produto-card__link" style="text-decoration:none;color:inherit;display:block">
+        <div class="produto-card__media">
+          ${product.images && product.images.length ? `
+            <div class="produto-card__carousel" data-product-id="${product.id}">
+              <button type="button" class="produto-card__carousel-arrow produto-card__carousel-arrow--left" aria-label="Imagem anterior" tabindex="0">&#8592;</button>
+              <img src="${product.images[0]}" alt="Imagem do produto" class="produto-card__imagem" loading="lazy">
+              <button type="button" class="produto-card__carousel-arrow produto-card__carousel-arrow--right" aria-label="Próxima imagem" tabindex="0">&#8594;</button>
+            </div>
+          ` : `
+            <span class="produto-card__iniciais" aria-hidden="true">${product.initials}</span>
+          `}
+          <span class="produto-card__empresa">${product.company}</span>
+        </div>
+        <div class="produto-card__conteudo">
+          <span class="produto-card__categoria">${product.categoryLabel}</span>
+          <h3 class="produto-card__titulo">${product.name}</h3>
+          <p class="produto-card__descricao">${product.description}</p>
+          <span class="produto-card__modalidade">${product.purchaseModeLabel}</span>
+          <!-- Galeria removida, imagens só no topo -->
+          <div class="produto-card__rodape">
+            <span class="produto-card__preco">${product.price}</span>
+            <div class="produto-card__acoes">
+              <button type="button" class="btn btn--outline btn--sm produto-card__favorito ${isFavorite ? 'produto-card__favorito--ativo' : ''}" data-favorite="${product.id}" aria-pressed="${isFavorite ? 'true' : 'false'}">${isFavorite ? 'Favoritado' : 'Favoritar'}</button>
+              <button type="button" class="btn btn--primary btn--sm" data-add-cart="${product.id}">Adicionar</button>
+            </div>
           </div>
         </div>
-      </div>
+      </a>
     </article>
   `;
 }
@@ -198,10 +162,11 @@ function updateUserPanel() {
   const user = readSessionUser();
 
   if (!user) {
-    userPanelText.textContent = 'Compradores salvam favoritos e mensagens. Vendedores tambem podem gerenciar produtos pela area Minha conta.';
-    userPanelLink.textContent = 'Entrar para acessar';
-    userPanelLink.href = 'login.html';
+    // Esconde o painel de sessão para visitantes
+    userPanel.style.display = 'none';
     return;
+  } else {
+    userPanel.style.display = '';
   }
 
   const isAdmin = user.role === 'administrador';
@@ -215,20 +180,25 @@ function updateUserPanel() {
 
 async function loadFavorites() {
   const user = readSessionUser();
-
   favoriteIds.clear();
 
-  if (!user || !isFirebaseConfigured || !db) {
+  // Se não houver usuário logado, apenas renderiza os produtos normalmente
+  if (!user) {
+    renderProducts();
+    return;
+  }
+
+
+  // Se não houver Firestore (getDocs), apenas renderiza os produtos normalmente
+  if (typeof getDocs !== 'function' || !db) {
     renderProducts();
     return;
   }
 
   try {
     const snapshot = await getDocs(query(collection(db, 'favoritos'), where('userId', '==', user.uid)));
-
     snapshot.forEach((favoriteDoc) => {
       const favorite = favoriteDoc.data();
-
       if (favorite?.productId) {
         favoriteIds.add(favorite.productId);
       }
@@ -236,7 +206,6 @@ async function loadFavorites() {
   } catch (error) {
     console.error(error);
   }
-
   renderProducts();
 }
 
@@ -333,7 +302,6 @@ function renderProducts() {
     button.addEventListener('click', () => {
       const productId = button.getAttribute('data-add-cart');
       const selectedProduct = getAllProducts().find((product) => product.id === productId);
-
       if (selectedProduct && typeof window.adicionarItemAoCarrinho === 'function') {
         window.adicionarItemAoCarrinho(selectedProduct);
       }
@@ -343,12 +311,38 @@ function renderProducts() {
   catalogGrid.querySelectorAll('[data-favorite]').forEach((button) => {
     button.addEventListener('click', () => {
       const productId = button.getAttribute('data-favorite');
-
       if (productId) {
         toggleFavorite(productId);
       }
     });
   });
+
+  attachCarouselListeners();
+// Carrossel simples para imagens do produto no topo do card
+function attachCarouselListeners() {
+  document.querySelectorAll('.produto-card__carousel').forEach(carousel => {
+    const productId = carousel.getAttribute('data-product-id');
+    const product = getAllProducts().find(p => p.id === productId);
+    if (!product || !product.images || product.images.length < 2) return;
+    let index = 0;
+    const img = carousel.querySelector('.produto-card__imagem');
+    const left = carousel.querySelector('.produto-card__carousel-arrow--left');
+    const right = carousel.querySelector('.produto-card__carousel-arrow--right');
+    function update() {
+      img.src = product.images[index];
+    }
+    left.addEventListener('click', e => {
+      e.preventDefault();
+      index = (index - 1 + product.images.length) % product.images.length;
+      update();
+    });
+    right.addEventListener('click', e => {
+      e.preventDefault();
+      index = (index + 1) % product.images.length;
+      update();
+    });
+  });
+}
 }
 
 const initialCategory = new URLSearchParams(window.location.search).get('categoria') ?? '';

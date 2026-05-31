@@ -27,7 +27,7 @@ function readSessionUser() {
     const parsed = JSON.parse(localStorage.getItem(sessionStorageKey) ?? 'null');
     return parsed && typeof parsed.uid === 'string'
       ? {
-          accountType: parsed.accountType === 'vendedor' ? 'vendedor' : 'comprador',
+          accountType: (parsed.accountType === 'vendedor' || parsed.accountType === 'quero-vender') ? 'vendedor' : 'comprador',
           ...parsed
         }
       : null;
@@ -161,6 +161,7 @@ function renderSellerProducts(items) {
       </div>
       <p class="conta-produto__meta">${item.categoryLabel} · ${item.purchaseModeLabel}</p>
       <p class="conta-produto__descricao">${item.description}</p>
+      ${(item.images && item.images.length) ? `<div class="conta-produto__galeria">${item.images.map(img => `<img src="${img}" alt="Imagem do produto" style="max-width:80px; margin:2px; border-radius:6px;">`).join('')}</div>` : ''}
       <div class="conta-produto__acoes">
         <a href="catalogo.html" class="btn btn--outline btn--sm">Ver no catalogo</a>
         <button type="button" class="btn btn--outline btn--sm" data-remove-product="${item.id}">Remover produto</button>

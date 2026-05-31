@@ -1,0 +1,118 @@
+/* Detalhes do Produto - Empr-E */
+.pagina-detalhe-produto {
+  font-family: 'Plus Jakarta Sans', 'DM Sans', Arial, sans-serif;
+  background: #f8fafc;
+  color: #1e293b;
+  min-height: 100vh;
+}
+.header {
+  background: #fff;
+  border-bottom: 1px solid #e5e7eb;
+  padding: 1rem 2rem;
+  margin-bottom: 2rem;
+}
+.header__logo {
+  font-weight: 800;
+  font-size: 1.2rem;
+  color: #f97316;
+  text-decoration: none;
+  letter-spacing: -0.5px;
+}
+.produto-detalhe {
+  background: #fff;
+  border-radius: 16px;
+  box-shadow: 0 2px 16px 0 #0001;
+  max-width: 700px;
+  margin: 2rem auto;
+  padding: 2rem 2.5rem 2.5rem 2.5rem;
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+.produto-detalhe__titulo {
+  font-size: 2rem;
+  font-weight: 700;
+  color: #1e293b;
+  margin-bottom: 0.5rem;
+}
+.produto-detalhe__galeria {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+  justify-content: flex-start;
+  align-items: center;
+}
+.produto-detalhe__imagem {
+  border-radius: 10px;
+  box-shadow: 0 1px 8px 0 #0001;
+  background: #f1f5f9;
+  max-width: 320px;
+  max-height: 320px;
+  object-fit: contain;
+}
+.produto-detalhe__variacoes {
+  margin: 1rem 0 0.5rem 0;
+  display: flex;
+  gap: 0.5rem;
+  align-items: center;
+}
+.btn-variacao {
+  background: #fff;
+  border: 1px solid #f97316;
+  color: #f97316;
+  border-radius: 6px;
+  padding: 0.3rem 0.9rem;
+  font-size: 1rem;
+  cursor: pointer;
+  transition: background 0.2s, color 0.2s;
+}
+.btn-variacao:hover, .btn-variacao:focus {
+  background: #f97316;
+  color: #fff;
+}
+.produto-detalhe__descricao {
+  font-size: 1.1rem;
+  color: #334155;
+  margin-bottom: 0.5rem;
+}
+.produto-detalhe__preco {
+  font-size: 1.2rem;
+  font-weight: 600;
+  color: #f97316;
+  margin-bottom: 0.5rem;
+}
+.produto-detalhe__modalidade {
+  font-size: 1rem;
+  color: #64748b;
+  margin-bottom: 0.5rem;
+}
+.produto-detalhe__vendedor {
+  font-size: 1rem;
+  color: #1e293b;
+  margin-bottom: 1rem;
+}
+.btn.btn--primary {
+  background: #f97316;
+  color: #fff;
+  border: none;
+  border-radius: 8px;
+  padding: 0.7rem 2rem;
+  font-size: 1.1rem;
+  font-weight: 600;
+  cursor: pointer;
+  box-shadow: 0 1px 8px 0 #0001;
+  transition: background 0.2s;
+}
+.btn.btn--primary:hover, .btn.btn--primary:focus {
+  background: #ea580c;
+}
+@media (max-width: 800px) {
+  .produto-detalhe {
+    padding: 1rem;
+    max-width: 98vw;
+  }
+  .produto-detalhe__galeria {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+}
