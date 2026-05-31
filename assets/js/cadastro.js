@@ -110,7 +110,11 @@ if (formCadastro) {
         uid: credential.user.uid
       });
 
-      alert('Cadastro realizado com sucesso.');
+      document.getElementById("mensagem").classList.remove("hidden");
+      setTimeout(() => {
+        document.getElementById("mensagem").classList.add("hidden");
+    }, 3000);
+
       window.location.href = 'login.html';
     } catch (erro) {
       console.error(erro);

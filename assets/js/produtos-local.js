@@ -1,4 +1,5 @@
 // Limpa todos os produtos cadastrados temporários ao carregar a página
+
 window.produtosMarketplaceCadastrados = [];
 // Lista de produtos locais pré-cadastrados com múltiplas imagens
 window.produtosLocaisMarketplace = [

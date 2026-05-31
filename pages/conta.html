@@ -27,12 +27,13 @@
   <div id="barra-acessibilidade" class="barra-acessibilidade" role="toolbar" aria-label="Ferramentas de acessibilidade">
     <div class="barra-acessibilidade__inner">
       <span class="barra-acessibilidade__label" aria-hidden="true">Acessibilidade:</span>
-      <button id="btn-contraste" class="btn-acess" aria-pressed="false" aria-label="Alternar modo alto contraste"><span>Contraste</span></button>
+      <button id="btn-contraste" class="btn-acess" aria-pressed="false" aria-label="Alternar modo alto contraste">
+        <svg aria-hidden="true" focusable="false" width="16" height="16" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><circle cx="12" cy="12" r="10"/><path d="M12 2v20"/></svg>
+        <span>Contraste</span></button>
       <button id="btn-aumentar-fonte" class="btn-acess" aria-label="Aumentar tamanho da fonte"><span>A+</span></button>
       <button id="btn-diminuir-fonte" class="btn-acess" aria-label="Diminuir tamanho da fonte"><span>A-</span></button>
       <button id="btn-layout" class="btn-acess" aria-pressed="false" aria-label="Alternar layout simplificado"><span>Simplificado</span></button>
       <button id="btn-leitura" class="btn-acess" aria-pressed="false" aria-label="Alternar modo leitura"><span>Leitura</span></button>
-      <button id="btn-libras" class="btn-acess btn-acess--destaque" aria-pressed="false" aria-label="Ativar traducao em Libras"><span>Libras</span></button>
     </div>
   </div>
 
@@ -312,14 +313,17 @@
       </div>
     </div>
   </footer>
-
-  <div id="widget-libras" class="widget-libras" hidden aria-live="polite">
-    <div class="widget-libras__inner">
-      <span aria-hidden="true">L</span>
-      <span>Traducao em Libras ativa</span>
-      <button id="btn-fechar-libras" class="widget-libras__fechar" aria-label="Fechar widget Libras">x</button>
+<!--VLIBRAS-->
+<div vw class="enabled">
+    <div vw-access-button class="active"></div>
+    <div vw-plugin-wrapper>
+        <div class="vw-plugin-top-wrapper"></div>
     </div>
-  </div>
+</div>
+<script src="https://vlibras.gov.br/app/vlibras-plugin.js"></script>
+<script>
+    new window.VLibras.Widget('https://vlibras.gov.br/app');
+</script>
 
   <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true" role="status"></div>
 

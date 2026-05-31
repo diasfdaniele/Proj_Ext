@@ -1907,8 +1907,6 @@ body.modo-alto-contraste .nav__link {
 body.modo-alto-contraste .header__logo {
   display: inline-flex;
   align-items: center;
-  padding: 0.35rem 0.55rem;
-  border: 1.5px solid #F97316 !important;
   border-radius: 14px;
   background: #000000 !important;
 }
@@ -1977,7 +1975,7 @@ body.modo-alto-contraste .login-lateral__diferencial,
 body.modo-alto-contraste .login-lateral__selo,
 body.modo-alto-contraste .login-lateral__tagline,
 body.modo-alto-contraste .produto-card__empresa {
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 
 body.modo-alto-contraste .produto-card__media,
@@ -2032,7 +2030,7 @@ body.modo-alto-contraste .hero__card-badge,
 body.modo-alto-contraste .carrinho-item__quantidade {
   background: #000000 !important;
   border-color: #F97316 !important;
-  color: #FFFFFF !important;
+  color: #ffffff !important;
 }
 
 body.modo-alto-contraste .categorias .section-titulo,
@@ -2098,7 +2096,6 @@ body.modo-alto-contraste .footer__rede svg,
 body.modo-alto-contraste .widget-libras__inner span[aria-hidden="true"] {
   color: #FFFFFF !important;
   stroke: currentColor !important;
-  fill: currentColor !important;
   opacity: 1 !important;
 }
 

@@ -433,3 +433,16 @@ body.modo-alto-contraste .campo-grupo.valido .campo-input {
   border-color: #00FF88;
   background: #001A0D;
 }
+
+/*Mensagem de cadastro*/
+.hidden {
+    display: none;
+}
+#mensagem {
+    background: #4CAF50;
+    color: white;
+    padding: 12px;
+    margin-top: 10px;
+    border-radius: 5px;
+    align-self: center;
+}
