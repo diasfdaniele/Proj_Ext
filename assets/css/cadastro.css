@@ -1,8 +1,5 @@
 /* Empr-E – cadastro.css */
 
-
-/* ÁREA GERAL DA PÁGINA */
-
 /* Fundo levemente diferente para dar identidade à tela */
 body.pagina-cadastro {
   background-color: var(--cinza-50);
@@ -17,7 +14,6 @@ body.pagina-cadastro {
 
 
 /* CABEÇALHO DA PÁGINA (título e subtítulo) */
-
 .cadastro-topo {
   text-align: center;
   margin-bottom: 2rem;
@@ -38,79 +34,6 @@ body.pagina-cadastro {
   font-size: 1rem;
   color: var(--cinza-500);
   max-width: 480px;
-}
-
-
-/* 3. INDICADOR DE ETAPAS */
-
-.etapas {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  gap: 0;
-  margin-bottom: 2rem;
-}
-
-/* Cada etapa individual */
-.etapa {
-  display: flex;
-  align-items: center;
-  gap: 0.5rem;
-  font-size: 0.82rem;
-  font-weight: 600;
-  font-family: var(--fonte-display);
-  color: var(--cinza-400);
-}
-
-.etapa__numero {
-  width: 28px;
-  height: 28px;
-  border-radius: 50%;
-  border: 2px solid var(--cinza-300);
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  font-size: 0.78rem;
-  font-weight: 700;
-  background: var(--branco);
-  flex-shrink: 0;
-  transition: all 0.25s ease;
-}
-
-/* Etapa ativa (laranja) */
-.etapa--ativa {
-  color: var(--laranja-escuro);
-}
-
-.etapa--ativa .etapa__numero {
-  background: var(--laranja-vivo);
-  border-color: var(--laranja-vivo);
-  color: var(--branco);
-}
-
-/* Etapa concluída (verde) */
-.etapa--concluida {
-  color: var(--cor-sucesso);
-}
-
-.etapa--concluida .etapa__numero {
-  background: var(--cor-sucesso);
-  border-color: var(--cor-sucesso);
-  color: var(--branco);
-}
-
-/* Linha entre etapas */
-.etapa__linha {
-  flex: 1;
-  height: 2px;
-  background: var(--cinza-200);
-  max-width: 60px;
-  margin: 0 0.5rem;
-  transition: background 0.25s ease;
-}
-
-.etapa__linha--ativa {
-  background: var(--laranja-vivo);
 }
 
 

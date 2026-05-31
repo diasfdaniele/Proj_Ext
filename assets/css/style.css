@@ -19,13 +19,13 @@
   --cinza-50: #F8FAFC;
   --cinza-100: #F1F5F9;
   --cinza-200: #E2E8F0;
-  --cinza-300: #CBD5E1;
-  --cinza-400: #94A3B8;
-  --cinza-500: #64748B;
+  --cinza-300: #5c6b7c;
+  --cinza-400: #3c4e68;
+  --cinza-500: #0b1524;
   --cinza-600: #475569;
   --cinza-700: #334155;
   --cinza-800: #1E293B;
-  --cinza-900: #0F172A;
+  --cinza-900: #05070e;
 
   /* Semânticas */
   --cor-primaria: var(--laranja-vivo);
