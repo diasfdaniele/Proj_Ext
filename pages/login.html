@@ -98,11 +98,12 @@
 
             <nav id="navegacao-principal" class="nav" aria-label="Navegação principal">
                 <ul class="nav__list" role="list">
-                    <li><a href="../index.html" class="nav__link">Início</a></li>
-                    <li><a href="catalogo.html" class="nav__link">Produtos</a></li>
-                    <li><a href="../index.html#empresas" class="nav__link">Empresas</a></li>
-                    <li><a href="../index.html#sobre" class="nav__link">Sobre</a></li>
-                    <li><a href="../index.html#contato" class="nav__link">Contato</a></li>
+                    <li><a href="../index.html" class="nav__link" aria-current="page">Início</a></li>
+                        <li><a href="catalogo.html" class="nav__link">Produtos</a></li>
+                        <li><a href="../index.html#sobre" class="nav__link">Sobre</a></li>
+                        <li><a href="../index.html#empresas" class="nav__link">Empresas</a></li>
+                        <li><a href="#contato" class="nav__link">Contato</a></li>
+                        <li><a href="conta.html" class="nav__link nav__link--active">Minha conta</a></li>    
                 </ul>
             </nav>
 
@@ -428,7 +429,12 @@
 
         </div><!-- /login-layout -->
 
+
+        <!-- Toasts -->
+  <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true" role="status" hidden></div>
     </main>
+
+
 
   <!--VLIBRAS-->
 <div vw class="enabled">
@@ -442,8 +448,7 @@
     new window.VLibras.Widget('https://vlibras.gov.br/app');
 </script>
 
-    <!-- TOAST NOTIFICATIONS -->
-    <div id="toast-container" class="toast-container" aria-live="polite" aria-atomic="true" role="status"></div>
+    
 
     <!-- Firebase compat CDN (deve vir antes do login.js) -->
     <script src="https://www.gstatic.com/firebasejs/9.23.0/firebase-app-compat.js"></script>

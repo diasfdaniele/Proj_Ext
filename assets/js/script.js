@@ -22,6 +22,20 @@ window.mostrarToast = function (mensagem, tipo = 'info', tempo = 3000) {
 };
 'use strict';
 
+const menuMobile = document.getElementById("menu-mobile");
+const btnMenu = document.getElementById("btn-menu-mobile");
+
+document.querySelectorAll(".menu-mobile__link").forEach(link => {
+    link.addEventListener("click", () => {
+
+        menuMobile.hidden = true;
+
+        btnMenu.setAttribute("aria-expanded", "false");
+
+        document.body.classList.remove("menu-aberto");
+    });
+});
+
 const body = document.body;
 const root = document.documentElement;
 const header = document.getElementById('header');

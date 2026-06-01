@@ -1795,6 +1795,10 @@ body.modo-alto-contraste .hero {
   background: #111111;
 }
 
+body.modo-alto-contraste .footer__rede svg{
+  fill: none;
+}
+
 body.modo-alto-contraste,
 body.modo-alto-contraste main,
 body.modo-alto-contraste section,
@@ -1825,6 +1829,10 @@ body.modo-alto-contraste .campo-select,
 body.modo-alto-contraste .campo-textarea,
 body.modo-alto-contraste .login-lateral {
   color: #FFFFFF;
+}
+
+body.modo-alto-contraste a:hover{
+  color: #F97316;
 }
 
 body.modo-alto-contraste a,
@@ -2079,8 +2087,6 @@ body.modo-alto-contraste .produto-card__titulo,
 body.modo-alto-contraste .produto-card__preco,
 body.modo-alto-contraste .carrinho-item__preco,
 body.modo-alto-contraste .footer__rede svg {
-  color: #FFFFFF !important;
-  fill: currentColor !important;
   opacity: 1 !important;
 }
 

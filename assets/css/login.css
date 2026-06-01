@@ -24,12 +24,9 @@
    Estilos específicos da tela de login */
 
 body.pagina-login {
-  height: 100vh;
-  height: 100dvh;
-  overflow: hidden;
-  display: flex;
-  flex-direction: column;
-  background: var(--cinza-50);
+  min-height: 100vh;
+  min-height: 100dvh;
+  overflow-y: auto;
 }
 
 body.pagina-login .header {
@@ -40,10 +37,9 @@ body.pagina-login .header {
 
 .login-main {
   flex: 1 1 0;
-  min-height: 0;        /* Impede que o flex filho estoure o pai */
   display: flex;
   align-items: stretch;
-  overflow: hidden;
+  overflow-y: auto;
 }
 
 .login-layout {
@@ -882,4 +878,35 @@ body.modo-alto-contraste .campo-grupo.valido .campo-input {
 /* Telas muito largas */
 @media (min-width: 1400px) {
   .login-layout { grid-template-columns: 480px 1fr; }
+}
+
+.Bad_Toast{
+  background-color: red !important;
+}
+.Good_Toast{
+  background-color: green !important;
+}
+
+#toast-container {
+  position: fixed;
+  top: 10%;
+  left: 50%;
+  transform: translateX(-50%);
+
+  color: white;
+
+  padding: 16px 32px;
+  min-width: 420px;
+
+  border-radius: 14px;
+  box-shadow: 0 8px 24px rgba(0,0,0,.2);
+
+  display: flex;
+  justify-content: center;
+  align-items: center;
+
+  font-size: 1rem;
+  font-weight: 600;
+
+  z-index: 9999;
 }

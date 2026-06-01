@@ -5,11 +5,20 @@
 
 // Usa auth e db globais definidos em firebase.js
 const googleLoginButton = document.getElementById('btn-google-login');
+const toast = document.getElementById("toast-container");
+
+        
 // Login com Google (compat)
 if (googleLoginButton) {
   googleLoginButton.addEventListener('click', async () => {
     if (!window.auth || !window.db) {
-      alert('Firebase não está configurado corretamente.');
+      toast.hidden = false;
+        toast.innerHTML = "";
+        setTimeout(() => {
+        toast.hidden = true;
+      }, 3000);
+      toast.innerHTML = 'Firebase não está configurado corretamente.';
+      toast.classList.add('Bad_Toast');
       return;
     }
     try {
@@ -34,11 +43,23 @@ if (googleLoginButton) {
         role,
         uid: user.uid
       });
-      alert('Login com Google realizado com sucesso.');
+      toast.hidden = false;
+        toast.innerHTML = "";
+        setTimeout(() => {
+        toast.hidden = true;
+      }, 3000);
+      toast.innerHTML = 'Login com Google realizado com sucesso.';
+      toast.classList.add('Good_Toast');
       window.location.href = 'conta.html';
     } catch (erro) {
-      console.error(erro);
-      alert('Não foi possível fazer login com Google.');
+      toast.hidden = false;
+        toast.innerHTML = "";
+        setTimeout(() => {
+        toast.hidden = true;
+      }, 3000);
+      toast.innerHTML = 'Não foi possível fazer login com Google.';
+      toast.classList.add('Bad_Toast');
+      
     } finally {
       setLoadingState(false);
     }
@@ -61,13 +82,6 @@ function saveUserSession(user) {
   localStorage.setItem(sessionStorageKey, JSON.stringify(user));
 }
 
-function mostrarMensagemLoginSucesso() {
-  if (typeof window.mostrarToast === 'function') {
-    window.mostrarToast('Login realizado com sucesso!', 'sucesso');
-  } else {
-    alert('Login realizado com sucesso!');
-  }
-}
 
 function setLoadingState(isLoading) {
   if (!botaoEntrar || !textoBotaoEntrar || !loadingBotaoEntrar) {
@@ -80,6 +94,8 @@ function setLoadingState(isLoading) {
 }
 
 if (form && email && senha) {
+  toast.innerHTML = "";
+  toast.classList.remove('Good_Toast', 'Bad_Toast');
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -87,12 +103,24 @@ if (form && email && senha) {
     const senhaValor = senha.value.trim();
 
     if (!emailValor || !senhaValor) {
-      alert('Preencha email e senha para entrar.');
+      toast.hidden = false;
+        toast.innerHTML = "";
+        setTimeout(() => {
+        toast.hidden = true;
+      }, 3000);
+      toast.innerHTML = 'Preencha email e senha para entrar.';
+      toast.classList.add('Bad_Toast');
       return;
     }
 
     if (!window.auth || !window.db) {
-      alert('Firebase não está configurado corretamente.');
+      toast.hidden = false;
+        toast.innerHTML = "";
+        setTimeout(() => {
+        toast.hidden = true;
+      }, 3000);
+      toast.innerHTML = 'Firebase não está configurado corretamente.';
+      toast.classList.add('Bad_Toast');
       return;
     }
 
@@ -118,14 +146,23 @@ if (form && email && senha) {
         role,
         uid: credential.user.uid
       });
-
-      mostrarMensagemLoginSucesso();
-      setTimeout(() => {
+      toast.hidden = false;
+        toast.innerHTML = "";
+        setTimeout(() => {
+        toast.hidden = true;
         window.location.href = 'conta.html';
-      }, 900);
+      }, 3000);
+      toast.innerHTML = 'Login realizado com sucesso!';
+      toast.classList.add('Good_Toast');
     } catch (erro) {
       console.error(erro);
-      alert('Email ou senha invalidos.');
+      toast.hidden = false;
+        toast.innerHTML = "";
+        setTimeout(() => {
+        toast.hidden = true;
+      }, 3000);
+      toast.innerHTML = 'Email ou senha inválidos.';
+      toast.classList.add('Bad_Toast');
     } finally {
       setLoadingState(false);
     }

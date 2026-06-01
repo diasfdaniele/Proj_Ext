@@ -6,6 +6,18 @@ body.pagina-carrinho {
   padding: 2.5rem 0 1.5rem;
 }
 
+.btn-carrinho{
+  background: #FFF7ED;
+  border-color: #faac52;
+  color: #EA580C;
+}
+
+.btn-carrinho:hover{
+  background: #ffffff;
+  border-color: #faac52;
+  color: #EA580C;
+}
+
 .carrinho-hero__content {
   background: linear-gradient(135deg, rgba(11, 24, 59, 0.98) 0%, rgba(20, 51, 112, 0.96) 100%);
   border-radius: var(--raio-xl);

@@ -30,7 +30,14 @@ function setLoadingState(isLoading) {
 }
 
 if (formCadastro) {
+  
   formCadastro.addEventListener('submit', async (event) => {
+    const toast = document.getElementById("toast-container");
+        toast.hidden = false;
+        toast.innerHTML = "";
+        setTimeout(() => {
+        toast.hidden = true;
+      }, 3000);
     event.preventDefault();
 
     const razaoSocial = readValue('razao-social');
@@ -51,27 +58,32 @@ if (formCadastro) {
     const aceitouTermos = document.getElementById('aceitar-termos')?.checked ?? false;
 
     if (!razaoSocial || !cnpj || !tipoEmpresa || !categoria || !descricao || !nomeResponsavel || !cargo || !cpf || !email || !senha) {
-      alert('Preencha os campos obrigatorios para continuar.');
+      toast.classList.add("Bad_Toast");
+      toast.innerHTML = 'Preencha os campos obrigatorios para continuar.';
       return;
     }
 
     if (senha.length < 8) {
-      alert('A senha precisa ter pelo menos 8 caracteres.');
+      toast.classList.add("Bad_Toast");
+      toast.innerHTML = 'A senha precisa ter pelo menos 8 caracteres.';
       return;
     }
 
     if (senha !== confirmarSenha) {
-      alert('A confirmacao de senha nao confere.');
+      toast.classList.add("Bad_Toast");
+      toast.innerHTML = 'A confirmacao de senha nao confere.';
       return;
     }
 
     if (!aceitouTermos) {
-      alert('Aceite os termos de uso para concluir o cadastro.');
+      toast.classList.add("Bad_Toast");
+      toast.innerHTML = 'Aceite os termos de uso para concluir o cadastro.';
       return;
     }
 
     if (!window.auth || !window.db) {
-      alert('Firebase não está configurado corretamente.');
+      toast.classList.add("Bad_Toast");
+      toast.innerHTML = 'Firebase não está configurado corretamente.';
       return;
     }
 
@@ -110,15 +122,14 @@ if (formCadastro) {
         uid: credential.user.uid
       });
 
-      document.getElementById("mensagem").classList.remove("hidden");
-      setTimeout(() => {
-        document.getElementById("mensagem").classList.add("hidden");
-    }, 3000);
-
+      
+      toast.classList.add("Good_Toast");
+      toast.innerHTML = 'Empresa cadastrada com sucesso!';
       window.location.href = 'login.html';
     } catch (erro) {
       console.error(erro);
-      alert('Nao foi possivel concluir o cadastro. Verifique os dados e tente novamente.');
+      toast.classList.add("Bad_Toast");
+      toast.innerHTML = 'Nao foi possivel concluir o cadastro. Verifique os dados e tente novamente.';
     } finally {
       setLoadingState(false);
     }
