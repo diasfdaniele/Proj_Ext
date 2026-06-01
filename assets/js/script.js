@@ -24,17 +24,25 @@ window.mostrarToast = function (mensagem, tipo = 'info', tempo = 3000) {
 
 const menuMobile = document.getElementById("menu-mobile");
 const btnMenu = document.getElementById("btn-menu-mobile");
+const scriptSessionStorageKey = 'empre:usuario-logado';
 
-document.querySelectorAll(".menu-mobile__link").forEach(link => {
-    link.addEventListener("click", () => {
+function closeMobileMenuByLinkClick(event) {
+  const target = event.target;
 
-        menuMobile.hidden = true;
+  if (!target || !target.closest('.menu-mobile__link')) {
+    return;
+  }
 
-        btnMenu.setAttribute("aria-expanded", "false");
+  if (!menuMobile || !btnMenu) {
+    return;
+  }
 
-        document.body.classList.remove("menu-aberto");
-    });
-});
+  menuMobile.hidden = true;
+  btnMenu.setAttribute('aria-expanded', 'false');
+  document.body.classList.remove('menu-aberto');
+}
+
+document.addEventListener('click', closeMobileMenuByLinkClick);
 
 const body = document.body;
 const root = document.documentElement;
@@ -69,9 +77,33 @@ const storageKeys = {
 
 let tamanhoFonte = Number(localStorage.getItem(storageKeys.fonte)) || 16;
 
+function getSessionStorageKey() {
+  return window.sessionStorageKey || scriptSessionStorageKey;
+}
+
+function getUserCartStorageKeys(user) {
+  const uid = user?.uid;
+
+  if (!uid) {
+    return {
+      countKey: storageKeys.carrinho,
+      itemsKey: storageKeys.carrinhoItens,
+      uid: null
+    };
+  }
+
+  return {
+    countKey: `${storageKeys.carrinho}:${uid}`,
+    itemsKey: `${storageKeys.carrinhoItens}:${uid}`,
+    uid
+  };
+}
+
 function readSessionUser() {
+  const sessionKey = getSessionStorageKey();
+
   try {
-    const parsed = JSON.parse(localStorage.getItem(sessionStorageKey) ?? 'null');
+    const parsed = JSON.parse(localStorage.getItem(sessionKey) ?? 'null');
     return parsed && typeof parsed.uid === 'string' ? parsed : null;
   } catch {
     return null;
@@ -86,30 +118,174 @@ function resolveInternalPagePath(fileName) {
 
 function updateAuthLinks() {
   const user = readSessionUser();
+  const accountPath = resolveInternalPagePath('conta.html');
+  const loginPath = resolveInternalPagePath('login.html');
+  const currentPath = (window.location.pathname || '').toLowerCase();
+  const isIndexPage = currentPath === '/' || currentPath.endsWith('/index.html');
 
-  if (!user) {
+  const accountLinks = document.querySelectorAll('.header__actions a[href$="login.html"], .menu-mobile a[href$="login.html"], .header__actions a[href$="conta.html"], .menu-mobile a[href$="conta.html"]');
+
+  accountLinks.forEach((link) => {
+    if (isIndexPage) {
+      link.href = loginPath;
+      link.textContent = 'Entrar';
+      link.setAttribute('aria-label', 'Acessar login');
+      return;
+    }
+
+    if (user) {
+      link.href = accountPath;
+      link.textContent = 'Minha conta';
+      link.setAttribute('aria-label', 'Acessar minha conta');
+      return;
+    }
+
+    link.href = loginPath;
+    link.textContent = 'Entrar';
+    link.setAttribute('aria-label', 'Acessar login');
+  });
+
+  ensureQuickLinks(user);
+}
+
+function createQuickButton(id, text, className = 'btn btn--outline btn-link-facil') {
+  const button = document.createElement('button');
+  button.type = 'button';
+  button.id = id;
+  button.className = className;
+  button.textContent = text;
+  return button;
+}
+
+function resolveHomePath(fragment) {
+  const currentPath = window.location.pathname.toLowerCase();
+  const insidePagesFolder = currentPath.includes('/pages/');
+
+  if (!fragment) {
+    return insidePagesFolder ? '../index.html' : 'index.html';
+  }
+
+  return insidePagesFolder ? `../index.html#${fragment}` : `index.html#${fragment}`;
+}
+
+function logoutCurrentUser() {
+  const sessionKey = getSessionStorageKey();
+  localStorage.removeItem(sessionKey);
+
+  const finalizeLogout = () => {
+    window.location.href = resolveInternalPagePath('login.html');
+  };
+
+  if (window.auth && typeof window.auth.signOut === 'function') {
+    window.auth.signOut().finally(finalizeLogout);
     return;
   }
 
-  const accountPath = resolveInternalPagePath('conta.html');
-  const authLinks = document.querySelectorAll('.header__actions a[href$="login.html"], .menu-mobile a[href$="login.html"]');
+  finalizeLogout();
+}
 
-  authLinks.forEach((link) => {
-    link.href = accountPath;
-    link.textContent = 'Minha conta';
-    link.setAttribute('aria-label', 'Acessar minha conta');
-  });
+function ensureQuickLinks(user) {
+  const mainContent = document.getElementById('conteudo-principal') || document.querySelector('main');
+  const legacyFixedLinks = document.getElementById('topo-links-fixos-global');
+  const currentPath = (window.location.pathname || '').toLowerCase();
+  const isIndexPage = currentPath === '/' || currentPath.endsWith('/index.html');
+  const isLoginPage = body.classList.contains('pagina-login');
+
+  if (legacyFixedLinks) {
+    legacyFixedLinks.remove();
+  }
+
+  const headerActions = document.querySelector('.header__actions');
+
+  if (headerActions) {
+    let headerLogoutButton = headerActions.querySelector('#btn-sair-header-global');
+
+    if (!headerLogoutButton) {
+      headerLogoutButton = createQuickButton('btn-sair-header-global', 'Sair', 'btn btn-header-sair-discreto');
+      const accountLink = headerActions.querySelector('a[href$="conta.html"], a[href$="login.html"]');
+
+      if (accountLink && accountLink.nextSibling) {
+        headerActions.insertBefore(headerLogoutButton, accountLink.nextSibling);
+      } else {
+        headerActions.appendChild(headerLogoutButton);
+      }
+    }
+
+    headerLogoutButton.hidden = isIndexPage || !user;
+    headerLogoutButton.onclick = logoutCurrentUser;
+  }
+
+  if (!mainContent) {
+    return;
+  }
+
+  if (isLoginPage) {
+    const loginTopActions = mainContent.querySelector('.topo-acoes-conteudo');
+    if (loginTopActions) {
+      loginTopActions.remove();
+    }
+    return;
+  }
+
+  let wrapper = mainContent.querySelector('.topo-acoes-conteudo');
+
+  if (!wrapper) {
+    wrapper = document.createElement('div');
+    wrapper.className = 'container topo-acoes-conteudo';
+    wrapper.innerHTML = `
+      <div class="topo-acoes-conteudo__inner" role="navigation" aria-label="Acoes da pagina">
+        <div class="topo-acoes-conteudo__esquerda">
+          <button type="button" id="btn-voltar-conteudo-global" class="btn btn--outline btn-link-facil">Voltar</button>
+        </div>
+      </div>
+    `;
+
+    mainContent.prepend(wrapper);
+  }
+
+  const canGoBack = !isIndexPage && window.history.length > 1;
+
+  const backButton = wrapper.querySelector('#btn-voltar-conteudo-global');
+
+  if (backButton) {
+    backButton.hidden = !canGoBack;
+    backButton.onclick = () => {
+      window.history.back();
+    };
+  }
+
+
 }
 
 function readCartItems() {
-  try {
-    const storedItems = JSON.parse(localStorage.getItem(storageKeys.carrinhoItens) ?? '[]');
+  const user = readSessionUser();
 
-    if (!Array.isArray(storedItems)) {
+  if (!user) {
+    return [];
+  }
+
+  const { itemsKey } = getUserCartStorageKeys(user);
+
+  try {
+    const storedItems = JSON.parse(localStorage.getItem(itemsKey) ?? '[]');
+    const isCurrentKeyEmpty = !Array.isArray(storedItems) || storedItems.length === 0;
+
+    // Migra carrinho legado global para o carrinho vinculado ao usuário atual.
+    if (isCurrentKeyEmpty) {
+      const legacyItems = JSON.parse(localStorage.getItem(storageKeys.carrinhoItens) ?? '[]');
+      if (Array.isArray(legacyItems) && legacyItems.length > 0) {
+        localStorage.setItem(itemsKey, JSON.stringify(legacyItems));
+        localStorage.removeItem(storageKeys.carrinhoItens);
+      }
+    }
+
+    const scopedItems = JSON.parse(localStorage.getItem(itemsKey) ?? '[]');
+
+    if (!Array.isArray(scopedItems)) {
       return [];
     }
 
-    return storedItems.filter((item) => item && typeof item.id === 'string');
+    return scopedItems.filter((item) => item && typeof item.id === 'string');
   } catch {
     return [];
   }
@@ -201,8 +377,13 @@ function mostrarToast(texto, tipo = 'info') {
 }
 
 function updateCartCount(nextValue) {
+  const user = readSessionUser();
+  const { countKey } = getUserCartStorageKeys(user);
+
   itensCarrinho = Math.max(0, nextValue);
-  localStorage.setItem(storageKeys.carrinho, String(itensCarrinho));
+  if (user) {
+    localStorage.setItem(countKey, String(itensCarrinho));
+  }
 
   carrinhoBadges.forEach((badge) => {
     badge.textContent = String(itensCarrinho);
@@ -217,12 +398,24 @@ function syncCartCountFromItems() {
 }
 
 function saveCartItems(items) {
-  localStorage.setItem(storageKeys.carrinhoItens, JSON.stringify(items));
+  const user = readSessionUser();
+
+  if (!user) {
+    return;
+  }
+
+  const { itemsKey } = getUserCartStorageKeys(user);
+  localStorage.setItem(itemsKey, JSON.stringify(items));
   syncCartCountFromItems();
 }
 
 function addCartItem(product) {
   if (!product || typeof product.id !== 'string') {
+    return;
+  }
+
+  if (!readSessionUser()) {
+    mostrarToast('Faca login para usar o carrinho.', 'info');
     return;
   }
 
@@ -266,6 +459,11 @@ function updateCartItemQuantity(productId, quantity) {
 }
 
 function clearCart() {
+  if (!readSessionUser()) {
+    updateCartCount(0);
+    return;
+  }
+
   saveCartItems([]);
 }
 

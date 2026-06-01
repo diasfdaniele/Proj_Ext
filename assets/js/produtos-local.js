@@ -1,6 +1,38 @@
-// Limpa todos os produtos cadastrados temporários ao carregar a página
+const marketplaceStorageKey = 'empre:produtos-marketplace';
+const marketplaceCollectionName = 'produtos_marketplace';
 
-window.produtosMarketplaceCadastrados = [];
+function readMarketplaceProductsFromStorage() {
+  try {
+    const raw = localStorage.getItem(marketplaceStorageKey);
+    const parsed = JSON.parse(raw || '[]');
+
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return parsed.filter((item) => item && typeof item.id === 'string' && typeof item.sellerId === 'string');
+  } catch {
+    return [];
+  }
+}
+
+function saveMarketplaceProductsToStorage(items) {
+  localStorage.setItem(marketplaceStorageKey, JSON.stringify(items));
+}
+
+function mergeMarketplaceProducts(localItems, remoteItems) {
+  const merged = new Map();
+
+  [...localItems, ...remoteItems].forEach((item) => {
+    if (!item || typeof item.id !== 'string' || item.sellerId === 'local') {
+      return;
+    }
+
+    merged.set(item.id, item);
+  });
+
+  return Array.from(merged.values());
+}
 // Lista de produtos locais pré-cadastrados com múltiplas imagens
 window.produtosLocaisMarketplace = [
   {
@@ -84,20 +116,89 @@ window.produtosLocaisMarketplace = [
 
 ];
 
+// Produtos cadastrados por vendedores (persistidos em localStorage)
+window.produtosMarketplaceCadastrados = readMarketplaceProductsFromStorage().filter((item) => item.sellerId !== 'local');
+
 // Função para obter todos os produtos do marketplace (locais + cadastrados)
 window.obterProdutosMarketplace = function() {
   return (window.produtosLocaisMarketplace || []).concat(window.produtosMarketplaceCadastrados || []);
 };
 
-// Função para salvar produto cadastrado pelo vendedor (apenas em memória)
-window.produtosMarketplaceCadastrados = window.produtosMarketplaceCadastrados || [];
+// Função para salvar produto cadastrado pelo vendedor
 window.salvarProdutoMarketplace = function(produto) {
-  window.produtosMarketplaceCadastrados.push(produto);
+  if (!produto || typeof produto.id !== 'string') {
+    return;
+  }
+
+  const items = readMarketplaceProductsFromStorage().filter((item) => item.sellerId !== 'local');
+  const index = items.findIndex((item) => item.id === produto.id);
+
+  if (index >= 0) {
+    items[index] = produto;
+  } else {
+    items.push(produto);
+  }
+
+  window.produtosMarketplaceCadastrados = items;
+  saveMarketplaceProductsToStorage(items);
 };
 
 // Função para remover produto do marketplace cadastrado pelo vendedor
 window.removerProdutoMarketplace = function(produtoId, sellerId) {
-  window.produtosMarketplaceCadastrados = window.produtosMarketplaceCadastrados.filter(
+  const items = readMarketplaceProductsFromStorage().filter(
     (p) => p.id !== produtoId || p.sellerId !== sellerId
   );
+
+  window.produtosMarketplaceCadastrados = items;
+  saveMarketplaceProductsToStorage(items);
+};
+
+window.sincronizarProdutosMarketplace = async function() {
+  if (!window.db) {
+    return window.produtosMarketplaceCadastrados || [];
+  }
+
+  try {
+    const snapshot = await window.db.collection(marketplaceCollectionName).get();
+    const remoteItems = [];
+
+    snapshot.forEach((docSnapshot) => {
+      const data = docSnapshot.data();
+      if (data && data.sellerId && data.sellerId !== 'local') {
+        remoteItems.push({ id: docSnapshot.id, ...data });
+      }
+    });
+
+    const localItems = readMarketplaceProductsFromStorage().filter((item) => item.sellerId !== 'local');
+    const mergedItems = mergeMarketplaceProducts(localItems, remoteItems);
+
+    window.produtosMarketplaceCadastrados = mergedItems;
+    saveMarketplaceProductsToStorage(mergedItems);
+    return mergedItems;
+  } catch (error) {
+    console.error('Falha ao sincronizar produtos do marketplace:', error?.code || error?.message || error);
+    return window.produtosMarketplaceCadastrados || [];
+  }
+};
+
+window.salvarProdutoMarketplaceNoFirestore = async function(produto) {
+  if (!produto || typeof produto.id !== 'string' || !window.db) {
+    return null;
+  }
+
+  const payload = {
+    ...produto,
+    atualizadoEm: new Date().toISOString()
+  };
+
+  await window.db.collection(marketplaceCollectionName).doc(produto.id).set(payload);
+  return produto.id;
+};
+
+window.removerProdutoMarketplaceNoFirestore = async function(produtoId) {
+  if (!produtoId || !window.db) {
+    return;
+  }
+
+  await window.db.collection(marketplaceCollectionName).doc(produtoId).delete();
 };

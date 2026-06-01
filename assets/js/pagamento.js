@@ -23,6 +23,7 @@ const pixCodeField = document.getElementById('pix-code');
 const copyPixButton = document.getElementById('btn-copiar-pix');
 const cepInput = document.getElementById('cep');
 const cepStatus = document.getElementById('cep-status');
+const orderHistoryStorageKey = 'empre:historico-pedidos';
 const addressFields = {
   bairro: document.getElementById('bairro'),
   cidade: document.getElementById('cidade'),
@@ -70,6 +71,192 @@ function formatCurrency(value) {
 
 function sanitizeDigits(value) {
   return String(value || '').replace(/\D/g, '');
+}
+
+function getLoggedUser() {
+  const storageKey = window.sessionStorageKey;
+
+  if (!storageKey) {
+    return null;
+  }
+
+  try {
+    const raw = localStorage.getItem(storageKey);
+    return raw ? JSON.parse(raw) : null;
+  } catch {
+    return null;
+  }
+}
+
+function saveLoggedUser(user) {
+  const storageKey = window.sessionStorageKey;
+
+  if (!storageKey || !user) {
+    return;
+  }
+
+  try {
+    localStorage.setItem(storageKey, JSON.stringify(user));
+  } catch {
+    // Ignora erro de armazenamento local para nao interromper o checkout.
+  }
+}
+
+function setInputValueIfEmpty(fieldId, value) {
+  const field = document.getElementById(fieldId);
+  const safeValue = String(value || '').trim();
+
+  if (!field || !safeValue) {
+    return;
+  }
+
+  if (!String(field.value || '').trim()) {
+    field.value = safeValue;
+  }
+}
+
+async function fetchUserProfileByUid(uid) {
+  if (!uid || !window.db) {
+    return null;
+  }
+
+  try {
+    const snapshot = await window.db.collection('usuarios').doc(uid).get();
+    return snapshot.exists ? snapshot.data() : null;
+  } catch (error) {
+    console.error('Falha ao buscar perfil do usuario para pre-preenchimento:', error?.code || error?.message || error);
+    return null;
+  }
+}
+
+async function preloadCompanyDataFromLogin() {
+  const loggedUser = getLoggedUser() || {};
+  const currentAuthUser = window.auth?.currentUser || null;
+  const uid = loggedUser.uid || currentAuthUser?.uid || null;
+
+  let firestoreProfile = null;
+  const isMissingData = !loggedUser.razaoSocial || !loggedUser.cnpj || !loggedUser.email;
+
+  if (uid && isMissingData) {
+    firestoreProfile = await fetchUserProfileByUid(uid);
+  }
+
+  const mergedUser = {
+    ...loggedUser,
+    cnpj: loggedUser.cnpj || firestoreProfile?.cnpj || null,
+    email: loggedUser.email || currentAuthUser?.email || firestoreProfile?.email || null,
+    nomeResponsavel: loggedUser.nomeResponsavel || firestoreProfile?.nomeResponsavel || null,
+    razaoSocial: loggedUser.razaoSocial || firestoreProfile?.razaoSocial || null,
+    uid
+  };
+
+  if (uid) {
+    saveLoggedUser(mergedUser);
+  }
+
+  setInputValueIfEmpty('empresa', mergedUser.razaoSocial);
+  setInputValueIfEmpty('cnpj', mergedUser.cnpj);
+  setInputValueIfEmpty('email', mergedUser.email);
+  setInputValueIfEmpty('responsavel', mergedUser.nomeResponsavel);
+}
+
+function buildOrderItems(items) {
+  return items.map((item) => {
+    const quantity = Number(item.quantity) || 1;
+    const unitPrice = parsePrice(item.price);
+    return {
+      categoria: item.category || null,
+      empresa: item.company || null,
+      id: item.id || null,
+      nome: item.name || 'Item sem nome',
+      precoTexto: item.price || 'Sob consulta',
+      precoUnitario: unitPrice,
+      quantidade: quantity,
+      subtotal: unitPrice === null ? null : unitPrice * quantity
+    };
+  });
+}
+
+function buildOrderAddress() {
+  return {
+    bairro: addressFields.bairro?.value?.trim() || '',
+    cep: cepInput?.value?.trim() || '',
+    cidade: addressFields.cidade?.value?.trim() || '',
+    complemento: addressFields.complemento?.value?.trim() || '',
+    estado: addressFields.estado?.value?.trim() || '',
+    logradouro: addressFields.logradouro?.value?.trim() || '',
+    numero: document.getElementById('numero')?.value?.trim() || ''
+  };
+}
+
+function buildOrderPayload(items, method) {
+  const loggedUser = getLoggedUser();
+  const normalizedMethod = method || 'checkout';
+  const orderItems = buildOrderItems(items);
+  const pricedItems = orderItems.filter((item) => typeof item.precoUnitario === 'number');
+  const totalEstimado = pricedItems.reduce((sum, item) => sum + (item.subtotal || 0), 0);
+
+  const userEmail = String(document.getElementById('email')?.value?.trim() || loggedUser?.email || '').trim();
+  const userUid = loggedUser?.uid || window.auth?.currentUser?.uid || null;
+
+  return {
+    cliente: {
+      accountType: loggedUser?.accountType || null,
+      email: userEmail || null,
+      nomeEmpresa: document.getElementById('empresa')?.value?.trim() || loggedUser?.razaoSocial || null,
+      nomeResponsavel: document.getElementById('responsavel')?.value?.trim() || loggedUser?.nomeResponsavel || null,
+      role: loggedUser?.role || null,
+      uid: userUid
+    },
+    clienteEmail: userEmail || null,
+    clienteUid: userUid,
+    cnpj: document.getElementById('cnpj')?.value?.trim() || null,
+    criadoEm: new Date().toISOString(),
+    endereco: buildOrderAddress(),
+    itens: orderItems,
+    metodoPagamento: normalizedMethod,
+    observacoes: document.getElementById('observacoes')?.value?.trim() || '',
+    parcelamento: installmentsSelect?.value || '1x',
+    possuiItensSobConsulta: orderItems.some((item) => item.precoUnitario === null),
+    referenciaPix: normalizedMethod === 'pix' ? (pixCodeField?.value || null) : null,
+    status: 'simulado',
+    totalEstimado,
+    userEmail: userEmail || null,
+    userId: userUid,
+    uid: userUid
+  };
+}
+
+async function saveOrderToFirestore(payload) {
+  if (!window.db || !window.firebase) {
+    return null;
+  }
+
+  const payloadWithServerTime = {
+    ...payload,
+    criadoEmServer: window.firebase.firestore.FieldValue.serverTimestamp()
+  };
+
+  const docRef = await window.db.collection('pedidos').add(payloadWithServerTime);
+  return docRef.id;
+}
+
+function saveOrderToLocalHistory(payload, orderId) {
+  const localOrder = {
+    ...payload,
+    id: orderId || `local-${Date.now()}`,
+    origem: orderId ? 'firestore' : 'local'
+  };
+
+  try {
+    const raw = localStorage.getItem(orderHistoryStorageKey);
+    const parsed = JSON.parse(raw || '[]');
+    const current = Array.isArray(parsed) ? parsed : [];
+    const next = [...current, localOrder].slice(-100);
+    localStorage.setItem(orderHistoryStorageKey, JSON.stringify(next));
+  } catch {
+    // Nao interrompe o checkout se o historico local falhar.
+  }
 }
 
 function buildPixCode(items) {
@@ -220,9 +407,11 @@ function updateSummary(items) {
   paymentImmediateItems.textContent = String(immediateItems.length);
   paymentTotalValue.textContent = estimatedTotal > 0 ? formatCurrency(estimatedTotal) : 'A confirmar';
 
-  paymentSummaryText.textContent = items.length
-    ? `${totalItems} item(ns) carregados do carrinho para este checkout.`
-    : 'Seus itens de checkout serao exibidos aqui.';
+  if (paymentSummaryText) {
+    paymentSummaryText.textContent = items.length
+      ? `${totalItems} item(ns) carregados do carrinho para este checkout.`
+      : 'Seus itens de checkout serao exibidos aqui.';
+  }
 
   if (paymentAlert) {
     paymentAlert.hidden = consultiveItems === 0;
@@ -256,7 +445,7 @@ function renderCheckout() {
   updatePaymentMethodState(items);
 }
 
-paymentForm?.addEventListener('submit', (event) => {
+paymentForm?.addEventListener('submit', async (event) => {
   event.preventDefault();
 
   const items = getCartItems();
@@ -273,6 +462,24 @@ paymentForm?.addEventListener('submit', (event) => {
   }
 
   const method = paymentMethodSelect?.value || 'checkout';
+  const payload = buildOrderPayload(items, method);
+  let orderId = null;
+
+  try {
+    orderId = await saveOrderToFirestore(payload);
+
+    if (orderId && typeof window.mostrarToast === 'function') {
+      window.mostrarToast(`Pedido registrado com sucesso (ID: ${orderId}).`, 'sucesso');
+    }
+  } catch (error) {
+    console.error('Falha ao salvar pedido no Firestore:', error?.code || error?.message || error);
+
+    if (typeof window.mostrarToast === 'function') {
+      window.mostrarToast('Pedido processado localmente. Nao foi possivel registrar no Firebase agora.', 'info');
+    }
+  }
+
+  saveOrderToLocalHistory(payload, orderId);
 
   if (typeof window.mostrarToast === 'function') {
     window.mostrarToast(
@@ -322,3 +529,4 @@ cepInput?.addEventListener('blur', () => {
 });
 
 renderCheckout();
+preloadCompanyDataFromLogin();

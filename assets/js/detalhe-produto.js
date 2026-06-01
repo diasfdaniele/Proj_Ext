@@ -9,6 +9,26 @@ function getAllProductsDetalhe() {
   return [...baseProducts, ...produtosLocais, ...produtosCadastrados];
 }
 
+function getVariationNameByImage(produto, imageUrl) {
+  if (!produto?.variations || !Array.isArray(produto.variations)) {
+    return '';
+  }
+
+  const match = produto.variations.find((variation) => variation?.imagem === imageUrl);
+  return match?.nome || '';
+}
+
+function buildDetailImageAlt(produto, imageUrl, index = 0, total = 1) {
+  const safeName = produto?.name || 'produto';
+  const safeCompany = produto?.company || 'empresa nao informada';
+  const safeCategory = produto?.categoryLabel || 'categoria nao informada';
+  const variationName = getVariationNameByImage(produto, imageUrl);
+  const variationLabel = variationName ? ` Variacao ${variationName}.` : '';
+  const positionLabel = total > 1 ? ` Foto ${index + 1} de ${total}.` : '';
+
+  return `${safeName}, empresa ${safeCompany}, categoria ${safeCategory}.${variationLabel}${positionLabel}`;
+}
+
 function renderDetalheProduto() {
   const params = new URLSearchParams(window.location.search);
   const id = params.get('id');
@@ -23,14 +43,14 @@ function renderDetalheProduto() {
   let galeria = '';
   if (produto.images && produto.images.length) {
     galeria = `<div class="produto-detalhe__galeria">${produto.images.map((img, i) => `
-      <img src="${img}" alt="Imagem ${i+1} do produto" class="produto-detalhe__imagem" style="max-width:320px; margin:4px; border-radius:8px;">
+      <img src="${img}" alt="${buildDetailImageAlt(produto, img, i, produto.images.length)}" title="${buildDetailImageAlt(produto, img, i, produto.images.length)}" class="produto-detalhe__imagem" style="max-width:320px; margin:4px; border-radius:8px;">
     `).join('')}</div>`;
   }
 
   // Variações
   let variacoes = '';
   if (produto.variations && produto.variations.length) {
-    variacoes = `<div class="produto-detalhe__variacoes"><strong>Variações:</strong> ${produto.variations.map(v => `<button class="btn-variacao" data-img="${v.imagem}">${v.nome}</button>`).join(' ')}</div>`;
+    variacoes = `<div class="produto-detalhe__variacoes"><strong>Variações:</strong> ${produto.variations.map(v => `<button class="btn-variacao" data-img="${v.imagem}" aria-label="Selecionar variação ${v.nome}">${v.nome}</button>`).join(' ')}</div>`;
   }
 
   // Info vendedor
@@ -53,7 +73,8 @@ function renderDetalheProduto() {
       const img = btn.getAttribute('data-img');
       const galeriaDiv = container.querySelector('.produto-detalhe__galeria');
       if (galeriaDiv && img) {
-        galeriaDiv.innerHTML = `<img src="${img}" alt="Variação" class="produto-detalhe__imagem" style="max-width:320px; margin:4px; border-radius:8px;">`;
+        const imageDescription = buildDetailImageAlt(produto, img, 0, 1);
+        galeriaDiv.innerHTML = `<img src="${img}" alt="${imageDescription}" title="${imageDescription}" class="produto-detalhe__imagem" style="max-width:320px; margin:4px; border-radius:8px;">`;
       }
     });
   });

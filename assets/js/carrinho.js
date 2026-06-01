@@ -26,6 +26,10 @@ const clearCartButton = document.getElementById('btn-limpar-carrinho');
 const finalizeCartButton = document.getElementById('btn-finalizar-carrinho');
 const proceedToPaymentLink = document.getElementById('btn-ir-pagamento');
 
+function getLoggedUser() {
+  return typeof window.obterUsuarioLogado === 'function' ? window.obterUsuarioLogado() : null;
+}
+
 function getCartItems() {
   if (typeof window.obterItensCarrinho !== 'function') {
     return [];
@@ -57,6 +61,21 @@ function formatCurrency(value) {
 }
 
 function createEmptyState() {
+  const user = getLoggedUser();
+
+  if (!user) {
+    return `
+      <div class="carrinho-vazio">
+        <div>
+          <div class="carrinho-vazio__icone" aria-hidden="true">+</div>
+          <h3>Faça login para usar o carrinho</h3>
+          <p>Seus itens de carrinho ficam vinculados à sua conta e reaparecem após novo login.</p>
+          <a href="login.html" class="btn btn--primary">Entrar</a>
+        </div>
+      </div>
+    `;
+  }
+
   return `
     <div class="carrinho-vazio">
       <div>
@@ -183,6 +202,13 @@ clearCartButton?.addEventListener('click', () => {
 
 
 finalizeCartButton?.addEventListener('click', () => {
+  if (!getLoggedUser()) {
+    if (typeof window.mostrarToast === 'function') {
+      window.mostrarToast('Faca login para finalizar o carrinho.', 'info');
+    }
+    return;
+  }
+
   const items = getCartItems();
   if (!items.length) {
     if (typeof window.mostrarToast === 'function') {
@@ -194,6 +220,15 @@ finalizeCartButton?.addEventListener('click', () => {
 });
 
 proceedToPaymentLink?.addEventListener('click', (event) => {
+  if (!getLoggedUser()) {
+    event.preventDefault();
+
+    if (typeof window.mostrarToast === 'function') {
+      window.mostrarToast('Faca login para seguir ao pagamento.', 'info');
+    }
+    return;
+  }
+
   if (getCartItems().length) {
     return;
   }

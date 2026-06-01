@@ -16,7 +16,7 @@ function readOptionalValue(id) {
 }
 
 function saveUserSession(user) {
-  localStorage.setItem(sessionStorageKey, JSON.stringify(user));
+  localStorage.setItem(window.sessionStorageKey, JSON.stringify(user));
 }
 
 function setLoadingState(isLoading) {
@@ -82,6 +82,11 @@ if (formCadastro) {
     }
 
     if (!window.auth || !window.db) {
+      console.error('Firebase indisponivel na pagina de cadastro.', {
+        hasAuth: !!window.auth,
+        hasDb: !!window.db,
+        hasFirebase: !!window.firebase
+      });
       toast.classList.add("Bad_Toast");
       toast.innerHTML = 'Firebase não está configurado corretamente.';
       return;
@@ -127,7 +132,7 @@ if (formCadastro) {
       toast.innerHTML = 'Empresa cadastrada com sucesso!';
       window.location.href = 'login.html';
     } catch (erro) {
-      console.error(erro);
+      console.error('Falha no cadastro de empresa:', erro?.code || erro?.message || erro);
       toast.classList.add("Bad_Toast");
       toast.innerHTML = 'Nao foi possivel concluir o cadastro. Verifique os dados e tente novamente.';
     } finally {

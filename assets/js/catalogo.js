@@ -12,7 +12,7 @@ const catalogGrid = document.getElementById('catalogo-lista');
 const userPanel = document.getElementById('catalogo-painel-usuario');
 const userPanelText = document.getElementById('catalogo-painel-texto');
 const userPanelLink = document.getElementById('catalogo-painel-link');
-// Usa window.sessionStorageKey global
+const catalogSessionStorageKey = 'empre:usuario-logado';
 const favoriteIds = new Set();
 
 // ESTRUTURA PARA PRODUTOS - NÃO EXCLUIR POR ENQUANTO 
@@ -32,21 +32,6 @@ const baseProducts = [
   }
 ];
 
-  // Garante que produtos locais sejam carregados mesmo se o script for importado depois
-  function getProdutosLocaisMarketplaceSafe() {
-    if (window.produtosLocaisMarketplace && Array.isArray(window.produtosLocaisMarketplace)) {
-      return window.produtosLocaisMarketplace;
-    }
-    return [];
-  }
-
-  function getProdutosMarketplaceCadastradosSafe() {
-    if (window.produtosMarketplaceCadastrados && Array.isArray(window.produtosMarketplaceCadastrados)) {
-      return window.produtosMarketplaceCadastrados;
-    }
-    return [];
-  }
-
 function getAllProducts() {
   const sellerProducts = typeof window.obterProdutosMarketplace === 'function'
     ? window.obterProdutosMarketplace()
@@ -58,9 +43,23 @@ function getAllProducts() {
   return produtosLocais.concat(baseProducts, produtosCadastrados);
 }
 
-function readSessionUser() {
+async function syncMarketplaceProducts() {
+  if (typeof window.sincronizarProdutosMarketplace !== 'function') {
+    return;
+  }
+
   try {
-    const parsed = JSON.parse(localStorage.getItem(sessionStorageKey) ?? 'null');
+    await window.sincronizarProdutosMarketplace();
+  } catch (error) {
+    console.error('Falha ao sincronizar produtos no catalogo:', error?.code || error?.message || error);
+  }
+}
+
+function readSessionUser() {
+  const sessionKey = window.sessionStorageKey || catalogSessionStorageKey;
+
+  try {
+    const parsed = JSON.parse(localStorage.getItem(sessionKey) ?? 'null');
     return parsed && typeof parsed.uid === 'string' ? parsed : null;
   } catch {
     return null;
@@ -118,8 +117,18 @@ function getFilteredProducts() {
   });
 }
 
+function buildProductImageAlt(product, index = 0, total = 1) {
+  const safeName = product?.name || 'produto';
+  const safeCompany = product?.company || 'empresa nao informada';
+  const safeCategory = product?.categoryLabel || 'categoria nao informada';
+  const positionLabel = total > 1 ? ` Foto ${index + 1} de ${total}.` : '';
+
+  return `${safeName}, empresa ${safeCompany}, categoria ${safeCategory}.${positionLabel}`;
+}
+
 function createProductCard(product) {
   const isFavorite = favoriteIds.has(product.id);
+  const firstImageAlt = buildProductImageAlt(product, 0, (product.images || []).length || 1);
   return `
     <article class="produto-card" aria-label="${product.name} - ${product.company}">
       <a href="detalhe-produto.html?id=${product.id}" class="produto-card__link" style="text-decoration:none;color:inherit;display:block">
@@ -127,7 +136,7 @@ function createProductCard(product) {
           ${product.images && product.images.length ? `
             <div class="produto-card__carousel" data-product-id="${product.id}">
               <button type="button" class="produto-card__carousel-arrow produto-card__carousel-arrow--left" aria-label="Imagem anterior" tabindex="0">&#8592;</button>
-              <img src="${product.images[0]}" alt="Imagem do produto" class="produto-card__imagem" loading="lazy">
+              <img src="${product.images[0]}" alt="${firstImageAlt}" title="${firstImageAlt}" class="produto-card__imagem" loading="lazy">
               <button type="button" class="produto-card__carousel-arrow produto-card__carousel-arrow--right" aria-label="Próxima imagem" tabindex="0">&#8594;</button>
             </div>
           ` : `
@@ -144,8 +153,12 @@ function createProductCard(product) {
           <div class="produto-card__rodape">
             <span class="produto-card__preco">${product.price}</span>
             <div class="produto-card__acoes">
-              <button type="button" class="btn btn--outline btn--sm produto-card__favorito ${isFavorite ? 'produto-card__favorito--ativo' : ''}" data-favorite="${product.id}" aria-pressed="${isFavorite ? 'true' : 'false'}">${isFavorite ? 'Favoritado' : 'Favoritar'}</button>
-              <button type="button" class="btn btn--primary btn--sm" data-add-cart="${product.id}">Adicionar</button>
+              <button type="button" class="produto-card__favorito-icon ${isFavorite ? 'produto-card__favorito-icon--ativo' : ''}" data-favorite="${product.id}" aria-pressed="${isFavorite ? 'true' : 'false'}" aria-label="${isFavorite ? 'Desfavoritar produto' : 'Favoritar produto'}" title="${isFavorite ? 'Desfavoritar' : 'Favoritar'}">
+                <svg viewBox="0 0 24 24" aria-hidden="true" focusable="false">
+                  <path d="M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z"/>
+                </svg>
+              </button>
+              <button type="button" class="btn btn--primary btn--sm produto-card__btn-adicionar" data-add-cart="${product.id}">Adicionar</button>
             </div>
           </div>
         </div>
@@ -189,14 +202,13 @@ async function loadFavorites() {
   }
 
 
-  // Se não houver Firestore (getDocs), apenas renderiza os produtos normalmente
-  if (typeof getDocs !== 'function' || !db) {
+  if (!window.db) {
     renderProducts();
     return;
   }
 
   try {
-    const snapshot = await getDocs(query(collection(db, 'favoritos'), where('userId', '==', user.uid)));
+    const snapshot = await window.db.collection('favoritos').where('userId', '==', user.uid).get();
     snapshot.forEach((favoriteDoc) => {
       const favorite = favoriteDoc.data();
       if (favorite?.productId) {
@@ -219,7 +231,7 @@ async function toggleFavorite(productId) {
     return;
   }
 
-  if (!isFirebaseConfigured || !db) {
+  if (!window.db) {
     if (typeof window.mostrarToast === 'function') {
       window.mostrarToast('Configure o Firebase para salvar favoritos.', 'info');
     }
@@ -232,18 +244,18 @@ async function toggleFavorite(productId) {
     return;
   }
 
-  const favoriteRef = doc(db, 'favoritos', getFavoriteDocumentId(user.uid, productId));
+  const favoriteRef = window.db.collection('favoritos').doc(getFavoriteDocumentId(user.uid, productId));
 
   try {
     if (favoriteIds.has(productId)) {
-      await deleteDoc(favoriteRef);
+      await favoriteRef.delete();
       favoriteIds.delete(productId);
 
       if (typeof window.mostrarToast === 'function') {
         window.mostrarToast('Produto removido dos favoritos.', 'info');
       }
     } else {
-      await setDoc(favoriteRef, {
+      await favoriteRef.set({
         category: selectedProduct.category,
         categoryLabel: selectedProduct.categoryLabel,
         company: selectedProduct.company,
@@ -257,7 +269,7 @@ async function toggleFavorite(productId) {
         purchaseModeLabel: selectedProduct.purchaseModeLabel,
         userEmail: user.email,
         userId: user.uid,
-        userRole: user.role
+        userRole: user.role || 'usuario-comum'
       });
       favoriteIds.add(productId);
 
@@ -299,7 +311,9 @@ function renderProducts() {
   catalogGrid.innerHTML = filteredProducts.map(createProductCard).join('');
 
   catalogGrid.querySelectorAll('[data-add-cart]').forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       const productId = button.getAttribute('data-add-cart');
       const selectedProduct = getAllProducts().find((product) => product.id === productId);
       if (selectedProduct && typeof window.adicionarItemAoCarrinho === 'function') {
@@ -309,7 +323,9 @@ function renderProducts() {
   });
 
   catalogGrid.querySelectorAll('[data-favorite]').forEach((button) => {
-    button.addEventListener('click', () => {
+    button.addEventListener('click', (event) => {
+      event.preventDefault();
+      event.stopPropagation();
       const productId = button.getAttribute('data-favorite');
       if (productId) {
         toggleFavorite(productId);
@@ -329,7 +345,10 @@ function attachCarouselListeners() {
     const left = carousel.querySelector('.produto-card__carousel-arrow--left');
     const right = carousel.querySelector('.produto-card__carousel-arrow--right');
     function update() {
+      const imageDescription = buildProductImageAlt(product, index, product.images.length);
       img.src = product.images[index];
+      img.alt = imageDescription;
+      img.title = imageDescription;
     }
     left.addEventListener('click', e => {
       e.preventDefault();
@@ -354,6 +373,11 @@ if (categorySelect && initialCategory) {
 populateFilterOptions();
 updateUserPanel();
 loadFavorites();
+
+syncMarketplaceProducts().then(() => {
+  populateFilterOptions();
+  renderProducts();
+});
 
 searchInput?.addEventListener('input', renderProducts);
 categorySelect?.addEventListener('change', renderProducts);

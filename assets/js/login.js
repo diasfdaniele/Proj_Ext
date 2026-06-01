@@ -12,13 +12,7 @@ const toast = document.getElementById("toast-container");
 if (googleLoginButton) {
   googleLoginButton.addEventListener('click', async () => {
     if (!window.auth || !window.db) {
-      toast.hidden = false;
-        toast.innerHTML = "";
-        setTimeout(() => {
-        toast.hidden = true;
-      }, 3000);
-      toast.innerHTML = 'Firebase não está configurado corretamente.';
-      toast.classList.add('Bad_Toast');
+      showToast('Firebase não está configurado corretamente.', 'Bad_Toast');
       return;
     }
     try {
@@ -43,22 +37,10 @@ if (googleLoginButton) {
         role,
         uid: user.uid
       });
-      toast.hidden = false;
-        toast.innerHTML = "";
-        setTimeout(() => {
-        toast.hidden = true;
-      }, 3000);
-      toast.innerHTML = 'Login com Google realizado com sucesso.';
-      toast.classList.add('Good_Toast');
+      showToast('Login com Google realizado com sucesso.', 'Good_Toast');
       window.location.href = 'conta.html';
     } catch (erro) {
-      toast.hidden = false;
-        toast.innerHTML = "";
-        setTimeout(() => {
-        toast.hidden = true;
-      }, 3000);
-      toast.innerHTML = 'Não foi possível fazer login com Google.';
-      toast.classList.add('Bad_Toast');
+      showToast('Não foi possível fazer login com Google.', 'Bad_Toast');
       
     } finally {
       setLoadingState(false);
@@ -72,14 +54,31 @@ const senha = document.getElementById('campo-senha');
 const botaoEntrar = document.getElementById('btn-entrar');
 const textoBotaoEntrar = botaoEntrar?.querySelector('.btn-login-submit__texto');
 const loadingBotaoEntrar = botaoEntrar?.querySelector('.btn-login-submit__loading');
-// Usa window.sessionStorageKey global
+const loginSessionStorageKey = 'empre:usuario-logado';
+
+function showToast(message, type = 'Bad_Toast', hideDelay = 3000) {
+  if (!toast) {
+    return;
+  }
+
+  toast.hidden = false;
+  toast.innerHTML = '';
+  toast.classList.remove('Good_Toast', 'Bad_Toast');
+  toast.classList.add(type);
+  toast.textContent = message;
+
+  setTimeout(() => {
+    toast.hidden = true;
+  }, hideDelay);
+}
 
 function normalizeRole(value) {
   return value === 'administrador' ? 'administrador' : 'usuario-comum';
 }
 
 function saveUserSession(user) {
-  localStorage.setItem(sessionStorageKey, JSON.stringify(user));
+  const sessionKey = window.sessionStorageKey || loginSessionStorageKey;
+  localStorage.setItem(sessionKey, JSON.stringify(user));
 }
 
 
@@ -94,8 +93,10 @@ function setLoadingState(isLoading) {
 }
 
 if (form && email && senha) {
-  toast.innerHTML = "";
-  toast.classList.remove('Good_Toast', 'Bad_Toast');
+  if (toast) {
+    toast.innerHTML = '';
+    toast.classList.remove('Good_Toast', 'Bad_Toast');
+  }
   form.addEventListener('submit', async (event) => {
     event.preventDefault();
 
@@ -103,24 +104,12 @@ if (form && email && senha) {
     const senhaValor = senha.value.trim();
 
     if (!emailValor || !senhaValor) {
-      toast.hidden = false;
-        toast.innerHTML = "";
-        setTimeout(() => {
-        toast.hidden = true;
-      }, 3000);
-      toast.innerHTML = 'Preencha email e senha para entrar.';
-      toast.classList.add('Bad_Toast');
+      showToast('Preencha email e senha para entrar.', 'Bad_Toast');
       return;
     }
 
     if (!window.auth || !window.db) {
-      toast.hidden = false;
-        toast.innerHTML = "";
-        setTimeout(() => {
-        toast.hidden = true;
-      }, 3000);
-      toast.innerHTML = 'Firebase não está configurado corretamente.';
-      toast.classList.add('Bad_Toast');
+      showToast('Firebase não está configurado corretamente.', 'Bad_Toast');
       return;
     }
 
@@ -146,23 +135,13 @@ if (form && email && senha) {
         role,
         uid: credential.user.uid
       });
-      toast.hidden = false;
-        toast.innerHTML = "";
-        setTimeout(() => {
-        toast.hidden = true;
+      showToast('Login realizado com sucesso!', 'Good_Toast');
+      setTimeout(() => {
         window.location.href = 'conta.html';
       }, 3000);
-      toast.innerHTML = 'Login realizado com sucesso!';
-      toast.classList.add('Good_Toast');
     } catch (erro) {
       console.error(erro);
-      toast.hidden = false;
-        toast.innerHTML = "";
-        setTimeout(() => {
-        toast.hidden = true;
-      }, 3000);
-      toast.innerHTML = 'Email ou senha inválidos.';
-      toast.classList.add('Bad_Toast');
+      showToast('Email ou senha inválidos.', 'Bad_Toast');
     } finally {
       setLoadingState(false);
     }
