@@ -1595,7 +1595,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   gap: 0.5rem;
   font-size: 0.875rem;
-  color: var(--cinza-400);
+  color: var(--cinza-100);
 }
 
 .footer__contato svg {
@@ -1637,7 +1637,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .footer__copy {
   font-size: 0.8rem;
-  color: var(--cinza-500);
+  color: var(--cinza-400);
 }
 
 .footer__selos {
@@ -1865,7 +1865,7 @@ body.modo-alto-contraste .footer__copy,
 body.modo-alto-contraste .campo-label,
 body.modo-alto-contraste .login-form-subtitulo,
 body.modo-alto-contraste .login-suporte-texto {
-  color: #FFFFFF;
+  color: var(--cinza-500);
 }
 
 body.modo-alto-contraste .btn-acess,
@@ -2205,7 +2205,7 @@ body.modo-leitura .login-painel__inner {
   max-width: 72ch;
 }
 
-/* Layout simplificado */
+/* Layout simplificado*/
 body.modo-simplificado .hero__visual,
 body.modo-simplificado .hero__bg-deco,
 body.modo-simplificado .catalogo-hero__content::after,
@@ -2239,8 +2239,8 @@ body.modo-simplificado .produto-card__media,
 body.modo-simplificado .carrinho-item__media,
 body.modo-simplificado .login-lateral,
 body.modo-simplificado .header__logo-icon {
-  background: var(--cinza-100) !important;
-  color: var(--cinza-900) !important;
+  background: var(--azul-profundo) !important;
+  color: var(--cinza-100) !important;
 }
 
 body.modo-simplificado * {
