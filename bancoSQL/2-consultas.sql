@@ -1,45 +1,91 @@
-# Consultas (Inserts e massa de dados (1,0 pt)) - 1pt
+# Consultas (Inserts e massa de dados)
 
-#Mostrar as empresas ativas, seus endereços e contatos
-select e.nome_fantasia, en.cep, c.contato from empresas e
-inner join enderecos en on e.id_empresa = en.fk_empresa
-inner join contatos c on e.id_empresa = c.fk_empresa
-where e.status_conta = 'Ativo';
+#CONSULTA 1 - Join entre 3 tabelas - Exibe as empresas, seus endereços e múltiplas opções de contatos
+#USO: Relatórios administrativos
+SELECT 
+	e.razao_social, e.perfil, en.cidade, en.cep, en.estado, c.tipo_contato, c.contato
+FROM empresas e
+INNER JOIN enderecos en
+    ON e.id_empresa = en.fk_empresa
+INNER JOIN contatos c
+    ON e.id_empresa = c.fk_empresa
+ORDER BY e.razao_social;
 
-#Mostrar as empresas ativas e seus produtos
-select e.nome_fantasia, p.nome_produto, p.preco_unitario from empresas e
-inner join produtos p on e.id_empresa = p.fk_vendedor
-where e.status_conta = 'Ativo';
+#CONSULTA 2 - Mesma consulta da anterior, mas exibindo apenas o telefone
+#Justificativa: Validar os JOINS da consulta anterior
+SELECT 
+	e.razao_social, e.perfil, en.cidade, en.cep, en.estado, c.tipo_contato, c.contato
+FROM empresas e
+INNER JOIN enderecos en
+    ON e.id_empresa = en.fk_empresa
+INNER JOIN contatos c
+    ON e.id_empresa = c.fk_empresa
+WHERE c.tipo_contato = 'Telefone'
+ORDER BY e.razao_social;
 
-#Mostrar as empresas com faturamento maior que a média de outras ativas
-select e.nome_fantasia, sum(ip.preco_venda) as 'Faturamento' from itens_pedido ip
-inner join produtos p on ip.fk_produto = p.id_produto
-inner join empresas e on e.id_empresa = p.fk_vendedor
-where e.status_conta = 'Ativo'
-group by e.id_empresa
-having sum(ip.preco_venda) > (select avg(ip.preco_venda) as 'Faturamento' from itens_pedido ip
-inner join produtos p on ip.fk_produto = p.id_produto
-inner join empresas e on e.id_empresa = p.fk_vendedor
-where e.status_conta = 'Ativo')
-order by sum(ip.preco_venda) desc;
+#CONSULTA 3 - JOIN - Mostrar as empresas e seus produtos cadastrados
+#USO: catálogo interno de produto por fornecedor
+SELECT
+	e.razao_social, p.nome_produto, p.preco_unitario, p.estoque_atual
+FROM empresas e
+INNER JOIN produtos p
+    ON e.id_empresa = p.fk_vendedor
+WHERE e.perfil = 'vendedor'
+ORDER BY e.razao_social;
 
-#Mostrar o total de receita de 7 dias até hoje
-select date(p.data_emissao) as 'data', sum(ip.preco_venda) as 'valor do dia' from itens_pedido ip
-inner join pedidos p on p.id_pedido = ip.fk_pedido
-group by p.data_emissao
-having date(p.data_emissao) between DATE_SUB(CURRENT_DATE(), INTERVAL 1 WEEK) AND CURRENT_DATE();
+#CONSULTA 4 - GROUP BY+HAVING - Exibe as empresas com faturamento maior que a média
+#USO: Identificar fornecedores com melhor desempenho comercial
+SELECT
+    e.razao_social,
+    SUM(ip.subtotal) AS faturamento
+FROM itens_pedido ip
+INNER JOIN produtos p
+    ON ip.fk_produto = p.id_produto
+INNER JOIN empresas e
+    ON p.fk_vendedor = e.id_empresa
+GROUP BY e.id_empresa
+HAVING SUM(ip.subtotal) >
+(
+    SELECT AVG(faturamento)
+    FROM
+    (
+        SELECT SUM(ip2.subtotal) AS faturamento
+        FROM itens_pedido ip2
+        INNER JOIN produtos p2
+            ON ip2.fk_produto = p2.id_produto
+        GROUP BY p2.fk_vendedor
+    ) media_vendedores
+)
+ORDER BY faturamento DESC;
 
-#Mostrar os produtos e suas categorias das empresas atuais
-select p.nome_produto, c.nome_categoria from produtos p
-inner join categorias c on p.fk_categoria = c.id_categoria
-inner join empresas e on e.id_empresa = p.fk_vendedor
-where e.status_conta = 'Ativo'
-order by c.nome_categoria, p.nome_produto;
+#CONSULTA 5 - Filtro por intervalo - Exibe a receita do último ano
+#USO: Relatórios Financeiros
+SELECT
+    DATE(data_emissao) AS data_venda,
+    SUM(total_estimado) AS receita
+FROM pedidos
+WHERE data_emissao BETWEEN '2025-01-01' AND '2025-12-31'
+GROUP BY DATE(data_emissao)
+ORDER BY data_venda;
 
-#Mostrar empresas que nunca compraram nada
-select e.nome_fantasia from empresas e
-where not exists (
-    select id_pedido
-    from pedidos p
-    where p.fk_comprador = e.id_empresa
+#CONSULTA 6 - SUBCONSULTA NOT EXISTS - Exibe empresas que nunca compraram
+#USO: Ações de reativação
+SELECT
+    e.razao_social
+FROM empresas e
+WHERE e.perfil = 'comprador'
+AND NOT EXISTS
+(
+    SELECT 1
+    FROM pedidos p
+    WHERE p.fk_comprador = e.id_empresa
 );
+
+#CONSULTA 7 - AGREGAÇÃO + ORDENAÇÃO - Exibe os produtos mais vendidos
+#USO: Verificar tendências de compra
+SELECT
+    nome_produto,
+    SUM(quantidade) AS total_vendido
+FROM itens_pedido
+GROUP BY nome_produto
+ORDER BY total_vendido DESC;
