@@ -56,21 +56,7 @@ const textoBotaoEntrar = botaoEntrar?.querySelector('.btn-login-submit__texto');
 const loadingBotaoEntrar = botaoEntrar?.querySelector('.btn-login-submit__loading');
 const loginSessionStorageKey = 'empre:usuario-logado';
 
-function showToast(message, type = 'Bad_Toast', hideDelay = 3000) {
-  if (!toast) {
-    return;
-  }
 
-  toast.hidden = false;
-  toast.innerHTML = '';
-  toast.classList.remove('Good_Toast', 'Bad_Toast');
-  toast.classList.add(type);
-  toast.textContent = message;
-
-  setTimeout(() => {
-    toast.hidden = true;
-  }, hideDelay);
-}
 
 function normalizeRole(value) {
   return value === 'administrador' ? 'administrador' : 'usuario-comum';

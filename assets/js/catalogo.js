@@ -14,6 +14,7 @@ const userPanelText = document.getElementById('catalogo-painel-texto');
 const userPanelLink = document.getElementById('catalogo-painel-link');
 const catalogSessionStorageKey = 'empre:usuario-logado';
 const favoriteIds = new Set();
+const toast = document.getElementById("toast-container");
 
 // ESTRUTURA PARA PRODUTOS - NÃO EXCLUIR POR ENQUANTO 
 const baseProducts = [
@@ -288,6 +289,8 @@ async function toggleFavorite(productId) {
   }
 }
 
+
+
 function renderProducts() {
   if (!catalogGrid || !resultsLabel) {
     return;
@@ -310,14 +313,21 @@ function renderProducts() {
 
   catalogGrid.innerHTML = filteredProducts.map(createProductCard).join('');
 
+
   catalogGrid.querySelectorAll('[data-add-cart]').forEach((button) => {
     button.addEventListener('click', (event) => {
       event.preventDefault();
       event.stopPropagation();
+      
       const productId = button.getAttribute('data-add-cart');
       const selectedProduct = getAllProducts().find((product) => product.id === productId);
       if (selectedProduct && typeof window.adicionarItemAoCarrinho === 'function') {
+        showToast('Produto adicionado ao carrinho!', 'Good_Toast', 800);
         window.adicionarItemAoCarrinho(selectedProduct);
+      }
+      else{
+        showToast('Erro ao adicionar o produto no carrinho!', 'Bad_Toast', 800);
+        return;
       }
     });
   });

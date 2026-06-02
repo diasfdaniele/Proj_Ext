@@ -25,6 +25,7 @@ const totalValueElement = document.getElementById('resumo-valor');
 const clearCartButton = document.getElementById('btn-limpar-carrinho');
 const finalizeCartButton = document.getElementById('btn-finalizar-carrinho');
 const proceedToPaymentLink = document.getElementById('btn-ir-pagamento');
+const toast = document.getElementById("toast-container");
 
 function getLoggedUser() {
   return typeof window.obterUsuarioLogado === 'function' ? window.obterUsuarioLogado() : null;
@@ -154,6 +155,7 @@ function bindCartActions(items) {
 
       if (action === 'increase' && typeof window.atualizarQuantidadeCarrinho === 'function') {
         window.atualizarQuantidadeCarrinho(itemId, (Number(item.quantity) || 1) + 1);
+        showToast("Produto Adicionado ao Carrinho", 'Good_Toast', 800);
         renderCart();
         return;
       }
@@ -161,6 +163,7 @@ function bindCartActions(items) {
       if (action === 'decrease' && typeof window.atualizarQuantidadeCarrinho === 'function') {
         const nextQuantity = Math.max(1, (Number(item.quantity) || 1) - 1);
         window.atualizarQuantidadeCarrinho(itemId, nextQuantity);
+        showToast("Produto Diminuído do Carrinho", 'Bad_Toast', 800);
         renderCart();
         return;
       }
@@ -169,6 +172,7 @@ function bindCartActions(items) {
         window.removerItemDoCarrinho(itemId);
         if (typeof window.mostrarToast === 'function') {
           window.mostrarToast('Item removido do carrinho.', 'info');
+          showToast("Produto Removido do Carrinho", 'Bad_Toast', 800);
         }
         renderCart();
       }

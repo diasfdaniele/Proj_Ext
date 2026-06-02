@@ -1988,6 +1988,7 @@ body.modo-alto-contraste .campo-select,
 body.modo-alto-contraste .campo-textarea,
 body.modo-alto-contraste .login-lateral {
   color: #FFFFFF;
+  background-color: #100f0f;
 }
 
 body.modo-alto-contraste a:hover{
@@ -2140,9 +2141,12 @@ body.modo-alto-contraste .login-lateral__titulo,
 body.modo-alto-contraste .login-lateral__subtitulo,
 body.modo-alto-contraste .login-lateral__diferencial,
 body.modo-alto-contraste .login-lateral__selo,
-body.modo-alto-contraste .login-lateral__tagline,
-body.modo-alto-contraste .produto-card__empresa {
+body.modo-alto-contraste .login-lateral__tagline {
   color: #ffffff !important;
+}
+
+body.modo-alto-contraste .produto-card__empresa{
+  color: var(--cinza-200);
 }
 
 body.modo-alto-contraste .produto-card__media,
@@ -2592,3 +2596,4 @@ body.modo-simplificado * {
     padding-top: 0;
   }
 }
+
