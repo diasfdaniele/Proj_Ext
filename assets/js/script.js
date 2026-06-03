@@ -442,19 +442,36 @@ function addCartItem(product) {
 
   const items = readCartItems();
   const existingItem = items.find((item) => item.id === product.id);
+  const selectedVariation = typeof product.selectedVariation === 'string' ? product.selectedVariation.trim() : '';
+  const selectedImage = typeof product.selectedImage === 'string' ? product.selectedImage : '';
+  const selectedVariationImage = typeof product.selectedVariationImage === 'string' ? product.selectedVariationImage : selectedImage;
 
   if (existingItem) {
     existingItem.quantity = (Number(existingItem.quantity) || 1) + 1;
+    if (selectedVariation) {
+      existingItem.selectedVariation = selectedVariation;
+    }
+    if (selectedImage) {
+      existingItem.selectedImage = selectedImage;
+    }
+    if (selectedVariationImage) {
+      existingItem.selectedVariationImage = selectedVariationImage;
+    }
   } else {
     items.push({
       category: product.category ?? '',
+      categoryLabel: product.categoryLabel ?? product.category ?? '',
       company: product.company ?? '',
       description: product.description ?? '',
       id: product.id,
       initials: product.initials ?? '',
       name: product.name ?? 'Produto',
       price: product.price ?? 'Sob consulta',
-      quantity: 1
+      purchaseModeLabel: product.purchaseModeLabel ?? '',
+      quantity: 1,
+      selectedImage,
+      selectedVariationImage,
+      selectedVariation
     });
   }
 

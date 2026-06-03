@@ -180,7 +180,7 @@ function readCartItems() {
   return typeof window.obterItensCarrinho === 'function' ? window.obterItensCarrinho() : [];
 }
 
-function readLocalOrders(userId, userEmail) {
+function readLocalOrders(userId, userEmail, user = null) {
   if (!userId && !userEmail) {
     return [];
   }
@@ -195,7 +195,13 @@ function readLocalOrders(userId, userEmail) {
 
     const normalizedEmail = String(userEmail || '').trim().toLowerCase();
 
-    return parsed.filter((order) => isOrderOwnedByUser(order, userId, normalizedEmail));
+    return parsed.filter((order) => {
+      if (isOrderOwnedByUser(order, userId, normalizedEmail)) {
+        return true;
+      }
+
+      return isOrderOwnedByProfile(order, user);
+    });
   } catch {
     return [];
   }
@@ -422,7 +428,7 @@ function requireAuthenticationState() {
   const purchasesTarget = ensurePurchasesListElement();
 
   if (!user) {
-    summaryText.textContent = 'Entre com sua conta para acessar seus favoritos e histórico de interações.';
+    summaryText.textContent = 'Entre com sua conta para acessar seus favoritos e histórico de pedidos.';
     heroText.textContent = 'Acesse sua conta para visualizar seus produtos favoritos, carrinho, histórico e recursos personalizados.';
     if (heroTitle) heroTitle.textContent = 'Minha conta';
     favoritesText.textContent = 'Seus favoritos aparecerão aqui após o login.';
@@ -438,7 +444,9 @@ function requireAuthenticationState() {
     }
     renderEmptyState(interactionsList, 'Nenhuma interação disponível. Faça login para visualizar seu histórico.');
     updateSummary(0, 0);
-    logoutButton.hidden = true;
+    if (logoutButton) {
+      logoutButton.hidden = true;
+    }
     if (topLogoutButton) {
       topLogoutButton.hidden = true;
     }
@@ -449,7 +457,9 @@ function requireAuthenticationState() {
     return null;
   }
 
-  logoutButton.hidden = false;
+  if (logoutButton) {
+    logoutButton.hidden = false;
+  }
   if (topLogoutButton) {
     topLogoutButton.hidden = false;
   }
@@ -465,14 +475,14 @@ function requireAuthenticationState() {
   heroText.textContent = user.accountType === 'vendedor'
     ? 'Anuncie seus produtos, acompanhe suas vendas e compre de outros vendedores. Tudo em um só lugar.'
     : 'Acompanhe seus produtos favoritos, carrinho e interações.';
-  favoritesText.textContent = 'Produtos favoritados ficam salvos no banco e reaparecem aqui.';
+  favoritesText.textContent = 'Produtos favoritados aparecem aqui.';
   cartText.textContent = user.accountType === 'vendedor'
     ? 'Mesmo como vendedor, voce continua com acesso ao seu carrinho e ao fluxo de compra.'
     : 'Itens atuais do carrinho e atalhos para finalizar a compra.';
   if (purchasesTextElement) {
     purchasesTextElement.textContent = user.accountType === 'vendedor'
-      ? 'Pedidos simulados realizados com sua conta aparecem abaixo para acompanhamento.'
-      : 'Pedidos simulados e finalizados aparecem aqui automaticamente.';
+      ? 'Pedidos realizados aparecem abaixo para acompanhamento.'
+      : 'Pedidos finalizados aparecem aqui automaticamente.';
   }
   interactionsText.textContent = user.role === 'administrador'
     ? 'Modo administrador: visualizacao de todas as interacoes registradas.'
@@ -515,7 +525,7 @@ function renderSellerProducts(items) {
   }
 
   if (!items.length) {
-    renderEmptyState(sellerProductList, 'Voce ainda nao cadastrou produtos para venda.');
+    renderEmptyState(sellerProductList, 'Você ainda não cadastrou produtos para venda.');
     return;
   }
 
@@ -567,7 +577,7 @@ function renderSellerProducts(items) {
 
 function renderFavorites(items) {
   if (!items.length) {
-    renderEmptyState(favoritesList, 'Voce ainda nao favoritou nenhum produto. Use o catalogo para salvar seus itens preferidos.');
+    renderEmptyState(favoritesList, 'Você ainda não favoritou nenhum produto. Use o catálogo para salvar seus itens preferidos.');
     return;
   }
 
@@ -646,7 +656,7 @@ function renderFavorites(items) {
 
 function renderInteractions(items, isAdmin) {
   if (!items.length) {
-    renderEmptyState(interactionsList, 'Nenhuma interacao registrada para esta conta.');
+    renderEmptyState(interactionsList, 'Nenhuma interação registrada para esta conta.');
     return;
   }
 
@@ -684,7 +694,7 @@ async function loadAccountData() {
     renderEmptyState(favoritesList, 'Configure o Firebase para visualizar favoritos persistidos.');
     renderEmptyState(interactionsList, 'Configure o Firebase para visualizar o historico persistido.');
     renderCartItems(readCartItems());
-    renderPurchaseHistory(readLocalOrders(identifiers.uid, identifiers.email));
+    renderPurchaseHistory(readLocalOrders(identifiers.uid, identifiers.email, user));
     if (user.accountType === 'vendedor') {
       renderSellerProducts(readSellerProducts());
     }
@@ -732,7 +742,10 @@ async function loadAccountData() {
     console.error('Falha ao carregar pedidos:', error?.code || error?.message || error);
   }
 
-  const purchaseHistory = mergeOrders(firestorePurchases, readLocalOrders(identifiers.uid, identifiers.email));
+  const purchaseHistory = mergeOrders(
+    firestorePurchases,
+    readLocalOrders(identifiers.uid, identifiers.email, user)
+  );
 
   if (!purchaseHistory.length) {
     console.info('Nenhum pedido localizado para a conta atual.', {
@@ -747,7 +760,7 @@ async function loadAccountData() {
   renderPurchaseHistory(purchaseHistory);
   renderInteractions(interactions, isAdmin);
   if (user.accountType === 'vendedor') {
-    sellerText.textContent = 'Cadastre e gerencie seus produtos para venda. Eles passam a aparecer no catalogo local sem interromper seu fluxo de compra.';
+    sellerText.textContent = 'Cadastre e gerencie seus produtos para venda.';
     renderSellerProducts(readSellerProducts());
   }
 }
@@ -773,14 +786,17 @@ sellerProductForm?.addEventListener('submit', async (event) => {
   }
 
   if (typeof window.salvarProdutoMarketplace !== 'function') {
-    sellerProductStatus.textContent = 'Nao foi possivel cadastrar o produto agora.';
+    sellerProductStatus.textContent = 'Não foi possível cadastrar o produto.';
     return;
   }
 
   const categoryLabels = {
     mobilidade: 'Mobilidade',
-    visual: 'Deficiencia visual',
-    digital: 'Acessibilidade digital'
+    visual: 'Deficiência visual',
+    digital: 'Acessibilidade digital',
+    auditiva: 'Deficiência auditiva',
+    predial: 'Acessibilidade predial',
+    
   };
 
   const purchaseModeLabels = {

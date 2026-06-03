@@ -132,7 +132,7 @@ function createProductCard(product) {
   const firstImageAlt = buildProductImageAlt(product, 0, (product.images || []).length || 1);
   return `
     <article class="produto-card" aria-label="${product.name} - ${product.company}">
-      <a href="detalhe-produto.html?id=${product.id}" class="produto-card__link" style="text-decoration:none;color:inherit;display:block">
+      <a href="detalhe-produto.html?id=${product.id}" class="produto-card__link">
         <div class="produto-card__media">
           ${product.images && product.images.length ? `
             <div class="produto-card__carousel" data-product-id="${product.id}">

@@ -91,6 +91,7 @@ function createEmptyState() {
 
 function createCartItem(item) {
   const quantity = Number(item.quantity) || 1;
+  const variationLabel = item.selectedVariation ? `<div class="carrinho-item__meta">Variacao: ${item.selectedVariation}</div>` : '';
 
   return `
     <article class="carrinho-item" aria-label="${item.name}">
@@ -104,6 +105,7 @@ function createCartItem(item) {
         </div>
         <span class="carrinho-item__categoria">${item.category || 'solucao'}</span>
         <p class="carrinho-item__descricao">${item.description || 'Produto selecionado no catalogo da Empr-E.'}</p>
+        ${variationLabel}
         <div class="carrinho-item__controles">
           <div class="carrinho-item__quantidade" aria-label="Quantidade do produto ${item.name}">
             <button type="button" data-action="decrease" data-id="${item.id}" aria-label="Diminuir quantidade de ${item.name}">-</button>

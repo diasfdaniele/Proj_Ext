@@ -172,7 +172,9 @@ function buildOrderItems(items) {
       precoTexto: item.price || 'Sob consulta',
       precoUnitario: unitPrice,
       quantidade: quantity,
-      subtotal: unitPrice === null ? null : unitPrice * quantity
+      subtotal: unitPrice === null ? null : unitPrice * quantity,
+      variacao: item.selectedVariation || null,
+      variacaoImagem: item.selectedVariationImage || item.selectedImage || null
     };
   });
 }
@@ -383,6 +385,7 @@ function createEmptyState() {
 
 function createPaymentItem(item) {
   const quantity = Number(item.quantity) || 1;
+  const variationLabel = item.selectedVariation ? `<div class="pagamento-item__meta">Variacao: ${item.selectedVariation}</div>` : '';
 
   return `
     <article class="pagamento-item" aria-label="${item.name}">
@@ -391,6 +394,7 @@ function createPaymentItem(item) {
         <div class="pagamento-item__nome">${item.name}</div>
         <div class="pagamento-item__empresa">${item.company || 'Parceiro Empr-E'}</div>
         <div class="pagamento-item__meta">Quantidade: ${quantity}</div>
+        ${variationLabel}
       </div>
       <div class="pagamento-item__preco">${item.price || 'Sob consulta'}</div>
     </article>
