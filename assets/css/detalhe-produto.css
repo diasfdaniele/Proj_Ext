@@ -7,26 +7,20 @@
 }
 
 .produto-detalhe-hero {
-  padding: 2rem 0 1.5rem;
+  padding: 1rem 0 1.5rem;
 }
 
 .produto-detalhe-hero__content {
   background: linear-gradient(135deg, rgba(11, 24, 59, 0.98) 0%, rgba(20, 51, 112, 0.96) 100%);
   border-radius: var(--raio-xl);
-  padding: clamp(1.5rem, 3vw, 2.75rem);
+  padding: clamp(0.75rem, 2vw, 1rem);
   box-shadow: var(--sombra-lg);
 }
 
 .produto-detalhe-hero__titulo {
   color: var(--branco);
-  font-size: clamp(2rem, 4vw, 3rem);
+  font-size: clamp(1rem, 4vw, 2.5rem);
   margin-top: var(--espaco-md);
-}
-
-.produto-detalhe-hero__texto {
-  color: rgba(255, 255, 255, 0.8);
-  max-width: 720px;
-  margin-top: 0.75rem;
 }
 
 .produto-detalhe-section {

@@ -60,7 +60,7 @@ window.produtosLocaisMarketplace = [
       { nome: 'Amarelo', imagem: '../assets/img/alerta-2.jpg' },
       { nome: 'Preto', imagem: '../assets/img/alerta-3.jpg' },
       { nome: 'Quartzo', imagem: '../assets/img/alerta-4.jpg' },
-      { nome: 'Variações', imagem: '../assets/img/alerta-5.jpg' }
+      { nome: 'Aleatório', imagem: '../assets/img/alerta-5.jpg' }
 
     ]
   },
@@ -85,11 +85,11 @@ window.produtosLocaisMarketplace = [
       '../assets/img/direcional-5.jpg'
     ],
     variations: [
-      { nome: 'Azul', imagem: '../assets/img/direcional-1.jpg' },
-      { nome: 'Amarelo', imagem: '../assets/img/direcional-2.jpg' },
+      { nome: 'Amarelo', imagem: '../assets/img/direcional-1.jpg' },
+      { nome: 'Azul', imagem: '../assets/img/direcional-2.jpg' },
       { nome: 'Preto', imagem: '../assets/img/direcional-3.jpg' },
       { nome: 'Quartzo', imagem: '../assets/img/direcional-4.jpg' },
-      { nome: 'Variações', imagem: '../assets/img/direcional-5.jpg' }
+      { nome: 'Aleatório', imagem: '../assets/img/direcional-5.jpg' }
 
     ]
   },
@@ -102,7 +102,7 @@ window.produtosLocaisMarketplace = [
     category: 'digital',
     categoryLabel: 'Acessibilidade digital',
     description: 'Auditoria, monitoramento continuo e ajustes de acessibilidade para sistemas web corporativos.',
-    price: 'Plano recorrente a partir de R$ 1.000/mês',
+    price: 'Planos a partir de R$ 1.000/mês',
     purchaseMode: 'projeto-personalizado',
     purchaseModeLabel: 'Projeto personalizado',
     sellerId: 'local',

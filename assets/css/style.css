@@ -254,7 +254,7 @@ h1, h2, h3, h4, h5, h6 {
   align-items: center;
   gap: 0.5rem;
   font-family: var(--fonte-display);
-  font-weight: 600;
+  font-weight: 800;
   font-size: 0.95rem;
   padding: 0.625rem 1.25rem;
   border-radius: var(--raio-md);
@@ -264,11 +264,13 @@ h1, h2, h3, h4, h5, h6 {
   white-space: nowrap;
   cursor: pointer;
   line-height: 1.4;
+  
 }
 
 .btn--primary {
   background: var(--laranja-vivo);
   color: #111827;
+  font-weight: bold;
   border-color: var(--laranja-vivo);
   box-shadow: var(--sombra-laranja);
 }
@@ -1707,7 +1709,7 @@ button.menu-mobile__link {
 
 .footer__rede:hover {
   background: var(--laranja-vivo);
-  color: #111827;
+  color: var(--branco);
   border-color: var(--laranja-vivo);
 }
 
@@ -1781,7 +1783,7 @@ button.menu-mobile__link {
 .btn-reportar:hover {
   background: rgba(249,115,22,0.2);
   border-color: var(--laranja-vivo);
-  color: #111827;
+  color: var(--branco);
 }
 
 .footer__rodape {
