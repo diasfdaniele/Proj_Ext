@@ -1,22 +1,58 @@
-# Proj_Ext
+# Empr-E
 
-## Firebase Hosting (importante)
+Projeto de marketplace B2B focado em produtos e soluções de acessibilidade.
 
-- Este projeto publica a **raiz** do repositório no Firebase Hosting.
-- Configuracao atual em `firebase.json`: `"hosting.public": "."`
+## O que já está desenvolvido
 
-### Arquivos oficiais de entrada
+- Página inicial com seções institucionais e navegação completa.
+- Fluxo de autenticação (login e cadastro).
+- Catálogo de produtos.
+- Carrinho e tela de pagamento.
+- Área Minha Conta com histórico, favoritos e interações.
+- Integração com Firebase (Auth, Firestore e Hosting).
+- Estrutura de banco SQL para estudo/modelagem em `bancoSQL/`.
 
-- Home oficial: `index.html` (na raiz)
-- Erro 404 oficial: `404.html` (na raiz)
+## Páginas principais
 
-### Regra para evitar confusao
+- `index.html`
+- `pages/login.html`
+- `pages/cadastro.html`
+- `pages/catalogo.html`
+- `pages/carrinho.html`
+- `pages/pagamento.html`
+- `pages/conta.html`
+- `pages/detalhe-produto.html`
 
-- Edite sempre os arquivos da raiz para paginas principais.
-- Nao mantenha duplicados em `public/index.html` ou `public/404.html`.
+## Acessibilidade (status atual)
 
-### Deploy
+Foram aplicadas melhorias importantes para adequação ao WCAG:
+
+- Ajustes de contraste em componentes críticos.
+- Revisão de uso de ARIA em elementos de layout.
+- Inclusão/revisão de skip links.
+- Padronização de textos alternativos em imagens.
+- Aviso em links que abrem nova guia.
+
+## Tecnologias usadas
+
+- HTML, CSS e JavaScript (vanilla)
+- Firebase (Authentication, Firestore, Hosting)
+- Bootstrap (CSS)
+
+## Rodando o projeto
+
+Instalar dependências:
+
+```bash
+npm install
+```
+
+Deploy no Firebase:
 
 ```bash
 firebase deploy
 ```
+
+## Observação
+
+Este repositório está em evolução contínua. A base funcional já está pronta e os ajustes atuais estão focados em acabamento visual, consistência de navegação e conformidade de acessibilidade.
