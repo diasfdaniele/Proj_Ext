@@ -58,8 +58,8 @@
 }
 .btn-variacao {
   background: #fff;
-  border: 1px solid #f97316;
-  color: #f97316;
+  border: 1px solid #c2410c;
+  color: #9a3412;
   border-radius: 6px;
   padding: 0.3rem 0.9rem;
   font-size: 1rem;
@@ -67,7 +67,7 @@
   transition: background 0.2s, color 0.2s;
 }
 .btn-variacao:hover, .btn-variacao:focus {
-  background: #f97316;
+  background: #c2410c;
   color: #fff;
 }
 .produto-detalhe__descricao {
@@ -92,7 +92,7 @@
   margin-bottom: 1rem;
 }
 .btn.btn--primary {
-  background: #f97316;
+  background: #c2410c;
   color: #fff;
   border: none;
   border-radius: 8px;
@@ -104,7 +104,7 @@
   transition: background 0.2s;
 }
 .btn.btn--primary:hover, .btn.btn--primary:focus {
-  background: #ea580c;
+  background: #9a3412;
 }
 @media (max-width: 800px) {
   .produto-detalhe {

@@ -278,7 +278,7 @@ body.pagina-conta {
   border-radius: 50%;
   border: 1.5px solid var(--cinza-200);
   background: var(--branco);
-  color: #94a3b8;
+  color: #64748b;
   display: inline-flex;
   align-items: center;
   justify-content: center;
@@ -296,18 +296,18 @@ body.pagina-conta {
 .conta-favorito__heart:hover,
 .conta-favorito__heart:focus-visible {
   border-color: #fca5a5;
-  color: #ef4444;
+  color: #be123c;
   background: #fff1f2;
 }
 
 .conta-favorito__heart--ativo {
   border-color: #ef4444;
-  color: #ef4444;
+  color: #be123c;
   background: #fff1f2;
 }
 
 .conta-favorito__heart--ativo svg {
-  fill: #ef4444;
+  fill: #be123c;
 }
 
 .conta-produto__meta {
