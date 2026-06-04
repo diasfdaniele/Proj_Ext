@@ -4,7 +4,7 @@
 :root {
   /* Cores primárias */
   --laranja-vivo: #F97316;
-  --laranja-escuro: #EA580C;
+  --laranja-escuro: #512101;
   --laranja-claro: #faac52;
   --laranja-palido: #FFF7ED;
 
@@ -147,9 +147,12 @@ button {
 }
 
 /* 3. FOCO VISÍVEL (WCAG 2.4.7) */
+.skip-link:focus,
 :focus-visible {
   outline: 3px solid var(--laranja-vivo);
   outline-offset: 3px;
+  top: 1rem;
+  left: 1rem;
   border-radius: var(--raio-sm);
 }
 
@@ -161,8 +164,8 @@ button {
 /* 4. SKIP LINKS */
 .skip-link {
   position: absolute;
-  top: -100px;
-  left: 1rem;
+  left: -9999px;
+  top: 0;
   z-index: 9999;
   padding: 0.75rem 1.25rem;
   background: var(--azul-profundo);
@@ -175,9 +178,6 @@ button {
   transition: top var(--transicao-normal);
 }
 
-.skip-link:focus {
-  top: 1rem;
-}
 
 /* 5. TIPOGRAFIA */
 h1, h2, h3, h4, h5, h6 {
@@ -195,7 +195,7 @@ h1, h2, h3, h4, h5, h6 {
 
 .section-titulo em {
   font-style: normal;
-  color: var(--laranja-vivo);
+  color: #D53301;
 }
 
 .section-subtitulo {
@@ -561,12 +561,25 @@ h1, h2, h3, h4, h5, h6 {
 }
 
 .nav__link::after {
- .passo:hover {
+  content: '';
+  position: absolute;
+  bottom: 0;
+  left: 50%;
+  transform: translateX(-50%);
+  width: 0;
+  height: 2px;
+  background: var(--laranja-vivo);
+  border-radius: 2px;
+  transition: width var(--transicao-normal);
+}
+
+
+.passo:hover {
    border-color: var(--laranja-claro);
    box-shadow: var(--sombra-md);
- }
+}
  
- .passo__numero {
+.passo__numero {
    font-family: var(--fonte-display);
    font-size: 0.7rem;
    font-weight: 800;
@@ -612,17 +625,6 @@ h1, h2, h3, h4, h5, h6 {
  .como-funciona__cta {
    text-align: center;
  }
-  content: '';
-  position: absolute;
-  bottom: 0;
-  left: 50%;
-  transform: translateX(-50%);
-  width: 0;
-  height: 2px;
-  background: var(--laranja-vivo);
-  border-radius: 2px;
-  transition: width var(--transicao-normal);
-}
 
 .nav__link:hover,
 .nav__link--active {
@@ -1249,7 +1251,7 @@ button.menu-mobile__link {
 .sobre__texto {
   font-size: 0.97rem;
   line-height: 1.68;
-  color: var(--cinza-600);
+  color: var(--cinza-900);
 }
 
 .sobre__pilares {
