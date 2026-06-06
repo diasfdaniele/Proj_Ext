@@ -26,7 +26,8 @@
 body.pagina-login {
   min-height: 100vh;
   min-height: 100dvh;
-  overflow-y: auto;
+  overflow: hidden; 
+  height: 100dvh;   
 }
 
 body.pagina-login .header {
@@ -47,6 +48,7 @@ body.pagina-login .header {
   grid-template-columns: 1fr 1fr;
   width: 100%;
   height: calc(100dvh - var(--altura-barra-acess) - var(--altura-header));
+  overflow: hidden; 
 }
 
 /* 3. PAINEL LATERAL INSTITUCIONAL */
@@ -62,6 +64,7 @@ body.pagina-login .header {
   );
   display: flex;
   align-items: stretch;
+  height: 100%; 
 }
 
 .login-lateral__inner {
@@ -69,10 +72,10 @@ body.pagina-login .header {
   z-index: 2;
   display: flex;
   flex-direction: column;
-  /* Padding compacto para caber na viewport */
-  padding: 1.5rem 2.75rem;
+  padding: clamp(0.75rem, 1.8vh, 1.5rem) 2.75rem;
   width: 100%;
   overflow: hidden;
+  height: 100%; 
 }
 
 /* Link voltar */
@@ -109,10 +112,10 @@ body.pagina-login .header {
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;            
+  gap: clamp(0.4rem, 1.2vh, 1.1rem);
   justify-content: center;
-  padding: 0.75rem 0;
-  min-height: 0;
+  padding: clamp(0.2rem, 0.8vh, 0.75rem) 0;
+  min-height: 0; 
 }
 
 .login-lateral__logo {
@@ -152,7 +155,7 @@ body.pagina-login .header {
 .login-lateral__diferenciais {
   display: flex;
   flex-direction: column;
-  gap: 0.5rem;            
+  gap: clamp(0.2rem, 0.6vh, 0.5rem);
 }
 
 .login-lateral__diferencial {
@@ -252,10 +255,12 @@ body.pagina-login .header {
 
 .login-painel {
   display: flex;
-  align-items: center;
+  align-items: flex-start; 
   justify-content: center;
   background: var(--branco);
-  padding: 1.5rem 2rem;
+  padding: clamp(0.75rem, 2vh, 1.5rem) 2rem;
+  height: 100%;       
+  overflow-y: auto;   
 }
 
 .login-painel__inner {
@@ -263,7 +268,8 @@ body.pagina-login .header {
   max-width: 400px;
   display: flex;
   flex-direction: column;
-  gap: 1.1rem;            /* Reduzido de 1.75rem */
+  gap: clamp(0.4rem, 1.2vh, 1.1rem);
+  padding-block: clamp(0.5rem, 1.5vh, 1rem);
 }
 
 /* Cabeçalho do formulário */
@@ -288,16 +294,13 @@ body.pagina-login .header {
   line-height: 1.5;
 }
 
-/* ------------------------------------------------------------
-   5. FORMULÁRIO – CAMPOS
-   ------------------------------------------------------------ */
+/* 5. FORMULÁRIO – CAMPOS */
 
 .login-form {
   display: flex;
   flex-direction: column;
-  gap: 0.875rem;          /* Reduzido de 1.25rem */
+  gap: clamp(0.4rem, 1vh, 0.875rem);
 }
-
 /* Grupo de campo */
 .campo-grupo {
   display: flex;
@@ -657,14 +660,12 @@ body.pagina-login .header {
   text-transform: uppercase;
 }
 
-/* ------------------------------------------------------------
-   9. BOTÃO CRIAR CONTA — altura compacta
-   ------------------------------------------------------------ */
+/* 9. BOTÃO CRIAR CONTA — altura compacta */
 
 .btn-criar-conta {
   width: 100%;
   justify-content: center;
-  min-height: 46px;       /* Alinhado ao botão principal */
+  min-height: 46px;        
   font-size: 0.9rem;
   gap: 0.625rem;
   border-color: var(--cinza-200);
@@ -678,9 +679,7 @@ body.pagina-login .header {
   background: var(--azul-palido);
 }
 
-/* ------------------------------------------------------------
-   10. TEXTOS AUXILIARES
-   ------------------------------------------------------------ */
+/* 10. TEXTOS AUXILIARES */
 
 .login-suporte-texto {
   text-align: center;
@@ -702,16 +701,14 @@ body.pagina-login .header {
   text-underline-offset: 2px;
 }
 
-/* ------------------------------------------------------------
-   11. RODAPÉ DO PAINEL — compacto
-   ------------------------------------------------------------ */
+/* 11. RODAPÉ DO PAINEL */
 
 .login-painel-rodape {
-  padding-top: 0.6rem;
+  padding-top: clamp(0.3rem, 0.6vh, 0.6rem);
   border-top: 1px solid var(--cinza-100);
   display: flex;
   flex-direction: column;
-  gap: 0.25rem;
+  gap: 0.2rem;
 }
 
 .login-painel-rodape__logo {
@@ -741,9 +738,7 @@ body.pagina-login .header {
 
 .login-painel-rodape__acess svg { color: var(--cor-sucesso); }
 
-/* ------------------------------------------------------------
-   12. UTILITÁRIA – SCREEN READER ONLY
-   ------------------------------------------------------------ */
+/* 12. UTILITÁRIA – SCREEN READER ONLY */
 
 .sr-only {
   position: absolute;
@@ -757,9 +752,7 @@ body.pagina-login .header {
   border-width: 0;
 }
 
-/* ------------------------------------------------------------
-   13. ANIMAÇÕES DE ENTRADA
-   ------------------------------------------------------------ */
+/* 13. ANIMAÇÕES DE ENTRADA */
 
 .login-painel__inner {
   animation: painelEntrada 0.45s cubic-bezier(0.16, 1, 0.3, 1) both;
@@ -790,9 +783,7 @@ body.pagina-login .header {
   .loading-spinner { animation: none; }
 }
 
-/* ------------------------------------------------------------
-   14. ALTO CONTRASTE – LOGIN ESPECÍFICO
-   ------------------------------------------------------------ */
+/* 14. ALTO CONTRASTE */
 
 body.modo-alto-contraste .login-painel {
   background: #000000;
@@ -822,9 +813,7 @@ body.modo-alto-contraste .campo-grupo.valido .campo-input {
   background: #001A0D;
 }
 
-/* ------------------------------------------------------------
-   15. RESPONSIVIDADE
-   ------------------------------------------------------------ */
+/* 15. RESPONSIVIDADE */
 
 /* Tablet — oculta lateral, centraliza form, permite scroll suave */
 @media (max-width: 1024px) {
