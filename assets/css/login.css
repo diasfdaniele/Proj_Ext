@@ -1,3 +1,5 @@
+/* Estilos específicos da tela de login */
+
 /* Botão de login com Google */
 .btn-login-google, .btn--google {
   background: #fff;
@@ -20,8 +22,6 @@
   box-shadow: 0 0 0 2px #4285f433;
   color: #4285f4;
 }
-/* EMPR-E – login.css
-   Estilos específicos da tela de login */
 
 body.pagina-login {
   min-height: 100vh;
@@ -56,12 +56,7 @@ body.pagina-login .header {
 .login-lateral {
   position: relative;
   overflow: hidden;
-  background: linear-gradient(
-    150deg,
-    var(--azul-profundo) 0%,
-    #081024 40%,
-    #101e52 100%
-  );
+  background: var(--azul-profundo);
   display: flex;
   align-items: stretch;
   height: 100%; 
@@ -133,7 +128,7 @@ body.pagina-login .header {
 
 .login-lateral__titulo {
   font-family: var(--fonte-display);
-  font-size: clamp(1.3rem, 2vw, 1.85rem);  /* Ligeiramente menor */
+  font-size: clamp(1.3rem, 2vw, 1.85rem);  
   font-weight: 800;
   line-height: 1.15;
   letter-spacing: -0.025em;
@@ -145,7 +140,7 @@ body.pagina-login .header {
 }
 
 .login-lateral__subtitulo {
-  font-size: 0.875rem;    /* Ligeiramente menor */
+  font-size: 0.875rem;    
   line-height: 1.65;
   color: rgba(255, 255, 255, 0.65);
   max-width: 340px;

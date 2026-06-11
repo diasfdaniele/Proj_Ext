@@ -50,14 +50,14 @@ if (formCadastro) {
     const nomeResponsavel = readValue('nome-responsavel');
     const cargo = readValue('cargo');
     const cpf = readValue('cpf');
+    const email = readValue('email');
     const tipoConta = readValue('tipo-conta') || 'comprador';
     const perfilAcesso = readValue('perfil-acesso') || 'usuario-comum';
-    const email = readValue('email');
     const senha = readValue('senha');
     const confirmarSenha = readValue('confirmar-senha');
     const aceitouTermos = document.getElementById('aceitar-termos')?.checked ?? false;
 
-    if (!razaoSocial || !cnpj || !tipoEmpresa || !categoria || !descricao || !nomeResponsavel || !cargo || !cpf || !email || !senha) {
+    if (!razaoSocial || !cnpj || !tipoEmpresa || !descricao || !nomeResponsavel || !cargo || !cpf || !email || !senha) {
       toast.classList.add("Bad_Toast");
       toast.innerHTML = 'Preencha os campos obrigatorios para continuar.';
       return;
@@ -71,7 +71,7 @@ if (formCadastro) {
 
     if (senha !== confirmarSenha) {
       toast.classList.add("Bad_Toast");
-      toast.innerHTML = 'A confirmacao de senha nao confere.';
+      toast.innerHTML = 'A confirmação de senha não confere.';
       return;
     }
 
@@ -129,12 +129,12 @@ if (formCadastro) {
 
       
       toast.classList.add("Good_Toast");
-      toast.innerHTML = 'Empresa cadastrada com sucesso!';
+      toast.innerHTML = 'Cadastro realizado com sucesso!';
       window.location.href = 'login.html';
     } catch (erro) {
       console.error('Falha no cadastro de empresa:', erro?.code || erro?.message || erro);
       toast.classList.add("Bad_Toast");
-      toast.innerHTML = 'Nao foi possivel concluir o cadastro. Verifique os dados e tente novamente.';
+      toast.innerHTML = 'Não foi possível concluir o cadastro. Verifique os dados e tente novamente.';
     } finally {
       setLoadingState(false);
     }
