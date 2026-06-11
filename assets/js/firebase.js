@@ -18,4 +18,29 @@ const firebaseConfig = {
 firebase.initializeApp(firebaseConfig);
 window.db = firebase.firestore();
 window.auth = firebase.auth();
+window.marketplaceAdmin = Object.freeze({
+  email: 'administrador@admin.com',
+  password: 'Admin1234',
+  displayName: 'Administrador Empr-E'
+});
+
+window.isMarketplaceAdminCredentials = function(email, password) {
+  return String(email || '').trim().toLowerCase() === window.marketplaceAdmin.email
+    && String(password || '') === window.marketplaceAdmin.password;
+};
+
+window.isMarketplaceAdminEmail = function(email) {
+  return String(email || '').trim().toLowerCase() === window.marketplaceAdmin.email;
+};
+
+window.buildMarketplaceAdminSession = function(uid = 'admin-administrador@admin.com') {
+  return {
+    accountType: 'administrador',
+    email: window.marketplaceAdmin.email,
+    nomeResponsavel: window.marketplaceAdmin.displayName,
+    razaoSocial: 'Empr-E Administracao',
+    role: 'administrador',
+    uid
+  };
+};
 

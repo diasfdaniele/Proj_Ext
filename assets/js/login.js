@@ -62,6 +62,81 @@ function normalizeRole(value) {
   return value === 'administrador' ? 'administrador' : 'usuario-comum';
 }
 
+function isAdminCredentials(emailValue, passwordValue) {
+  return typeof window.isMarketplaceAdminCredentials === 'function'
+    ? window.isMarketplaceAdminCredentials(emailValue, passwordValue)
+    : false;
+}
+
+function buildAdminUserSession() {
+  if (typeof window.buildMarketplaceAdminSession === 'function') {
+    return window.buildMarketplaceAdminSession();
+  }
+
+  return {
+    accountType: 'administrador',
+    email: 'administrador@admin.com',
+    nomeResponsavel: 'Administrador Empr-E',
+    razaoSocial: 'Empr-E Administracao',
+    role: 'administrador',
+    uid: 'admin-administrador@admin.com'
+  };
+}
+
+async function saveAdminProfileToFirestore(userSession) {
+  if (!window.db || !userSession?.uid) {
+    return;
+  }
+
+  await window.db.collection('usuarios').doc(userSession.uid).set({
+    cargo: 'Administracao',
+    categoria: 'plataforma',
+    cnpj: '00000000000000',
+    cpf: '00000000000',
+    criadoEm: new Date().toISOString(),
+    descricao: 'Conta administrativa da plataforma Empr-E.',
+    email: userSession.email,
+    nomeResponsavel: userSession.nomeResponsavel,
+    perfil: 'administrador',
+    razaoSocial: userSession.razaoSocial,
+    role: 'administrador',
+    sellerType: 'administrador',
+    site: 'https://empr-e.web.app',
+    telefone: '',
+    tipoEmpresa: 'administracao',
+    uid: userSession.uid
+  }, { merge: true });
+}
+
+async function tryPersistAdminAuth(emailValue, passwordValue) {
+  if (!window.auth) {
+    return null;
+  }
+
+  try {
+    const credential = await window.auth.signInWithEmailAndPassword(emailValue, passwordValue);
+    return credential?.user || null;
+  } catch (error) {
+    if (error?.code !== 'auth/user-not-found' && error?.code !== 'auth/invalid-credential' && error?.code !== 'auth/wrong-password' && error?.code !== 'auth/invalid-login-credentials') {
+      throw error;
+    }
+  }
+
+  try {
+    const credential = await window.auth.createUserWithEmailAndPassword(emailValue, passwordValue);
+    if (credential?.user && typeof credential.user.updateProfile === 'function') {
+      await credential.user.updateProfile({ displayName: window.marketplaceAdmin?.displayName || 'Administrador Empr-E' });
+    }
+    return credential?.user || null;
+  } catch (error) {
+    if (error?.code !== 'auth/email-already-in-use') {
+      throw error;
+    }
+
+    return null;
+  }
+}
+
 function saveUserSession(user) {
   const sessionKey = window.sessionStorageKey || loginSessionStorageKey;
   localStorage.setItem(sessionKey, JSON.stringify(user));
@@ -91,6 +166,45 @@ if (form && email && senha) {
 
     if (!emailValor || !senhaValor) {
       showToast('Preencha email e senha para entrar.', 'Bad_Toast');
+      return;
+    }
+
+    if (isAdminCredentials(emailValor, senhaValor)) {
+      try {
+        setLoadingState(true);
+        let authUser = null;
+
+        try {
+          authUser = await tryPersistAdminAuth(emailValor, senhaValor);
+        } catch (error) {
+          console.warn('Nao foi possivel persistir o admin no Firebase Auth:', error?.code || error?.message || error);
+        }
+
+        if (authUser && window.db) {
+          const adminSession = buildAdminUserSession(authUser.uid);
+          await saveAdminProfileToFirestore(adminSession);
+          saveUserSession(adminSession);
+        } else {
+          if (window.auth && typeof window.auth.signOut === 'function') {
+            try {
+              await window.auth.signOut();
+            } catch {}
+          }
+
+          const adminSession = buildAdminUserSession();
+          await saveAdminProfileToFirestore(adminSession);
+          saveUserSession(adminSession);
+        }
+        showToast('Login administrativo realizado com sucesso.', 'Good_Toast');
+        setTimeout(() => {
+          window.location.href = 'conta.html';
+        }, 800);
+      } catch (erro) {
+        console.error(erro);
+        showToast('Nao foi possivel acessar a conta administrativa.', 'Bad_Toast');
+      } finally {
+        setLoadingState(false);
+      }
       return;
     }
 

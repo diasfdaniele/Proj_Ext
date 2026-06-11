@@ -70,7 +70,7 @@ function createEmptyState() {
         <div>
           <div class="carrinho-vazio__icone" aria-hidden="true">+</div>
           <h3>Faça login para usar o carrinho</h3>
-          <p>Seus itens de carrinho ficam vinculados à sua conta e reaparecem após novo login.</p>
+          <p>Os itens adicionados no carrinho aparecerão aqui após o login.</p>
           <a href="login.html" class="btn btn--primary">Entrar</a>
         </div>
       </div>
@@ -81,8 +81,8 @@ function createEmptyState() {
     <div class="carrinho-vazio">
       <div>
         <div class="carrinho-vazio__icone" aria-hidden="true">+</div>
-        <h3>Seu carrinho esta vazio</h3>
-        <p>Adicione produtos no catalogo para montar uma lista de interesse e facilitar a solicitacao comercial da sua empresa.</p>
+        <h3>Seu carrinho está vazio</h3>
+        <p>Explore o catálogo e adicione produtos ao carrinho.</p>
         <a href="catalogo.html" class="btn btn--primary">Explorar produtos</a>
       </div>
     </div>
@@ -140,7 +140,7 @@ function updateSummary(items) {
     ? (numericTotal > 0 ? `A partir de ${formatCurrency(numericTotal)}` : 'Sob consulta')
     : formatCurrency(numericTotal);
   cartSummaryText.textContent = items.length
-    ? `${totalQuantity} item(ns) selecionado(s) para revisão da sua empresa.`
+    ? `${totalQuantity} item(ns) selecionado(s)`
     : 'Revise os itens escolhidos antes de solicitar um orçamento ou seguir para o pagamento.';
 }
 
@@ -210,7 +210,7 @@ clearCartButton?.addEventListener('click', () => {
 finalizeCartButton?.addEventListener('click', () => {
   if (!getLoggedUser()) {
     if (typeof window.mostrarToast === 'function') {
-      window.mostrarToast('Faca login para finalizar o carrinho.', 'info');
+      window.mostrarToast('Faça login para finalizar o carrinho.', 'info');
     }
     return;
   }
@@ -230,7 +230,7 @@ proceedToPaymentLink?.addEventListener('click', (event) => {
     event.preventDefault();
 
     if (typeof window.mostrarToast === 'function') {
-      window.mostrarToast('Faca login para seguir ao pagamento.', 'info');
+      window.mostrarToast('Faça login para seguir ao pagamento.', 'info');
     }
     return;
   }

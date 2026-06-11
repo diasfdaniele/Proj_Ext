@@ -184,7 +184,11 @@ function updateUserPanel() {
   }
 
   const isAdmin = user.role === 'administrador';
-  const accountType = user.accountType === 'vendedor' ? 'vendedor' : 'comprador';
+  const accountType = user.accountType === 'vendedor'
+    ? 'vendedor'
+    : user.accountType === 'administrador'
+      ? 'administrador'
+      : 'comprador';
   userPanelText.textContent = isAdmin
     ? `Sessao administrativa ativa para ${user.razaoSocial || user.email}. Voce visualiza todas as interacoes do catalogo e segue com perfil ${accountType}.`
     : `Sessao ${accountType} ativa para ${user.razaoSocial || user.email}. Seus favoritos, mensagens e atalhos da conta ficam vinculados ao usuario logado.`;

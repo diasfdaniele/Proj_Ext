@@ -1,5 +1,6 @@
 const marketplaceStorageKey = 'empre:produtos-marketplace';
 const marketplaceCollectionName = 'produtos_marketplace';
+const marketplaceHiddenStorageKey = 'empre:produtos-ocultos';
 
 function readMarketplaceProductsFromStorage() {
   try {
@@ -20,11 +21,50 @@ function saveMarketplaceProductsToStorage(items) {
   localStorage.setItem(marketplaceStorageKey, JSON.stringify(items));
 }
 
+function readHiddenMarketplaceProductIds() {
+  try {
+    const raw = localStorage.getItem(marketplaceHiddenStorageKey);
+    const parsed = JSON.parse(raw || '[]');
+
+    if (!Array.isArray(parsed)) {
+      return [];
+    }
+
+    return parsed.filter((item) => typeof item === 'string');
+  } catch {
+    return [];
+  }
+}
+
+function saveHiddenMarketplaceProductIds(ids) {
+  localStorage.setItem(marketplaceHiddenStorageKey, JSON.stringify(ids));
+}
+
+function isHiddenMarketplaceProduct(productId) {
+  return readHiddenMarketplaceProductIds().includes(productId);
+}
+
+function hideMarketplaceProduct(productId) {
+  if (!productId) {
+    return;
+  }
+
+  const hiddenIds = new Set(readHiddenMarketplaceProductIds());
+  hiddenIds.add(productId);
+  saveHiddenMarketplaceProductIds(Array.from(hiddenIds));
+}
+
+function unhideMarketplaceProduct(productId) {
+  const hiddenIds = readHiddenMarketplaceProductIds().filter((id) => id !== productId);
+  saveHiddenMarketplaceProductIds(hiddenIds);
+}
+
 function mergeMarketplaceProducts(localItems, remoteItems) {
   const merged = new Map();
+  const hiddenIds = new Set(readHiddenMarketplaceProductIds());
 
   [...localItems, ...remoteItems].forEach((item) => {
-    if (!item || typeof item.id !== 'string' || item.sellerId === 'local') {
+    if (!item || typeof item.id !== 'string' || item.sellerId === 'local' || hiddenIds.has(item.id)) {
       return;
     }
 
@@ -121,7 +161,10 @@ window.produtosMarketplaceCadastrados = readMarketplaceProductsFromStorage().fil
 
 // Função para obter todos os produtos do marketplace (locais + cadastrados)
 window.obterProdutosMarketplace = function() {
-  return (window.produtosLocaisMarketplace || []).concat(window.produtosMarketplaceCadastrados || []);
+  const hiddenIds = new Set(readHiddenMarketplaceProductIds());
+  return (window.produtosLocaisMarketplace || [])
+    .concat(window.produtosMarketplaceCadastrados || [])
+    .filter((item) => item && typeof item.id === 'string' && !hiddenIds.has(item.id));
 };
 
 // Função para salvar produto cadastrado pelo vendedor
@@ -151,6 +194,47 @@ window.removerProdutoMarketplace = function(produtoId, sellerId) {
 
   window.produtosMarketplaceCadastrados = items;
   saveMarketplaceProductsToStorage(items);
+};
+
+window.removerProdutoMarketplacePorId = function(produtoId) {
+  if (!produtoId) {
+    return;
+  }
+
+  const items = readMarketplaceProductsFromStorage().filter((item) => item.id !== produtoId);
+  window.produtosMarketplaceCadastrados = items;
+  saveMarketplaceProductsToStorage(items);
+};
+
+window.removerProdutosMarketplacePorSellerId = function(sellerId) {
+  if (!sellerId) {
+    return;
+  }
+
+  const items = readMarketplaceProductsFromStorage().filter((item) => item.sellerId !== sellerId);
+  window.produtosMarketplaceCadastrados = items;
+  saveMarketplaceProductsToStorage(items);
+};
+
+window.ocultarProdutoMarketplace = function(produtoId) {
+  hideMarketplaceProduct(produtoId);
+  window.removerProdutoMarketplacePorId(produtoId);
+};
+
+window.excluirProdutoMarketplaceComoAdmin = async function(produtoId) {
+  if (!produtoId) {
+    return;
+  }
+
+  if (typeof window.removerProdutoMarketplaceNoFirestore === 'function') {
+    try {
+      await window.removerProdutoMarketplaceNoFirestore(produtoId);
+    } catch (error) {
+      console.error('Falha ao excluir produto no Firestore:', error?.code || error?.message || error);
+    }
+  }
+
+  window.ocultarProdutoMarketplace(produtoId);
 };
 
 window.sincronizarProdutosMarketplace = async function() {

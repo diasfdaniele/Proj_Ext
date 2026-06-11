@@ -4,6 +4,7 @@
 
 const heroText = document.getElementById('conta-hero-texto');
 const heroTitle = document.getElementById('conta-titulo');
+const heroBadge = document.querySelector('.conta-hero .section-badge');
 const summaryText = document.getElementById('conta-resumo-texto');
 const totalFavorites = document.getElementById('conta-total-favoritos');
 const totalInteractions = document.getElementById('conta-total-interacoes');
@@ -18,6 +19,22 @@ const interactionsList = document.getElementById('conta-interacoes-lista');
 const logoutButton = document.getElementById('btn-sair-conta');
 const topLogoutButton = document.getElementById('btn-sair-topo');
 const mobileLogoutButton = document.getElementById('btn-sair-conta-mobile');
+const adminShell = document.getElementById('conta-admin-shell');
+const adminStandardShell = document.getElementById('conta-padrao-shell');
+const adminHeaderText = document.getElementById('conta-admin-texto');
+const adminPanelText = document.getElementById('admin-painel-texto');
+const adminTotalVendedoras = document.getElementById('admin-total-vendedoras');
+const adminTotalCompradoras = document.getElementById('admin-total-compradoras');
+const adminTotalProdutos = document.getElementById('admin-total-produtos');
+const adminTotalVendas = document.getElementById('admin-total-vendas');
+const adminVendedorasList = document.getElementById('admin-vendedoras-lista');
+const adminCompradorasList = document.getElementById('admin-compradoras-lista');
+const adminProdutosList = document.getElementById('admin-produtos-lista');
+const adminVendasList = document.getElementById('admin-vendas-lista');
+const adminVendedorasToggle = document.getElementById('admin-vendedoras-toggle');
+const adminCompradorasToggle = document.getElementById('admin-compradoras-toggle');
+const adminProdutosToggle = document.getElementById('admin-produtos-toggle');
+const adminVendasToggle = document.getElementById('admin-vendas-toggle');
 const sellerShell = document.getElementById('conta-vendedor-shell');
 const sellerText = document.getElementById('conta-vendedor-texto');
 const sellerProductList = document.getElementById('conta-produtos-lista');
@@ -25,6 +42,382 @@ const sellerProductForm = document.getElementById('produto-form');
 const sellerProductStatus = document.getElementById('produto-status');
 const orderHistoryStorageKey = 'empre:historico-pedidos';
 const accountSessionStorageKey = 'empre:usuario-logado';
+const adminEmail = window.marketplaceAdmin?.email || 'administrador@admin.com';
+const adminPreviewLimit = 3;
+const adminSectionState = {
+  vendedoras: false,
+  compradoras: false,
+  produtos: false,
+  vendas: false
+};
+
+function isAdminUser(user) {
+  return Boolean(user) && (
+    user.role === 'administrador'
+    || user.accountType === 'administrador'
+    || String(user.email || '').trim().toLowerCase() === adminEmail
+  );
+}
+
+function formatCurrencyBRL(value) {
+  const numericValue = Number(value);
+  return Number.isFinite(numericValue)
+    ? new Intl.NumberFormat('pt-BR', { style: 'currency', currency: 'BRL' }).format(numericValue)
+    : 'R$ 0,00';
+}
+
+function getCompanyName(profile) {
+  return profile?.razaoSocial || profile?.nomeResponsavel || profile?.nome || profile?.email || 'Empresa';
+}
+
+function getCompanyBadge(profile) {
+  if (profile?.role === 'administrador') {
+    return 'Administrador';
+  }
+
+  return normalizeAccountType(profile?.sellerType, profile?.role) === 'vendedor'
+    ? 'Empresa vendedora'
+    : 'Empresa compradora';
+}
+
+function getCompanyMeta(profile) {
+  return [profile?.email, profile?.cnpj, profile?.telefone]
+    .filter(Boolean)
+    .join(' · ') || 'Sem dados adicionais';
+}
+
+function getCompanySecondaryMeta(profile) {
+  return [profile?.tipoEmpresa, profile?.cargo, profile?.site]
+    .filter(Boolean)
+    .join(' · ') || 'Dados básicos disponíveis no Firebase';
+}
+
+async function deleteDocumentsByField(collectionName, fieldName, fieldValue) {
+  if (!window.db) {
+    return 0;
+  }
+
+  const snapshot = await window.db.collection(collectionName).where(fieldName, '==', fieldValue).get();
+  await Promise.all(snapshot.docs.map((docSnapshot) => docSnapshot.ref.delete()));
+  return snapshot.size;
+}
+
+function renderAdminEmptyState(target, message) {
+  renderEmptyState(target, message);
+}
+
+function getAdminMarketplaceProducts() {
+  const localProducts = Array.isArray(window.produtosLocaisMarketplace) ? window.produtosLocaisMarketplace : [];
+  const persistedProducts = Array.isArray(window.produtosMarketplaceCadastrados) ? window.produtosMarketplaceCadastrados : [];
+  const merged = new Map();
+
+  [...localProducts, ...persistedProducts].forEach((item) => {
+    if (!item || typeof item.id !== 'string') {
+      return;
+    }
+
+    merged.set(item.id, item);
+  });
+
+  return Array.from(merged.values());
+}
+
+function getAdminSectionState(sectionKey) {
+  return Boolean(adminSectionState[sectionKey]);
+}
+
+function setAdminSectionState(sectionKey, isExpanded) {
+  adminSectionState[sectionKey] = Boolean(isExpanded);
+}
+
+function updateAdminToggleButton(button, sectionKey, totalItems) {
+  if (!button) {
+    return;
+  }
+
+  const expandable = totalItems > adminPreviewLimit;
+  button.hidden = !expandable;
+
+  if (!expandable) {
+    return;
+  }
+
+  const isExpanded = getAdminSectionState(sectionKey);
+  button.textContent = isExpanded ? 'Ver menos' : 'Ver mais';
+  button.setAttribute('aria-expanded', String(isExpanded));
+}
+
+function renderAdminListItems(target, sectionKey, items, renderItem, emptyMessage) {
+  if (!target) {
+    return false;
+  }
+
+  if (!items.length) {
+    renderAdminEmptyState(target, emptyMessage);
+    return false;
+  }
+
+  const visibleItems = getAdminSectionState(sectionKey) ? items : items.slice(0, adminPreviewLimit);
+  target.innerHTML = visibleItems.map(renderItem).join('');
+  return true;
+}
+
+function bindAdminToggle(button, sectionKey) {
+  if (!button) {
+    return;
+  }
+
+  button.addEventListener('click', async () => {
+    setAdminSectionState(sectionKey, !getAdminSectionState(sectionKey));
+    if (typeof loadAccountData === 'function') {
+      await loadAccountData();
+    }
+  });
+}
+
+function renderAdminUserList(target, items, listType) {
+  if (!target) {
+    return;
+  }
+
+  const sectionKey = listType === 'vendedoras' ? 'vendedoras' : 'compradoras';
+  renderAdminListItems(target, sectionKey, items, (item) => `
+    <article class="conta-admin-item">
+      <div class="conta-admin-item__topo">
+        <div>
+          <span class="conta-admin-item__badge">${getCompanyBadge(item)}</span>
+          <h4 class="mt-2 mb-1">${getCompanyName(item)}</h4>
+          <p class="conta-admin-item__empresa">${getCompanyMeta(item)}</p>
+        </div>
+        <strong>${item.createdAt || item.criadoEm ? 'Cadastrada' : 'Sem data'}</strong>
+      </div>
+      <p class="conta-admin-item__meta">${getCompanySecondaryMeta(item)}</p>
+      <div class="conta-admin-item__acoes">
+        <button type="button" class="btn btn--outline btn--sm" data-admin-delete-user="${item.id}">Excluir usuário</button>
+      </div>
+    </article>
+  `, `Nenhuma empresa ${listType} encontrada no Firebase.`);
+
+  updateAdminToggleButton(sectionKey === 'vendedoras' ? adminVendedorasToggle : adminCompradorasToggle, sectionKey, items.length);
+
+  target.querySelectorAll('[data-admin-delete-user]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const userId = button.getAttribute('data-admin-delete-user');
+      const selectedUser = items.find((item) => item.id === userId);
+
+      if (!selectedUser || !window.db) {
+        return;
+      }
+
+      const currentUser = readSessionUser();
+      if (currentUser?.uid && currentUser.uid === selectedUser.id) {
+        if (typeof window.mostrarToast === 'function') {
+          window.mostrarToast('Não é possível excluir o próprio administrador logado.', 'info');
+        }
+        return;
+      }
+
+      const label = getCompanyName(selectedUser);
+      const confirmed = window.confirm(`Excluir ${label} e todos os dados vinculados?`);
+      if (!confirmed) {
+        return;
+      }
+
+      try {
+        await Promise.all([
+          deleteDocumentsByField('favoritos', 'userId', selectedUser.id),
+          deleteDocumentsByField('interacoes', 'userId', selectedUser.id),
+          deleteDocumentsByField('pedidos', 'userId', selectedUser.id),
+          deleteDocumentsByField('pedidos', 'clienteUid', selectedUser.id)
+        ]);
+
+        if (normalizeAccountType(selectedUser.sellerType, selectedUser.role) === 'vendedor') {
+          await deleteDocumentsByField('produtos_marketplace', 'sellerId', selectedUser.id);
+
+          if (typeof window.removerProdutosMarketplacePorSellerId === 'function') {
+            window.removerProdutosMarketplacePorSellerId(selectedUser.id);
+          }
+        }
+
+        await window.db.collection('usuarios').doc(selectedUser.id).delete();
+        await syncMarketplaceProductsFromFirestore();
+
+        if (typeof window.mostrarToast === 'function') {
+          window.mostrarToast('Usuário excluído com sucesso.', 'sucesso');
+        }
+
+        loadAccountData();
+      } catch (error) {
+        console.error('Falha ao excluir usuário administrativo:', error?.code || error?.message || error);
+        if (typeof window.mostrarToast === 'function') {
+          window.mostrarToast('Não foi possível excluir o usuário.', 'erro');
+        }
+      }
+    });
+  });
+}
+
+function renderAdminProductsList(target, items) {
+  if (!target) {
+    return;
+  }
+
+  renderAdminListItems(target, 'produtos', items, (item) => `
+    <article class="conta-admin-item">
+      <div class="conta-admin-item__topo">
+        <div>
+          <span class="conta-admin-item__badge">${item.sellerId === 'local' ? 'Base do site' : 'Firebase'}</span>
+          <h4 class="mt-2 mb-1">${item.name || 'Produto sem nome'}</h4>
+          <p class="conta-admin-item__empresa">${item.company || 'Empresa não informada'}</p>
+        </div>
+        <strong>${item.price || 'Preço sob consulta'}</strong>
+      </div>
+      <p class="conta-admin-item__meta">${item.categoryLabel || item.category || 'Categoria não informada'} · ${item.purchaseModeLabel || item.purchaseMode || 'Modalidade não informada'}</p>
+      <p class="conta-admin-item__descricao">${item.description || 'Sem descrição cadastrada.'}</p>
+      <div class="conta-admin-item__acoes">
+        <button type="button" class="btn btn--outline btn--sm" data-admin-delete-product="${item.id}">Excluir produto</button>
+      </div>
+    </article>
+  `, 'Nenhum produto cadastrado foi encontrado no Firebase.');
+
+  updateAdminToggleButton(adminProdutosToggle, 'produtos', items.length);
+
+  target.querySelectorAll('[data-admin-delete-product]').forEach((button) => {
+    button.addEventListener('click', async () => {
+      const productId = button.getAttribute('data-admin-delete-product');
+      const selectedProduct = items.find((item) => item.id === productId);
+
+      if (!selectedProduct) {
+        return;
+      }
+
+      const confirmed = window.confirm(`Excluir o produto ${selectedProduct.name || 'selecionado'} do site?`);
+      if (!confirmed) {
+        return;
+      }
+
+      try {
+        if (typeof window.excluirProdutoMarketplaceComoAdmin === 'function') {
+          await window.excluirProdutoMarketplaceComoAdmin(productId);
+        } else if (typeof window.removerProdutoMarketplaceNoFirestore === 'function') {
+          await window.removerProdutoMarketplaceNoFirestore(productId);
+          if (typeof window.ocultarProdutoMarketplace === 'function') {
+            window.ocultarProdutoMarketplace(productId);
+          }
+        }
+
+        await Promise.all([
+          deleteDocumentsByField('favoritos', 'productId', productId),
+          deleteDocumentsByField('interacoes', 'productId', productId)
+        ]);
+
+        await syncMarketplaceProductsFromFirestore();
+
+        if (typeof window.mostrarToast === 'function') {
+          window.mostrarToast('Produto excluído com sucesso.', 'sucesso');
+        }
+
+        loadAccountData();
+      } catch (error) {
+        console.error('Falha ao excluir produto administrativo:', error?.code || error?.message || error);
+        if (typeof window.mostrarToast === 'function') {
+          window.mostrarToast('Não foi possível excluir o produto.', 'erro');
+        }
+      }
+    });
+  });
+}
+
+function renderAdminSalesList(target, items, totalRevenue) {
+  if (!target) {
+    return;
+  }
+
+  renderAdminListItems(target, 'vendas', items, (item) => `
+    <article class="conta-admin-item">
+      <div class="conta-admin-item__topo">
+        <div>
+          <span class="conta-admin-item__badge">${resolvePaymentMethodLabel(item.metodoPagamento)}</span>
+          <h4 class="mt-2 mb-1">Pedido ${item.id ? `#${String(item.id).slice(0, 8)}` : 'sem ID'}</h4>
+          <p class="conta-admin-item__empresa">${item.cliente?.nomeEmpresa || item.nomeEmpresa || item.userEmail || 'Cliente não informado'}</p>
+        </div>
+        <strong>${formatOrderValue(item)}</strong>
+      </div>
+      <p class="conta-admin-item__meta">${formatOrderDate(item)} · ${item.status || 'sem status'}</p>
+      <p class="conta-admin-item__descricao">${Array.isArray(item.itens) && item.itens.length ? item.itens.slice(0, 3).map((entry) => entry?.nome || entry?.name || 'Item').join(', ') : 'Itens não informados'}</p>
+    </article>
+  `, 'Nenhuma venda registrada no Firebase.');
+
+  updateAdminToggleButton(adminVendasToggle, 'vendas', items.length);
+
+  if (adminPanelText) {
+    adminPanelText.textContent = `Faturamento estimado com vendas registradas: ${formatCurrencyBRL(totalRevenue)}.`;
+  }
+}
+
+async function loadAdminDashboard(user) {
+  const firestoreDb = window.db || null;
+
+  if (!firestoreDb) {
+    renderAdminEmptyState(adminVendedorasList, 'Configure o Firebase para visualizar empresas vendedoras.');
+    renderAdminEmptyState(adminCompradorasList, 'Configure o Firebase para visualizar empresas compradoras.');
+    renderAdminEmptyState(adminProdutosList, 'Configure o Firebase para visualizar produtos.');
+    renderAdminEmptyState(adminVendasList, 'Configure o Firebase para visualizar vendas.');
+    return;
+  }
+
+  await syncMarketplaceProductsFromFirestore();
+
+  try {
+    const [usersSnapshot, ordersSnapshot] = await Promise.all([
+      firestoreDb.collection('usuarios').get(),
+      firestoreDb.collection('pedidos').get()
+    ]);
+
+    const allUsers = [];
+    const allOrders = [];
+
+    usersSnapshot.forEach((docSnapshot) => {
+      allUsers.push({ id: docSnapshot.id, ...docSnapshot.data() });
+    });
+
+    ordersSnapshot.forEach((docSnapshot) => {
+      allOrders.push({ id: docSnapshot.id, ...docSnapshot.data() });
+    });
+
+    const visibleUsers = allUsers.filter((profile) => !isAdminUser(profile));
+    const vendorUsers = visibleUsers.filter((profile) => normalizeAccountType(profile.sellerType, profile.role) === 'vendedor');
+    const buyerUsers = visibleUsers.filter((profile) => normalizeAccountType(profile.sellerType, profile.role) !== 'vendedor');
+    const visibleProducts = getAdminMarketplaceProducts();
+    const sortedOrders = allOrders
+      .slice()
+      .sort((first, second) => getOrderTimestamp(second) - getOrderTimestamp(first));
+    const totalRevenue = sortedOrders.reduce((sum, order) => sum + (Number(order.totalEstimado) || 0), 0);
+
+    if (adminHeaderText) {
+      adminHeaderText.textContent = `Painel de gerenciamento para ${user.razaoSocial || user.email}.`;
+    }
+    if (adminPanelText) {
+      adminPanelText.textContent = `Painel de gerenciamento: ${sortedOrders.length} venda(s) registradas e faturamento estimado de ${formatCurrencyBRL(totalRevenue)}.`;
+    }
+
+    if (adminTotalVendedoras) adminTotalVendedoras.textContent = String(vendorUsers.length);
+    if (adminTotalCompradoras) adminTotalCompradoras.textContent = String(buyerUsers.length);
+    if (adminTotalProdutos) adminTotalProdutos.textContent = String(visibleProducts.length);
+    if (adminTotalVendas) adminTotalVendas.textContent = String(sortedOrders.length);
+
+    renderAdminUserList(adminVendedorasList, vendorUsers, 'vendedoras');
+    renderAdminUserList(adminCompradorasList, buyerUsers, 'compradoras');
+    renderAdminProductsList(adminProdutosList, visibleProducts);
+    renderAdminSalesList(adminVendasList, sortedOrders.slice(0, 12), totalRevenue);
+  } catch (error) {
+    console.error('Falha ao carregar painel administrativo:', error?.code || error?.message || error);
+    renderAdminEmptyState(adminVendedorasList, 'Não foi possível carregar as empresas vendedoras.');
+    renderAdminEmptyState(adminCompradorasList, 'Não foi possível carregar as empresas compradoras.');
+    renderAdminEmptyState(adminProdutosList, 'Não foi possível carregar os produtos.');
+    renderAdminEmptyState(adminVendasList, 'Não foi possível carregar as vendas.');
+  }
+}
 
 function getPurchasesTextElement() {
   return purchasesText || document.getElementById('conta-compras-texto');
@@ -50,7 +443,7 @@ function ensurePurchasesListElement() {
     <div class="conta-shell__header">
       <div>
         <h2 id="conta-compras-titulo" class="conta-shell__titulo">Histórico de compras</h2>
-        <p id="conta-compras-texto" class="conta-shell__subtitulo">Acompanhe aqui seus pedidos simulados e finalizados.</p>
+        <p id="conta-compras-texto" class="conta-shell__subtitulo">Acompanhe aqui seus pedidos.</p>
       </div>
       <a href="pagamento.html" class="btn btn--ghost">Novo pagamento</a>
     </div>
@@ -66,12 +459,21 @@ function readSessionUser() {
 
   try {
     const parsed = JSON.parse(localStorage.getItem(sessionKey) ?? 'null');
-    return parsed && typeof parsed.uid === 'string'
-      ? {
-          accountType: (parsed.accountType === 'vendedor' || parsed.accountType === 'quero-vender') ? 'vendedor' : 'comprador',
-          ...parsed
-        }
-      : null;
+    if (!parsed || typeof parsed.uid !== 'string') {
+      return null;
+    }
+
+    const normalizedRole = parsed.role === 'administrador' || String(parsed.email || '').trim().toLowerCase() === adminEmail
+      ? 'administrador'
+      : 'usuario-comum';
+
+    return {
+      ...parsed,
+      accountType: normalizedRole === 'administrador'
+        ? 'administrador'
+        : ((parsed.accountType === 'vendedor' || parsed.accountType === 'quero-vender') ? 'vendedor' : 'comprador'),
+      role: normalizedRole
+    };
   } catch {
     return null;
   }
@@ -92,6 +494,10 @@ function writeSessionUser(user) {
 }
 
 function normalizeAccountType(value) {
+  if (value === 'administrador') {
+    return 'administrador';
+  }
+
   return (value === 'vendedor' || value === 'quero-vender') ? 'vendedor' : 'comprador';
 }
 
@@ -155,11 +561,13 @@ async function hydrateSessionFromFirebaseAuth() {
   }
 
   const hydratedUser = {
-    accountType: normalizeAccountType(profile?.sellerType),
+    accountType: profile?.role === 'administrador' || window.isMarketplaceAdminEmail?.(firebaseUser.email)
+      ? 'administrador'
+      : normalizeAccountType(profile?.sellerType),
     email: firebaseUser.email || profile?.email || '',
     nomeResponsavel: profile?.nomeResponsavel || firebaseUser.displayName || '',
     razaoSocial: profile?.razaoSocial || '',
-    role: profile?.role === 'administrador' ? 'administrador' : 'usuario-comum',
+    role: profile?.role === 'administrador' || window.isMarketplaceAdminEmail?.(firebaseUser.email) ? 'administrador' : 'usuario-comum',
     uid: firebaseUser.uid
   };
 
@@ -428,6 +836,13 @@ function requireAuthenticationState() {
   const purchasesTarget = ensurePurchasesListElement();
 
   if (!user) {
+    if (heroBadge) heroBadge.textContent = 'Área do usuário';
+    if (adminShell) {
+      adminShell.hidden = true;
+    }
+    if (adminStandardShell) {
+      adminStandardShell.hidden = false;
+    }
     summaryText.textContent = 'Entre com sua conta para acessar seus favoritos e histórico de pedidos.';
     heroText.textContent = 'Acesse sua conta para visualizar seus produtos favoritos, carrinho, histórico e recursos personalizados.';
     if (heroTitle) heroTitle.textContent = 'Minha conta';
@@ -457,6 +872,15 @@ function requireAuthenticationState() {
     return null;
   }
 
+  const adminMode = isAdminUser(user);
+
+  if (adminShell) {
+    adminShell.hidden = !adminMode;
+  }
+  if (adminStandardShell) {
+    adminStandardShell.hidden = adminMode;
+  }
+
   if (logoutButton) {
     logoutButton.hidden = false;
   }
@@ -466,6 +890,20 @@ function requireAuthenticationState() {
   if (mobileLogoutButton) {
     mobileLogoutButton.hidden = false;
   }
+
+  if (adminMode) {
+    if (heroBadge) heroBadge.textContent = 'Área administrativa';
+    if (heroTitle) heroTitle.textContent = 'Painel administrativo';
+    summaryText.textContent = 'Acompanhe empresas, produtos e vendas registradas diretamente no Firebase.';
+    heroText.textContent = 'Gerencie a plataforma com uma visão consolidada das empresas cadastradas, dos produtos e das vendas realizadas.';
+    if (sellerShell) {
+      sellerShell.hidden = true;
+    }
+    return user;
+  }
+
+  if (heroBadge) heroBadge.textContent = 'Área do usuário';
+
   // Preferência: nome do usuário, depois razão social, depois email
   let nomeUsuario = user.nome || user.displayName || user.razaoSocial || user.email || 'Usuário';
   if (heroTitle) heroTitle.textContent = `Olá, ${nomeUsuario}`;
@@ -688,6 +1126,11 @@ async function loadAccountData() {
     return;
   }
 
+  if (isAdminUser(user)) {
+    await loadAdminDashboard(user);
+    return;
+  }
+
   await syncMarketplaceProductsFromFirestore();
 
   if (!firestoreDb) {
@@ -853,6 +1296,11 @@ topLogoutButton?.addEventListener('click', async () => {
 mobileLogoutButton?.addEventListener('click', async () => {
   await logoutCurrentUser();
 });
+
+bindAdminToggle(adminVendedorasToggle, 'vendedoras');
+bindAdminToggle(adminCompradorasToggle, 'compradoras');
+bindAdminToggle(adminProdutosToggle, 'produtos');
+bindAdminToggle(adminVendasToggle, 'vendas');
 
 async function logoutCurrentUser() {
   const sessionKey = window.sessionStorageKey || accountSessionStorageKey;

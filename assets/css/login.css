@@ -587,15 +587,13 @@ body.pagina-login .header {
   text-underline-offset: 3px;
 }
 
-/* ------------------------------------------------------------
-   7. BOTÃO PRINCIPAL DE SUBMIT — altura compacta
-   ------------------------------------------------------------ */
+/* 7. BOTÃO PRINCIPAL DE SUBMIT — altura compacta */
 
 .btn-login-submit {
   width: 100%;
   justify-content: center;
   position: relative;
-  min-height: 46px;       /* Reduzido de 52px — ainda acima de 44px (WCAG) */
+  min-height: 46px;       
   font-size: 0.95rem;
   letter-spacing: 0.01em;
   overflow: hidden;
@@ -622,6 +620,12 @@ body.pagina-login .header {
   opacity: 0.85;
 }
 
+.btn-login-submit__loading {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+}
+
 /* Loading spinner */
 .loading-spinner { animation: girar 0.8s linear infinite; }
 
@@ -630,9 +634,7 @@ body.pagina-login .header {
   to   { transform: rotate(360deg); }
 }
 
-/* ------------------------------------------------------------
-   8. DIVISÓRIA
-   ------------------------------------------------------------ */
+/* DIVISÓRIA */
 
 .login-divisoria {
   display: flex;

@@ -1,9 +1,9 @@
 body.pagina-carrinho {
-  background: linear-gradient(180deg, var(--cinza-50) 0%, #ffffff 24%, var(--cinza-50) 100%);
+  background: var(--cinza-50);
 }
 
 .carrinho-hero {
-  padding: 2.5rem 0 1.5rem;
+  padding: 0.25rem 0 1.5rem;
 }
 
 .btn-carrinho{
@@ -19,23 +19,12 @@ body.pagina-carrinho {
 }
 
 .carrinho-hero__content {
-  background: linear-gradient(135deg, rgba(11, 24, 59, 0.98) 0%, rgba(20, 51, 112, 0.96) 100%);
+  background: var(--azul-profundo);
   border-radius: var(--raio-xl);
-  padding: clamp(1.5rem, 3vw, 2.75rem);
+  padding: clamp(0.5rem, 3vw, 1.25rem);
   box-shadow: var(--sombra-lg);
   position: relative;
   overflow: hidden;
-}
-
-.carrinho-hero__content::after {
-  content: '';
-  position: absolute;
-  inset: auto -50px -90px auto;
-  width: 240px;
-  height: 240px;
-  border-radius: 50%;
-  background: rgba(249, 115, 22, 0.22);
-  filter: blur(8px);
 }
 
 .carrinho-hero__titulo {
