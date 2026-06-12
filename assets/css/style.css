@@ -667,9 +667,9 @@ h1, h2, h3, h4, h5, h6 {
 
 .header__actions .btn-header-auth:hover,
 .header__actions .btn-header-auth:focus-visible {
-  background: #ea580c;
-  border-color: #c2410c;
-  color: #111827;
+  background: var(--laranja-palido);
+  border-color: #ff7700;
+  color: var(--laranja-escuro);
 }
 
 .btn-link-facil {
@@ -707,6 +707,20 @@ h1, h2, h3, h4, h5, h6 {
   color: var(--laranja-escuro);
   background: var(--laranja-palido);
   border-color: var(--laranja-claro);
+}
+
+body.modo-alto-contraste .btn-header-sair-discreto:hover,
+body.modo-alto-contraste .btn-header-sair-discreto:focus-visible {
+  color: var(--laranja-vivo);
+  border-color: var(--laranja-vivo);
+}
+
+body.modo-alto-contraste .btn-login-google{
+  color: #ffffff;
+}
+
+body.modo-alto-contraste .login-link{
+  color: var(--laranja-claro);
 }
 
 .topo-links-fixos {
@@ -1061,7 +1075,7 @@ button.menu-mobile__link {
 .hero__central-sub {
   font-size: 0.72rem;
   text-align: center;
-  color: var(--cinza-400);
+  color: var(--cinza-500);
   font-weight: 500;
 }
 
@@ -1132,7 +1146,7 @@ button.menu-mobile__link {
 
 .hero__card-empresa {
   font-size: 0.7rem;
-  color: var(--cinza-400);
+  color: var(--cinza-500);
 }
 
 .hero__card-badge {
@@ -1234,7 +1248,7 @@ button.menu-mobile__link {
 
 .categoria-card__qtd {
   font-size: 0.74rem;
-  color: var(--cinza-400);
+  color: var(--cinza-500);
   font-weight: 500;
 }
 
@@ -1409,7 +1423,7 @@ button.menu-mobile__link {
 .empresa-card__categoria {
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--laranja-escuro);
+  color: var(--laranja-vivo);
   background: var(--laranja-palido);
   padding: 0.1rem 0.6rem;
   border-radius: var(--raio-full);
@@ -1562,6 +1576,10 @@ button.menu-mobile__link {
   background: linear-gradient(135deg, var(--azul-profundo) 0%, #1a3270 100%);
   position: relative;
   overflow: hidden;
+}
+
+body.modo-alto-contraste .diferenciais{
+  background: var(--cinza-200);
 }
 
 .diferenciais .section-titulo--claro {
@@ -2015,6 +2033,7 @@ body.modo-alto-contraste .login-lateral {
   background-color: #100f0f;
 }
 
+
 body.modo-alto-contraste a:hover{
   color: #F97316;
 }
@@ -2022,7 +2041,6 @@ body.modo-alto-contraste a:hover{
 body.modo-alto-contraste a,
 body.modo-alto-contraste .footer__link,
 body.modo-alto-contraste .nav__link,
-body.modo-alto-contraste .brand-logo__wordmark,
 body.modo-alto-contraste .brand-logo__dot-outer,
 body.modo-alto-contraste .brand-logo__tagline,
 body.modo-alto-contraste .header__logo-name,
@@ -2061,7 +2079,6 @@ body.modo-alto-contraste .carrinho-shell,
 body.modo-alto-contraste .carrinho-resumo,
 body.modo-alto-contraste .carrinho-item,
 body.modo-alto-contraste .form-secao,
-body.modo-alto-contraste .campo-input,
 body.modo-alto-contraste .campo-select,
 body.modo-alto-contraste .campo-textarea,
 body.modo-alto-contraste .menu-mobile,
@@ -2074,6 +2091,29 @@ body.modo-alto-contraste .carrinho-vazio {
   box-shadow: none !important;
 }
 
+
+body.modo-alto-contraste .campo-input{
+  background: var(--cinza-100) !important;
+}
+
+body.modo-alto-contraste .campo-input::placeholder{
+  color: var(--cinza-200) !important;
+}
+
+body.modo-alto-contraste .campo-input:focus{
+  border: 2px solid var(--laranja-vivo) !important;
+}
+
+body.modo-alto-contraste .form-control:focus,
+body.modo-alto-contraste .form-select:focus{
+  color: rgb(255, 255, 255) !important;
+  background-color: var(--cinza-100);
+}
+
+body.modo-alto-contraste .form-control::placeholder{
+  color: var(--cinza-400) !important;
+}
+
 body.modo-alto-contraste .btn--primary,
 body.modo-alto-contraste .btn-acess[aria-pressed="true"],
 body.modo-alto-contraste .btn-acess--destaque,
@@ -2084,6 +2124,31 @@ body.modo-alto-contraste .carrinho-vazio__icone {
   background: #F97316 !important;
   color: #000000 !important;
   border-color: #F97316 !important;
+}
+
+body.modo-alto-contraste .produto-detalhe__descricao,
+body.modo-alto-contraste .produto-detalhe__vendedor{
+  color: var(--cinza-500);
+}
+body.modo-alto-contraste .produto-detalhe__titulo,
+body.modo-alto-contraste .produto-detalhe__categoria{
+  color: var(--laranja-vivo);
+}
+
+body.modo-alto-contraste .produto-detalhe-hero__content {
+  background: var(--cinza-200);
+}
+
+body.modo-alto-contraste{
+  background: var(--cinza-100);
+}
+
+body.modo-alto-contraste .brand-logo__wordmark{
+  color: #ffffff;
+}
+
+body.modo-alto-contraste .login-painel-rodape{
+  background-color: #000000;
 }
 
 body.modo-alto-contraste .btn--outline,
@@ -2113,6 +2178,11 @@ body.modo-alto-contraste .hero__badge {
 
 body.modo-alto-contraste .header__logo .brand-logo__wordmark {
   fill: #FFFFFF !important;
+}
+
+body.modo-alto-contraste .brand-logo__wordmark,
+body.modo-alto-contraste .brand-logo__dot-outer{
+  fill: #ffffff;
 }
 
 body.modo-alto-contraste .header__logo .brand-logo__wordmark-accent,
@@ -2166,11 +2236,15 @@ body.modo-alto-contraste .pagamento-bloco__titulo,
 body.modo-alto-contraste .pagamento-form__hint,
 body.modo-alto-contraste .pagamento-item__nome,
 body.modo-alto-contraste .login-lateral__titulo,
-body.modo-alto-contraste .login-lateral__subtitulo,
-body.modo-alto-contraste .login-lateral__diferencial,
 body.modo-alto-contraste .login-lateral__selo,
 body.modo-alto-contraste .login-lateral__tagline {
   color: #ffffff !important;
+}
+
+
+body.modo-alto-contraste .login-lateral__subtitulo,
+body.modo-alto-contraste .login-lateral__diferencial{
+  color: var(--cinza-500);
 }
 
 body.modo-alto-contraste .produto-card__empresa{

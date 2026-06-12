@@ -88,6 +88,7 @@ body.pagina-catalogo {
   background: var(--branco);
 }
 
+
 .catalogo__cabecalho {
   display: flex;
   align-items: end;
@@ -273,7 +274,7 @@ body.pagina-catalogo {
   font-family: var(--fonte-display);
   font-size: 1.08rem;
   font-weight: 800;
-  color: var(--laranja-escuro);
+  color: var(--laranja-vivo);
 }
 
 .produto-card__acoes {

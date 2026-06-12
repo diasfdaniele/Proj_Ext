@@ -427,7 +427,7 @@ body.modo-alto-contraste .form-secao {
 }
 
 body.modo-alto-contraste .campo-input {
-  background: #000000;
+  background: var(--cinza-400);
   border-color: #FFFFFF;
   color: #FFFFFF;
 }
