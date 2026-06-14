@@ -25,7 +25,6 @@ const totalValueElement = document.getElementById('resumo-valor');
 const clearCartButton = document.getElementById('btn-limpar-carrinho');
 const finalizeCartButton = document.getElementById('btn-finalizar-carrinho');
 const proceedToPaymentLink = document.getElementById('btn-ir-pagamento');
-const toast = document.getElementById("toast-container");
 
 function getLoggedUser() {
   return typeof window.obterUsuarioLogado === 'function' ? window.obterUsuarioLogado() : null;

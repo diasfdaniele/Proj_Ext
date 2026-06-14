@@ -1006,7 +1006,7 @@ function renderSellerProducts(items) {
       window.removerProdutoMarketplace(productId, user.uid);
       await syncMarketplaceProductsFromFirestore();
       if (typeof window.mostrarToast === 'function') {
-        window.mostrarToast('Produto removido do painel do vendedor.', 'info');
+        showToast('Produto removido do painel do vendedor.', 'Bad_Toast');
       }
       loadAccountData();
     });
@@ -1061,6 +1061,8 @@ function renderFavorites(items) {
           price: selectedProduct.price,
           quantity: 1
         });
+        
+      showToast('Item adicionado ao carrinho.', 'Good_Toast', 800);
       }
     });
   });
@@ -1079,13 +1081,13 @@ function renderFavorites(items) {
       try {
         await firestoreDb.collection('favoritos').doc(`${user.uid}_${productId}`).delete();
         if (typeof window.mostrarToast === 'function') {
-          window.mostrarToast('Favorito removido com sucesso.', 'info');
+          window.showToast('Favorito removido com sucesso.', 'Bad_Toast');
         }
         await loadAccountData();
       } catch (error) {
         console.error(error);
         if (typeof window.mostrarToast === 'function') {
-          window.mostrarToast('Nao foi possivel remover o favorito.', 'erro');
+          window.showToast('Nao foi possivel remover o favorito.', 'Bad_Toast');
         }
       }
     });
@@ -1224,12 +1226,12 @@ sellerProductForm?.addEventListener('submit', async (event) => {
   const description = document.getElementById('produto-descricao')?.value.trim() ?? '';
 
   if (!name || !category || !purchaseMode || !price || !description) {
-    sellerProductStatus.textContent = 'Preencha todos os campos para cadastrar o produto.';
+    showToast('Preencha todos os campos para cadastrar o produto.', 'Bad_Toast');
     return;
   }
 
   if (typeof window.salvarProdutoMarketplace !== 'function') {
-    sellerProductStatus.textContent = 'Não foi possível cadastrar o produto.';
+    showToast('Não foi possível cadastrar o produto.', 'Bad_Toast');
     return;
   }
 
@@ -1278,10 +1280,7 @@ sellerProductForm?.addEventListener('submit', async (event) => {
   await syncMarketplaceProductsFromFirestore();
 
   sellerProductForm.reset();
-  sellerProductStatus.textContent = 'Produto cadastrado com sucesso no painel do vendedor.';
-  if (typeof window.mostrarToast === 'function') {
-    window.mostrarToast('Produto cadastrado no painel do vendedor.', 'sucesso');
-  }
+  showToast("Produto cadastrado com sucesso no painel do vendedor.", "Good_Toast");
   loadAccountData();
 });
 

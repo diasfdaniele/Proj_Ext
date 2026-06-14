@@ -451,7 +451,7 @@ paymentForm?.addEventListener('submit', async (event) => {
 
   if (!items.length) {
     if (typeof window.mostrarToast === 'function') {
-      window.mostrarToast('Adicione itens ao carrinho antes de seguir para o pagamento.', 'info');
+      window.showToast('Adicione itens ao carrinho antes de seguir para o pagamento.', 'Bad_Toast');
     }
     return;
   }
@@ -468,26 +468,26 @@ paymentForm?.addEventListener('submit', async (event) => {
     orderId = await saveOrderToFirestore(payload);
 
     if (orderId && typeof window.mostrarToast === 'function') {
-      window.mostrarToast(`Pedido registrado com sucesso (ID: ${orderId}).`, 'sucesso');
+      window.showToast(`Pedido registrado com sucesso (ID: ${orderId}).`, 'Good_Toast');
     }
   } catch (error) {
     console.error('Falha ao salvar pedido no Firestore:', error?.code || error?.message || error);
 
     if (typeof window.mostrarToast === 'function') {
-      window.mostrarToast('Pedido processado localmente. Nao foi possivel registrar no Firebase agora.', 'info');
+      window.showToast('Pedido processado localmente. Nao foi possivel registrar no Firebase agora.', 'Bad_Toast');
     }
   }
 
   saveOrderToLocalHistory(payload, orderId);
 
   if (typeof window.mostrarToast === 'function') {
-    window.mostrarToast(
+    window.showToast(
       method === 'pix'
         ? 'Pagamento PIX simulado com sucesso. Em producao, conecte a um PSP ou gateway com cobranca real.'
         : method === 'cartao'
           ? 'Transacao de cartao simulada com sucesso. Para teste real, use sandbox de um gateway.'
           : 'Fluxo de boleto preparado com sucesso. Em producao, gere o titulo pelo financeiro ou gateway.',
-      'sucesso'
+      'Good_Toast'
     );
   }
 
@@ -512,13 +512,13 @@ copyPixButton?.addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(pixCodeField.value);
     if (typeof window.mostrarToast === 'function') {
-      window.mostrarToast('Codigo PIX copiado para a area de transferencia.', 'sucesso');
+      window.showToast('Codigo PIX copiado para a area de transferencia.', 'Good_Toast');
     }
   } catch {
     pixCodeField.select();
     document.execCommand('copy');
     if (typeof window.mostrarToast === 'function') {
-      window.mostrarToast('Codigo PIX copiado para a area de transferencia.', 'sucesso');
+      window.showToast('Codigo PIX copiado para a area de transferencia.', 'Good_Toast');
     }
   }
 });

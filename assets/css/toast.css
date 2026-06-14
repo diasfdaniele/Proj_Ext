@@ -5,6 +5,9 @@
 .Good_Toast{
   background-color: green !important;
 }
+.Info_Toast{
+  background-color: rgb(255, 149, 0) !important;
+}
 
 #toast-container {
   position: fixed;

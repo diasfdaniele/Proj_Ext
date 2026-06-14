@@ -57,7 +57,7 @@ const btnLeitura = document.getElementById('btn-leitura');
 const btnLibras = document.getElementById('btn-libras');
 const widgetLibras = document.getElementById('widget-libras');
 const fecharLibras = document.getElementById('btn-fechar-libras');
-const toastContainer = document.getElementById('toast-container');
+const toast = document.getElementById('toast-container');
 const btnReportar = document.getElementById('btn-reportar');
 const carrinhoBadges = [
   document.getElementById('carrinho-count'),
@@ -413,7 +413,7 @@ function saveCartItems(items) {
 }
 
 
-function showToast(message, type = 'Bad_Toast', hideDelay = 3000) {
+function showToast(message, type = 'Bad_Toast', hideDelay = 1000) {
   if (!toast) {
     return;
   }
@@ -421,7 +421,7 @@ function showToast(message, type = 'Bad_Toast', hideDelay = 3000) {
   
   toast.hidden = false;
   toast.innerHTML = '';
-  toast.classList.remove('Good_Toast', 'Bad_Toast');
+  toast.classList.remove('Good_Toast', 'Bad_Toast', 'Info_Toast');
   toast.classList.add(type);
   toast.textContent = message;
 
@@ -556,14 +556,14 @@ updateAuthLinks();
 if (btnContraste) {
   btnContraste.addEventListener('click', () => {
     const ativo = toggleBodyMode(btnContraste, 'modo-alto-contraste', storageKeys.contraste);
-    mostrarToast(ativo ? 'Modo alto contraste ativado.' : 'Modo alto contraste desativado.');
+    showToast(ativo ? 'Modo alto contraste ativado.' : 'Modo alto contraste desativado.', 'Info_Toast');
   });
 }
 
 if (btnLayout) {
   btnLayout.addEventListener('click', () => {
     const ativo = toggleBodyMode(btnLayout, 'modo-simplificado', storageKeys.layout);
-    mostrarToast(ativo ? 'Layout simplificado ativado.' : 'Layout simplificado desativado.');
+    showToast(ativo ? 'Layout simplificado ativado.' : 'Layout simplificado desativado.', 'Info_Toast');
   });
 }
 
@@ -571,7 +571,7 @@ if (btnLeitura) {
   btnLeitura.addEventListener('click', () => {
     const ativo = toggleBodyMode(btnLeitura, 'modo-leitura', storageKeys.leitura);
     applyFontSize(tamanhoFonte);
-    mostrarToast(ativo ? 'Modo leitura ativado.' : 'Modo leitura desativado.');
+    showToast(ativo ? 'Modo leitura ativado.' : 'Modo leitura desativado.', 'Info_Toast');
   });
 }
 
@@ -646,12 +646,11 @@ if (btnReportar) {
 
 window.atualizarCarrinho = (delta = 1) => {
   updateCartCount(itensCarrinho + delta);
-  mostrarToast('Item adicionado ao carrinho.', 'sucesso');
+  showToast('Item adicionado no carrinho.', 'Good_Toast', 800);
 };
 
 window.adicionarItemAoCarrinho = (product) => {
   addCartItem(product);
-  mostrarToast('Item adicionado ao carrinho.', 'sucesso');
 };
 
 window.obterItensCarrinho = readCartItems;

@@ -5,7 +5,6 @@
 
 // Usa auth e db globais definidos em firebase.js
 const googleLoginButton = document.getElementById('btn-google-login');
-const toast = document.getElementById("toast-container");
 
         
 // Login com Google (compat)

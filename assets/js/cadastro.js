@@ -58,26 +58,22 @@ if (formCadastro) {
     const aceitouTermos = document.getElementById('aceitar-termos')?.checked ?? false;
 
     if (!razaoSocial || !cnpj || !tipoEmpresa || !descricao || !nomeResponsavel || !cargo || !cpf || !email || !senha) {
-      toast.classList.add("Bad_Toast");
-      toast.innerHTML = 'Preencha os campos obrigatorios para continuar.';
+      showToast('Preencha os campos obrigatorios para continuar.', 'Bad_Toast');
       return;
     }
 
     if (senha.length < 8) {
-      toast.classList.add("Bad_Toast");
-      toast.innerHTML = 'A senha precisa ter pelo menos 8 caracteres.';
+      showToast('A senha precisa ter pelo menos 8 caracteres.', 'Bad_Toast');
       return;
     }
 
     if (senha !== confirmarSenha) {
-      toast.classList.add("Bad_Toast");
-      toast.innerHTML = 'A confirmação de senha não confere.';
+      showToast('A confirmação de senha não confere.', 'Bad_Toast');
       return;
     }
 
     if (!aceitouTermos) {
-      toast.classList.add("Bad_Toast");
-      toast.innerHTML = 'Aceite os termos de uso para concluir o cadastro.';
+      showToast('Aceite os termos de uso para concluir o cadastro.', 'Bad_Toast');
       return;
     }
 
@@ -87,8 +83,7 @@ if (formCadastro) {
         hasDb: !!window.db,
         hasFirebase: !!window.firebase
       });
-      toast.classList.add("Bad_Toast");
-      toast.innerHTML = 'Firebase não está configurado corretamente.';
+      showToast('Firebase não está configurado corretamente.', 'Bad_Toast');
       return;
     }
 
@@ -127,14 +122,11 @@ if (formCadastro) {
         uid: credential.user.uid
       });
 
-      
-      toast.classList.add("Good_Toast");
-      toast.innerHTML = 'Cadastro realizado com sucesso!';
+      showToast('Cadastro realizado com sucesso!', 'Good_Toast');
       window.location.href = 'login.html';
     } catch (erro) {
       console.error('Falha no cadastro de empresa:', erro?.code || erro?.message || erro);
-      toast.classList.add("Bad_Toast");
-      toast.innerHTML = 'Não foi possível concluir o cadastro. Verifique os dados e tente novamente.';
+      showToast('Não foi possível concluir o cadastro. Verifique os dados e tente novamente.', 'Bad_Toast');
     } finally {
       setLoadingState(false);
     }

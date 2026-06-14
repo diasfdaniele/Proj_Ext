@@ -14,7 +14,6 @@ const userPanelText = document.getElementById('catalogo-painel-texto');
 const userPanelLink = document.getElementById('catalogo-painel-link');
 const catalogSessionStorageKey = 'empre:usuario-logado';
 const favoriteIds = new Set();
-const toast = document.getElementById("toast-container");
 
 // ESTRUTURA PARA PRODUTOS - NÃO EXCLUIR POR ENQUANTO 
 const baseProducts = [
@@ -230,15 +229,15 @@ async function toggleFavorite(productId) {
   const user = readSessionUser();
 
   if (!user) {
-    if (typeof window.mostrarToast === 'function') {
-      window.mostrarToast('Faca login para favoritar produtos.', 'info');
+    if (typeof window.showToast === 'function') {
+      window.showToast('Faca login para favoritar produtos.', 'Bad_Toast');
     }
     return;
   }
 
   if (!window.db) {
-    if (typeof window.mostrarToast === 'function') {
-      window.mostrarToast('Configure o Firebase para salvar favoritos.', 'info');
+    if (typeof window.showToast === 'function') {
+      window.showToast('Configure o Firebase para salvar favoritos.', 'Bad_Toast');
     }
     return;
   }
@@ -256,8 +255,8 @@ async function toggleFavorite(productId) {
       await favoriteRef.delete();
       favoriteIds.delete(productId);
 
-      if (typeof window.mostrarToast === 'function') {
-        window.mostrarToast('Produto removido dos favoritos.', 'info');
+      if (typeof window.showToast === 'function') {
+        window.showToast('Produto removido dos favoritos.', 'Bad_Toast');
       }
     } else {
       await favoriteRef.set({
@@ -278,8 +277,8 @@ async function toggleFavorite(productId) {
       });
       favoriteIds.add(productId);
 
-      if (typeof window.mostrarToast === 'function') {
-        window.mostrarToast('Produto favoritado com sucesso.', 'sucesso');
+      if (typeof window.showToast === 'function') {
+        window.showToast('Produto favoritado com sucesso', 'Good_Toast');
       }
     }
 
@@ -287,8 +286,8 @@ async function toggleFavorite(productId) {
   } catch (error) {
     console.error(error);
 
-    if (typeof window.mostrarToast === 'function') {
-      window.mostrarToast('Nao foi possivel atualizar os favoritos.', 'erro');
+    if (typeof window.showToast === 'function') {
+      window.showToast('Nao foi possivel atualizar os favoritos.', 'Bad_Toast');
     }
   }
 }
@@ -325,6 +324,13 @@ function renderProducts() {
       
       const productId = button.getAttribute('data-add-cart');
       const selectedProduct = getAllProducts().find((product) => product.id === productId);
+
+      const user = readSessionUser();
+      if(!user){
+        showToast('Faça login para adicionar produtos ao carrinho.', 'Bad_Toast', 800);
+        return;
+      }
+
       if (selectedProduct && typeof window.adicionarItemAoCarrinho === 'function') {
         showToast('Produto adicionado ao carrinho!', 'Good_Toast', 800);
         window.adicionarItemAoCarrinho(selectedProduct);

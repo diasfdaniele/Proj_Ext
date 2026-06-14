@@ -1,6 +1,5 @@
 // Script para página de detalhes do produto
 // Lê o id do produto da URL, busca no catálogo e exibe detalhes
-
 function getAllProductsDetalhe() {
   // Mesma lógica do catalogo.js
   const produtosLocais = window.produtosLocaisMarketplace || [];
@@ -156,12 +155,14 @@ function renderDetalheProduto() {
 
   container.querySelector('#btn-adicionar-carrinho').addEventListener('click', () => {
     if (typeof window.adicionarItemAoCarrinho === 'function') {
+      
       window.adicionarItemAoCarrinho({
         ...produto,
         selectedImage: currentImage || null,
         selectedVariationImage: currentImage || null,
         selectedVariation: currentVariation?.nome || ''
       });
+      showToast('Produto Adicionado ao Carrinho!', 'Good_Toast', 900);
     }
   });
 }
