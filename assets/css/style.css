@@ -1969,6 +1969,16 @@ body.modo-alto-contraste .header {
   border-color: #FFFFFF;
 }
 
+body.modo-alto-contraste .conta-admin-metrica,
+body.modo-alto-contraste .conta-admin-bloco,
+body.modo-alto-contraste .conta-admin-item{
+  background: var(--cinza-100);
+}
+
+body.modo-alto-contraste .conta-admin-item__badge{
+  background: var(--laranja-vivo);
+}
+
 body.modo-alto-contraste.pagina-catalogo,
 body.modo-alto-contraste.pagina-catalogo main,
 body.modo-alto-contraste.pagina-catalogo .catalogo-produtos {
