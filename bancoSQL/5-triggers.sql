@@ -10,7 +10,7 @@ CREATE TABLE log_produtos (
     data_alteracao DATETIME DEFAULT CURRENT_TIMESTAMP
 );
 
-#2 INTEGRIDADE - Impedir exclusão de produtos que com histórico de pedidos
+#2 INTEGRIDADE - Impedir exclusão de produtos com histórico de pedidos
 DELIMITER //
 
 CREATE TRIGGER trg_bloquear_exclusao_produto
@@ -60,7 +60,7 @@ END //
 
 DELIMITER ;
 
-#EXTRA - Impedir estoque negativo
+#4 - Impedir estoque negativo
 DELIMITER //
 
 CREATE TRIGGER trg_validar_estoque

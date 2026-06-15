@@ -76,7 +76,7 @@ FROM empresas e
 WHERE e.perfil = 'comprador'
 AND NOT EXISTS
 (
-    SELECT 1
+    SELECT *
     FROM pedidos p
     WHERE p.fk_comprador = e.id_empresa
 );
@@ -84,8 +84,9 @@ AND NOT EXISTS
 #CONSULTA 7 - AGREGAÇÃO + ORDENAÇÃO - Exibe os produtos mais vendidos
 #USO: Verificar tendências de compra
 SELECT
-    nome_produto,
-    SUM(quantidade) AS total_vendido
-FROM itens_pedido
-GROUP BY nome_produto
+    p.nome_produto,
+    SUM(ip.quantidade) AS total_vendido
+FROM itens_pedido ip
+INNER JOIN produtos p ON p.id_produto = ip.fk_produto
+GROUP BY p.id_produto
 ORDER BY total_vendido DESC;

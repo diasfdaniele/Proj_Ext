@@ -7,7 +7,10 @@ SELECT
     p.id_produto, p.nome_produto, c.nome_categoria, p.preco_unitario, p.estoque_atual
 FROM produtos p
 INNER JOIN categorias c
-    ON p.fk_categoria = c.id_categoria;
+    ON p.fk_categoria = c.id_categoria
+INNER JOIN empresas e
+	ON e.id_empresa = p.fk_vendedor
+WHERE e.status_conta = 'Ativo';
     
 #Verificação
 SELECT * FROM vw_produtos_categorias;
@@ -59,5 +62,5 @@ INNER JOIN empresas e
 #Verificação
 SELECT *
 FROM vw_catalogo_produtos
-WHERE nome_categoria = 'Mobilidade';
+WHERE nome_categoria = 'Corrimãos';
 

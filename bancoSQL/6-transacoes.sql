@@ -15,7 +15,7 @@ START TRANSACTION;
 		11,
 		11,
 		'PIX',
-		'1x',
+		1,
 		'Aberto',
 		1700.00
 	);
@@ -25,9 +25,6 @@ START TRANSACTION;
 	INSERT INTO itens_pedido(
 		fk_pedido,
 		fk_produto,
-		nome_produto,
-		empresa_vendedora,
-		categoria,
 		quantidade,
 		preco_venda,
 		subtotal
@@ -35,9 +32,6 @@ START TRANSACTION;
 	VALUES(
 		@pedido,
 		6,
-		'Cadeira de Rodas Manual',
-		'Mobility Brasil',
-		'Mobilidade',
 		2,
 		850.00,
 		1700.00

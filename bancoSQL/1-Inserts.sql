@@ -276,6 +276,24 @@ nome_responsavel, cpf_responsavel, cargo
 'Gustavo Oliveira',
 '12345678915',
 'Diretor de Infraestrutura'
+),
+
+(
+'11222333000116',
+'Comprador',
+'Escola Santo Andre',
+'Centro de Educação Especial de Ensino Médio de São Paulo Santo Andre',
+'123456789019',
+'escolasantoandre@gmail.com.br',
+'Senha@12345#sa',
+'Ativo',
+'Educação',
+'Comprador',
+'Escola',
+'https://www.escolasantoandre.com.br',
+'Guimarães Rosa',
+'19995554411',
+'Diretor'
 );
 
 -- =====================================================
