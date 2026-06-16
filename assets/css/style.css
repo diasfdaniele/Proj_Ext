@@ -1425,7 +1425,7 @@ button.menu-mobile__link {
 .empresa-card__categoria {
   font-size: 0.75rem;
   font-weight: 600;
-  color: var(--laranja-vivo);
+  color: var(--laranja-escuro);
   background: var(--laranja-palido);
   padding: 0.1rem 0.6rem;
   border-radius: var(--raio-full);
