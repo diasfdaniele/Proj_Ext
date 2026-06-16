@@ -1,7 +1,7 @@
 #Views (1,0 pt)
 
-#View 1 - Relatório dos produtos de empresas ativas
-#USO: Simplificar JOIN
+#View 1 - produtos e categorias de empresas ativas
+#USO: Conveniência (Simplificação de JOINs)
 CREATE OR REPLACE VIEW vw_produtos_categorias AS
 SELECT
     p.id_produto, p.nome_produto, c.nome_categoria, p.preco_unitario, p.estoque_atual

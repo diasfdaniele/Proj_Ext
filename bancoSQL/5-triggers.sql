@@ -12,7 +12,6 @@ CREATE TABLE log_produtos (
 
 #2 INTEGRIDADE - Impedir exclusão de produtos com histórico de pedidos
 DELIMITER //
-
 CREATE TRIGGER trg_bloquear_exclusao_produto
 BEFORE DELETE ON produtos
 FOR EACH ROW
@@ -28,14 +27,11 @@ BEGIN
         SET MESSAGE_TEXT =
         'Produto possui histórico de vendas.';
     END IF;
-
 END //
-
 DELIMITER ;
 
-#3 AUDITORIA - Registra alterações de preço
+#3 AUDITORIA - Registra alterações de preço na tabela LOG
 DELIMITER //
-
 CREATE TRIGGER trg_log_preco_produto
 AFTER UPDATE ON produtos
 FOR EACH ROW
@@ -57,12 +53,10 @@ BEGIN
         );
     END IF;
 END //
-
 DELIMITER ;
 
 #4 - Impedir estoque negativo
 DELIMITER //
-
 CREATE TRIGGER trg_validar_estoque
 BEFORE UPDATE ON produtos
 FOR EACH ROW
@@ -73,5 +67,4 @@ BEGIN
         'O estoque não pode ficar negativo.';
     END IF;
 END //
-
 DELIMITER ;

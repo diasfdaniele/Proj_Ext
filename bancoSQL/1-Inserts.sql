@@ -1,5 +1,5 @@
 -- =====================================================
--- EMPRESAS (15 REGISTROS)
+-- EMPRESAS (16 REGISTROS)
 INSERT INTO empresas (
 cnpj, perfil, razao_social, nome_fantasia,
 inscricao_estadual, email_acesso, senha,
@@ -297,7 +297,7 @@ nome_responsavel, cpf_responsavel, cargo
 );
 
 -- =====================================================
--- ENDERECOS (15 REGISTROS)
+-- ENDERECOS (16 REGISTROS)
 
 INSERT INTO enderecos (
 fk_empresa, complemento, logradouro, numero,
@@ -318,7 +318,8 @@ bairro, cidade, estado, cep, tipo_endereco
 (12,'Prédio Principal','Rua São Lucas','100','Jardim Saúde','Campinas','SP','13050000','Sede'),
 (13,'Campus Central','Av. Universitária','1500','Cidade Universitária','São Paulo','SP','05508000','Sede'),
 (14,'Administração','Av. Central','890','Centro','Sorocaba','SP','18010000','Sede'),
-(15,'Terminal Administrativo','Rua dos Transportes','300','Centro','Paulínia','SP','13140000','Sede');
+(15,'Terminal Administrativo','Rua dos Transportes','300','Centro','Paulínia','SP','13140000','Sede'),
+(16, '', 'Rua da Felicidade', '123', 'São Judas Tadeu', 'Campinas', 'SP', '12341111', 'Sede');
 
 -- =====================================================
 -- CONTATOS (15 REGISTROS)
@@ -341,7 +342,8 @@ fk_empresa, contato, tipo_contato
 (12,'1937652000','Telefone'),
 (13,'1137653000','Telefone'),
 (14,'1537654000','Telefone'),
-(15,'1937655000','Telefone');
+(15,'1937655000','Telefone'),
+(16,'19999887744','Telefone');
 
 
 -- =====================================================
@@ -366,7 +368,7 @@ INSERT INTO produtos (
 fk_vendedor, fk_categoria,
 nome_produto, descricao,
 preco_unitario, estoque_minimo,
-estoque_atual, purchase_mode
+estoque_atual, tipo_compra
 ) VALUES
 
 (1,1,'Piso Tátil Direcional Premium','Piso tátil em concreto de alta resistência',89.90,50,500,'Compra'),
@@ -415,15 +417,12 @@ possui_itens_sob_consulta
 
 (11,11,'Pago','Pix',1,'Aquisição para calçadas públicas',3596.00,FALSE),
 (11,11,'Enviado','Crédito',3,'Projeto mobilidade urbana',15990.00,TRUE),
-
 (12,12,'Pago','Débito',1,'Adequação hospitalar',910.00,FALSE),
 (12,12,'Aberto','Crédito',6,'Ampliação acessibilidade',25990.00,TRUE),
-
 (13,13,'Pago','Pix',1,'Projeto universitário',1190.00,FALSE),
 (14,14,'Enviado','Crédito',4,'Adequação shopping',2290.00,FALSE),
-
 (15,15,'Aberto','Pix',1,'Terminal rodoviário',6890.00,TRUE),
-(15,15,'Pago','Crédito',2,'Aquisição de sinalização',1780.00,FALSE);
+(15,15,'Pago','Boleto',2,'Aquisição de sinalização',1780.00,FALSE);
 
 
 -- ==========================
@@ -450,7 +449,6 @@ INSERT INTO carrinhos (
 fk_empresa,
 subtotal
 ) VALUES
-
 (11,3596.00),
 (12,25990.00),
 (15,6890.00);
@@ -463,7 +461,6 @@ fk_carrinho,
 fk_produto,
 quantidade
 ) VALUES
-
 (1,1,40),
 (2,15,1),
 (3,10,1);
@@ -476,7 +473,6 @@ INSERT INTO favoritos (
 fk_empresa,
 fk_produto
 ) VALUES
-
 (11,1),
 (12,14),
 (13,17),

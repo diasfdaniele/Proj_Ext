@@ -11,29 +11,19 @@ INNER JOIN contatos c
     ON e.id_empresa = c.fk_empresa
 ORDER BY e.razao_social;
 
-#CONSULTA 2 - Mesma consulta da anterior, mas exibindo apenas o telefone
-#Justificativa: Validar os JOINS da consulta anterior
-SELECT 
-	e.razao_social, e.perfil, en.cidade, en.cep, en.estado, c.tipo_contato, c.contato
-FROM empresas e
-INNER JOIN enderecos en
-    ON e.id_empresa = en.fk_empresa
-INNER JOIN contatos c
-    ON e.id_empresa = c.fk_empresa
-WHERE c.tipo_contato = 'Telefone'
-ORDER BY e.razao_social;
-
-#CONSULTA 3 - JOIN - Mostrar as empresas e seus produtos cadastrados
+#CONSULTA 2 - JOIN - Mostrar as empresas ATIVAS e seus produtos cadastrados ativos
 #USO: catálogo interno de produto por fornecedor
 SELECT
 	e.razao_social, p.nome_produto, p.preco_unitario, p.estoque_atual
 FROM empresas e
 INNER JOIN produtos p
     ON e.id_empresa = p.fk_vendedor
-WHERE e.perfil = 'vendedor'
+WHERE e.perfil = 'vendedor' AND
+e.status_conta = 'Ativo' AND
+p.ativo = TRUE
 ORDER BY e.razao_social;
 
-#CONSULTA 4 - GROUP BY+HAVING - Exibe as empresas com faturamento maior que a média
+#CONSULTA 3 - GROUP BY+HAVING - Exibe as empresas com faturamento maior que a média
 #USO: Identificar fornecedores com melhor desempenho comercial
 SELECT
     e.razao_social,
@@ -58,15 +48,25 @@ HAVING SUM(ip.subtotal) >
 )
 ORDER BY faturamento DESC;
 
-#CONSULTA 5 - Filtro por intervalo - Exibe a receita do último ano
+#CONSULTA 4 - Filtro por intervalo - Exibe a receita do último mês
 #USO: Relatórios Financeiros
 SELECT
-    DATE(data_emissao) AS data_venda,
+    month(DATE(data_emissao)) AS mes_venda,
     SUM(total_estimado) AS receita
 FROM pedidos
-WHERE data_emissao BETWEEN '2025-01-01' AND '2025-12-31'
-GROUP BY DATE(data_emissao)
-ORDER BY data_venda;
+WHERE data_emissao BETWEEN CURRENT_DATE - INTERVAL 12 MONTH AND CURRENT_TIMESTAMP
+GROUP BY mes_venda
+ORDER BY mes_venda;
+
+#CONSULTA 5 - Categorias com mais produtos
+#USO: Relatório de produtos e categorias e índices de venda
+SELECT
+	c.nome_categoria,
+    COUNT(*)
+FROM categorias c
+INNER JOIN produtos p ON p.fk_categoria = c.id_categoria
+GROUP BY c.id_categoria
+ORDER BY c.nome_categoria;
 
 #CONSULTA 6 - SUBCONSULTA NOT EXISTS - Exibe empresas que nunca compraram
 #USO: Ações de reativação
