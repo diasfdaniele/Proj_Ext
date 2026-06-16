@@ -1,9 +1,9 @@
 /* Toast container e estilos básicos */
 .Bad_Toast{
-  background-color: red !important;
+  background-color: var(--cor-erro) !important;
 }
 .Good_Toast{
-  background-color: green !important;
+  background-color: var(--cor-sucesso) !important;
 }
 .Info_Toast{
   background-color: rgb(255, 149, 0) !important;
@@ -62,12 +62,12 @@
 .toast--sucesso {
   border-left-color: #22c55e;
   background: #f0fdf4;
-  color: #166534;
+  color: var(--cor-sucesso);
 }
 .toast--erro {
   border-left-color: #ef4444;
   background: #fef2f2;
-  color: #991b1b;
+  color: var(--cor-erro);
 }
 .toast--info {
   border-left-color: #0ea5e9;

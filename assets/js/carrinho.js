@@ -1,43 +1,153 @@
-
 'use strict';
 
-// Função para salvar o carrinho no Firestore usando compat
+const cartSessionStorageKey = 'empre:usuario-logado';
+const cartCollectionName = 'carrinhos';
+
+function resolveFirestoreDb() {
+  if (window.db) {
+    return window.db;
+  }
+
+  if (window.firebase && typeof window.firebase.firestore === 'function') {
+    try {
+      window.db = window.firebase.firestore();
+      return window.db;
+    } catch (error) {
+      console.error('Carrinho: no firestore.', error?.code || error?.message || error);
+    }
+  }
+
+  return null;
+}
+
+function sanitizeCartItems(items) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+
+  return items
+    .filter((item) => item && typeof item.id === 'string')
+    .map((item) => ({
+      category: String(item.category || ''),
+      categoryLabel: String(item.categoryLabel || ''),
+      company: String(item.company || ''),
+      description: String(item.description || ''),
+      id: String(item.id),
+      initials: String(item.initials || ''),
+      name: String(item.name || 'Produto'),
+      price: String(item.price || 'Sob consulta'),
+      purchaseModeLabel: String(item.purchaseModeLabel || ''),
+      quantity: Math.max(1, Number(item.quantity) || 1),
+      selectedImage: String(item.selectedImage || ''),
+      selectedVariation: String(item.selectedVariation || ''),
+      selectedVariationImage: String(item.selectedVariationImage || '')
+    }));
+}
+
+// FIREBASE: salva carrinho usando window.db
 async function salvarCarrinhoNoFirebase(items) {
   try {
-    await firebase.firestore().collection('carrinhos').add({
-      itens: items,
-      criadoEm: new Date()
-    });
-    if (typeof window.mostrarToast === 'function') {
-      window.mostrarToast('Carrinho salvo no Firebase!', 'sucesso');
+    const user = getLoggedUser() || window.auth?.currentUser || null;
+    const cleanItems = sanitizeCartItems(items);
+
+    if (!user?.uid) {
+      if (typeof window.mostrarToast === 'function') {
+        window.mostrarToast('Faça login para sincronizar o carrinho.', 'info');
+      }
+      return;
     }
-  } catch (e) {
+
+    if (!cleanItems.length) {
+      if (typeof window.mostrarToast === 'function') {
+        window.mostrarToast('Nenhum item válido para salvar no Firebase.', 'info');
+      }
+      return;
+    }
+
+    if (typeof window.sincronizarCarrinhoNoFirestore === 'function') {
+      const synced = await window.sincronizarCarrinhoNoFirestore(cleanItems, user);
+
+      if (!synced) {
+        if (typeof window.mostrarToast === 'function') {
+          window.mostrarToast('Não foi possível sincronizar o carrinho agora.', 'erro');
+        }
+        return;
+      }
+
+      if (typeof window.mostrarToast === 'function') {
+        window.mostrarToast('Carrinho sincronizado com sucesso!', 'sucesso');
+      }
+      return;
+    }
+
+    const firestoreDb = resolveFirestoreDb();
+
+    if (!firestoreDb) {
+      console.error('Carrinho: Firestore indisponível na página.');
+      if (typeof window.mostrarToast === 'function') {
+        window.mostrarToast('Firebase indisponível no carrinho. Recarregue a página.', 'erro');
+      }
+      return;
+    }
+
+    const payload = {
+      itens: cleanItems,
+      uid: user.uid,
+      email: user?.email || null,
+      status: 'pendente',
+      criadoEm: new Date().toISOString()
+    };
+
+    if (window.firebase?.firestore?.FieldValue?.serverTimestamp) {
+      payload.criadoEmServer = window.firebase.firestore.FieldValue.serverTimestamp();
+    }
+
+    await firestoreDb.collection(cartCollectionName).doc(user.uid).set(payload, { merge: true });
+    console.log('Carrinho salvo no Firebase! Coleção:', cartCollectionName, 'ID:', user.uid);
+
     if (typeof window.mostrarToast === 'function') {
-      window.mostrarToast('Erro ao salvar no Firebase.', 'erro');
+      window.mostrarToast('Carrinho salvo com sucesso!', 'sucesso');
+    }
+
+  } catch (e) {
+    // Loga o erro real no console para facilitar debug
+    console.error('Erro ao salvar carrinho no Firebase:', e?.code, e?.message || e);
+
+    if (typeof window.mostrarToast === 'function') {
+      window.mostrarToast(`Erro ao salvar: ${e?.message || 'falha inesperada'}`, 'erro');
     }
   }
 }
 
-const cartList = document.getElementById('lista-carrinho');
-const cartSummaryText = document.getElementById('carrinho-resumo-texto');
-const totalQuantityElement = document.getElementById('resumo-quantidade');
-const totalValueElement = document.getElementById('resumo-valor');
-const clearCartButton = document.getElementById('btn-limpar-carrinho');
-const finalizeCartButton = document.getElementById('btn-finalizar-carrinho');
-const proceedToPaymentLink = document.getElementById('btn-ir-pagamento');
+// SELETORES DOM 
+const cartList              = document.getElementById('lista-carrinho');
+const cartSummaryText       = document.getElementById('carrinho-resumo-texto');
+const totalQuantityElement  = document.getElementById('resumo-quantidade');
+const totalValueElement     = document.getElementById('resumo-valor');
+const clearCartButton       = document.getElementById('btn-limpar-carrinho');
+const finalizeCartButton    = document.getElementById('btn-finalizar-carrinho');
+const proceedToPaymentLink  = document.getElementById('btn-ir-pagamento');
 
+// USUÁRIO LOGADO 
 function getLoggedUser() {
-  return typeof window.obterUsuarioLogado === 'function' ? window.obterUsuarioLogado() : null;
+  try {
+    const chave = window.sessionStorageKey || cartSessionStorageKey;
+    const dados = localStorage.getItem(chave);
+    return dados ? JSON.parse(dados) : null;
+  } catch {
+    return null;
+  }
 }
 
+// ITENS DO CARRINHO 
 function getCartItems() {
   if (typeof window.obterItensCarrinho !== 'function') {
     return [];
   }
-
   return window.obterItensCarrinho();
 }
 
+// CÁLCULOS 
 function getTotalQuantity(items) {
   return items.reduce((sum, item) => sum + (Number(item.quantity) || 1), 0);
 }
@@ -45,11 +155,7 @@ function getTotalQuantity(items) {
 function parsePriceValue(price) {
   const normalizedPrice = String(price ?? '').replace(/\./g, '').replace(',', '.');
   const matchedValue = normalizedPrice.match(/r\$\s*(\d+(?:\.\d+)?)/i);
-
-  if (!matchedValue) {
-    return null;
-  }
-
+  if (!matchedValue) return null;
   return Number(matchedValue[1]);
 }
 
@@ -60,6 +166,7 @@ function formatCurrency(value) {
   }).format(value);
 }
 
+// ESTADO VAZIO 
 function createEmptyState() {
   const user = getLoggedUser();
 
@@ -81,16 +188,19 @@ function createEmptyState() {
       <div>
         <div class="carrinho-vazio__icone" aria-hidden="true">+</div>
         <h3>Seu carrinho está vazio</h3>
-        <p>Explore o catálogo e adicione produtos ao carrinho.</p>
+        <p>Explore o catálogo e adicione produtos ao seu carrinho.</p>
         <a href="catalogo.html" class="btn btn--primary">Explorar produtos</a>
       </div>
     </div>
   `;
 }
 
+// CARD DE ITEM 
 function createCartItem(item) {
   const quantity = Number(item.quantity) || 1;
-  const variationLabel = item.selectedVariation ? `<div class="carrinho-item__meta">Variacao: ${item.selectedVariation}</div>` : '';
+  const variationLabel = item.selectedVariation
+    ? `<div class="carrinho-item__meta">Variação: ${item.selectedVariation}</div>`
+    : '';
 
   return `
     <article class="carrinho-item" aria-label="${item.name}">
@@ -102,8 +212,8 @@ function createCartItem(item) {
             <p class="carrinho-item__empresa">${item.company || 'Parceiro Empr-E'}</p>
           </div>
         </div>
-        <span class="carrinho-item__categoria">${item.category || 'solucao'}</span>
-        <p class="carrinho-item__descricao">${item.description || 'Produto selecionado no catalogo da Empr-E.'}</p>
+        <span class="carrinho-item__categoria">${item.category || 'solução'}</span>
+        <p class="carrinho-item__descricao">${item.description || 'Produto selecionado no catálogo da Empr-E.'}</p>
         ${variationLabel}
         <div class="carrinho-item__controles">
           <div class="carrinho-item__quantidade" aria-label="Quantidade do produto ${item.name}">
@@ -125,38 +235,41 @@ function createCartItem(item) {
   `;
 }
 
+// RESUMO 
 function updateSummary(items) {
-  const totalQuantity = getTotalQuantity(items);
-  const pricedItems = items.map((item) => ({
+  const totalQuantity   = getTotalQuantity(items);
+  const pricedItems     = items.map((item) => ({
     quantity: Number(item.quantity) || 1,
     value: parsePriceValue(item.price)
   }));
   const hasNonPricedItems = pricedItems.some((item) => item.value === null);
-  const numericTotal = pricedItems.reduce((sum, item) => sum + ((item.value ?? 0) * item.quantity), 0);
+  const numericTotal      = pricedItems.reduce(
+    (sum, item) => sum + ((item.value ?? 0) * item.quantity), 0
+  );
 
   totalQuantityElement.textContent = String(totalQuantity);
   totalValueElement.textContent = hasNonPricedItems
     ? (numericTotal > 0 ? `A partir de ${formatCurrency(numericTotal)}` : 'Sob consulta')
     : formatCurrency(numericTotal);
+
   cartSummaryText.textContent = items.length
     ? `${totalQuantity} item(ns) selecionado(s)`
     : 'Revise os itens escolhidos antes de solicitar um orçamento ou seguir para o pagamento.';
 }
 
+// AÇÕES DOS BOTÕES DO ITEM (aumentar, diminuir, remover) 
 function bindCartActions(items) {
   cartList.querySelectorAll('[data-action]').forEach((button) => {
     button.addEventListener('click', () => {
       const action = button.getAttribute('data-action');
       const itemId = button.getAttribute('data-id');
-      const item = items.find((entry) => entry.id === itemId);
+      const item   = items.find((entry) => entry.id === itemId);
 
-      if (!item || !itemId) {
-        return;
-      }
+      if (!item || !itemId) return;
 
       if (action === 'increase' && typeof window.atualizarQuantidadeCarrinho === 'function') {
         window.atualizarQuantidadeCarrinho(itemId, (Number(item.quantity) || 1) + 1);
-        showToast("Produto Adicionado ao Carrinho", 'Good_Toast', 800);
+        showToast('Produto Adicionado ao Carrinho', 'Good_Toast', 800);
         renderCart();
         return;
       }
@@ -164,16 +277,16 @@ function bindCartActions(items) {
       if (action === 'decrease' && typeof window.atualizarQuantidadeCarrinho === 'function') {
         const nextQuantity = Math.max(1, (Number(item.quantity) || 1) - 1);
         window.atualizarQuantidadeCarrinho(itemId, nextQuantity);
-        showToast("Produto Diminuído do Carrinho", 'Bad_Toast', 800);
+        showToast('Produto Diminuído do Carrinho', 'Bad_Toast', 800);
         renderCart();
         return;
       }
 
       if (action === 'remove' && typeof window.removerItemDoCarrinho === 'function') {
         window.removerItemDoCarrinho(itemId);
+        showToast('Produto Removido do Carrinho', 'Bad_Toast', 800);
         if (typeof window.mostrarToast === 'function') {
           window.mostrarToast('Item removido do carrinho.', 'info');
-          showToast("Produto Removido do Carrinho", 'Bad_Toast', 800);
         }
         renderCart();
       }
@@ -181,6 +294,7 @@ function bindCartActions(items) {
   });
 }
 
+// RENDERIZAÇÃO PRINCIPAL
 function renderCart() {
   const items = getCartItems();
 
@@ -195,6 +309,7 @@ function renderCart() {
   bindCartActions(items);
 }
 
+// LIMPAR CARRINHO 
 clearCartButton?.addEventListener('click', () => {
   if (typeof window.limparCarrinho === 'function') {
     window.limparCarrinho();
@@ -205,44 +320,48 @@ clearCartButton?.addEventListener('click', () => {
   }
 });
 
-
-finalizeCartButton?.addEventListener('click', () => {
-  if (!getLoggedUser()) {
-    if (typeof window.mostrarToast === 'function') {
-      window.mostrarToast('Faça login para finalizar o carrinho.', 'info');
-    }
-    return;
-  }
-
+//  FINALIZAR / SALVAR NO FIREBASE 
+finalizeCartButton?.addEventListener('click', async () => {
   const items = getCartItems();
+
   if (!items.length) {
     if (typeof window.mostrarToast === 'function') {
       window.mostrarToast('Adicione itens ao carrinho antes de finalizar.', 'info');
     }
     return;
   }
-  salvarCarrinhoNoFirebase(items);
+
+  const user = getLoggedUser();
+
+  if (!user) {
+    if (typeof window.mostrarToast === 'function') {
+      window.mostrarToast('Faça login para finalizar o carrinho.', 'info');
+    }
+    return;
+  }
+
+  await salvarCarrinhoNoFirebase(items);
 });
 
+// IR PARA PAGAMENTO 
 proceedToPaymentLink?.addEventListener('click', (event) => {
-  if (!getLoggedUser()) {
-    event.preventDefault();
+  const user = getLoggedUser();
 
+  if (!user) {
+    event.preventDefault();
     if (typeof window.mostrarToast === 'function') {
       window.mostrarToast('Faça login para seguir ao pagamento.', 'info');
     }
     return;
   }
 
-  if (getCartItems().length) {
-    return;
-  }
-
-  event.preventDefault();
-
-  if (typeof window.mostrarToast === 'function') {
-    window.mostrarToast('Adicione itens ao carrinho antes de seguir para o pagamento.', 'info');
+  if (!getCartItems().length) {
+    event.preventDefault();
+    if (typeof window.mostrarToast === 'function') {
+      window.mostrarToast('Adicione itens ao carrinho antes de seguir para o pagamento.', 'info');
+    }
   }
 });
 
+// INICIALIZAÇÃO 
 renderCart();

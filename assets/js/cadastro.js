@@ -1,12 +1,11 @@
-// Firebase já está inicializado via firebase.js
-// Usa window.auth e window.db
+// Firebase inicializado via firebase.js (usa window.auth e window.db)
 
 const formCadastro = document.getElementById('formulario-cadastro');
 const botaoCadastro = document.getElementById('btn-cadastrar');
 const textoBotaoCadastro = botaoCadastro?.querySelector('.btn-texto');
 const loadingBotaoCadastro = botaoCadastro?.querySelector('.btn-loading');
-// Usa window.sessionStorageKey global
 
+// Usa window.sessionStorageKey global
 function readValue(id) {
   return document.getElementById(id)?.value.trim() ?? '';
 }
@@ -58,7 +57,7 @@ if (formCadastro) {
     const aceitouTermos = document.getElementById('aceitar-termos')?.checked ?? false;
 
     if (!razaoSocial || !cnpj || !tipoEmpresa || !descricao || !nomeResponsavel || !cargo || !cpf || !email || !senha) {
-      showToast('Preencha os campos obrigatorios para continuar.', 'Bad_Toast');
+      showToast('Preencha os campos obrigatórios para continuar.', 'Bad_Toast');
       return;
     }
 

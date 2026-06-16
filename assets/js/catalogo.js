@@ -5,6 +5,7 @@
 
 const searchInput = document.getElementById('campo-busca');
 const categorySelect = document.getElementById('filtro-categoria');
+const priceSelect = document.getElementById('filtro-preco');
 const companySelect = document.getElementById('filtro-empresa');
 const modalitySelect = document.getElementById('filtro-modalidade');
 const resultsLabel = document.getElementById('catalogo-resultado');
@@ -15,23 +16,6 @@ const userPanelLink = document.getElementById('catalogo-painel-link');
 const catalogSessionStorageKey = 'empre:usuario-logado';
 const favoriteIds = new Set();
 
-// ESTRUTURA PARA PRODUTOS - NÃO EXCLUIR POR ENQUANTO 
-const baseProducts = [
-  {
-    id: 'solucoes-software',
-    initials: 'SS',
-    name: 'Soluções de Software Acessível',
-    company: 'Acessify',
-    companySlug: 'acessify',
-    category: 'digital',
-    categoryLabel: 'Acessibilidade digital',
-    description: 'Auditoria, monitoramento continuo e ajustes de acessibilidade para sistemas web corporativos.',
-    price: 'Plano recorrente a partir de R$ 1.000/mês',
-    purchaseMode: 'projeto-personalizado',
-    purchaseModeLabel: 'Projeto personalizado'
-  }
-];
-
 function getAllProducts() {
   const sellerProducts = typeof window.obterProdutosMarketplace === 'function'
     ? window.obterProdutosMarketplace()
@@ -39,8 +23,8 @@ function getAllProducts() {
   // Separa produtos locais dos cadastrados
   const produtosLocais = sellerProducts.filter(p => p.sellerId === 'local');
   const produtosCadastrados = sellerProducts.filter(p => p.sellerId !== 'local');
-  // Ordem: locais, base, cadastrados
-  return produtosLocais.concat(baseProducts, produtosCadastrados);
+  // Ordem: locais, cadastrados
+  return produtosLocais.concat(produtosCadastrados);
 }
 
 async function syncMarketplaceProducts() {
@@ -51,7 +35,7 @@ async function syncMarketplaceProducts() {
   try {
     await window.sincronizarProdutosMarketplace();
   } catch (error) {
-    console.error('Falha ao sincronizar produtos no catalogo:', error?.code || error?.message || error);
+    console.error('Falha ao sincronizar produtos no catálogo:', error?.code || error?.message || error);
   }
 }
 
@@ -88,8 +72,52 @@ function getSelectedCompany() {
   return companySelect?.value ?? '';
 }
 
+function getSelectedPriceRange() {
+  return priceSelect?.value ?? '';
+}
+
 function getSelectedModality() {
   return modalitySelect?.value ?? '';
+}
+
+function extractMinPriceValue(priceLabel) {
+  const normalized = String(priceLabel || '').replace(/\./g, '').replace(',', '.');
+  const match = normalized.match(/r\$\s*(\d+(?:\.\d+)?)/i);
+  if (!match) {
+    return null;
+  }
+
+  const value = Number(match[1]);
+  return Number.isFinite(value) ? value : null;
+}
+
+function matchesPriceRange(product, selectedPriceRange) {
+  if (!selectedPriceRange) {
+    return true;
+  }
+
+  const minPrice = extractMinPriceValue(product?.price);
+  if (minPrice === null) {
+    return false;
+  }
+
+  if (selectedPriceRange === 'ate-100') {
+    return minPrice <= 100;
+  }
+  if (selectedPriceRange === '100-500') {
+    return minPrice >= 100 && minPrice <= 500;
+  }
+  if (selectedPriceRange === '500-1000') {
+    return minPrice >= 500 && minPrice <= 1000;
+  }
+  if (selectedPriceRange === '1000-5000') {
+    return minPrice >= 1000 && minPrice <= 5000;
+  }
+  if (selectedPriceRange === '5000-plus') {
+    return minPrice > 5000;
+  }
+
+  return true;
 }
 
 function populateFilterOptions() {
@@ -103,17 +131,19 @@ function populateFilterOptions() {
 
 function getFilteredProducts() {
   const selectedCategory = getSelectedCategory();
+  const selectedPriceRange = getSelectedPriceRange();
   const selectedCompany = getSelectedCompany();
   const selectedModality = getSelectedModality();
   const searchTerm = normalizeText(searchInput?.value.trim() ?? '');
 
   return getAllProducts().filter((product) => {
     const matchesCategory = !selectedCategory || product.category === selectedCategory;
+    const matchesPrice = matchesPriceRange(product, selectedPriceRange);
     const matchesCompany = !selectedCompany || product.companySlug === selectedCompany;
     const matchesModality = !selectedModality || product.purchaseMode === selectedModality;
     const searchableContent = normalizeText(`${product.name} ${product.company} ${product.description}`);
     const matchesSearch = !searchTerm || searchableContent.includes(searchTerm);
-    return matchesCategory && matchesCompany && matchesModality && matchesSearch;
+    return matchesCategory && matchesPrice && matchesCompany && matchesModality && matchesSearch;
   });
 }
 
@@ -189,8 +219,8 @@ function updateUserPanel() {
       ? 'administrador'
       : 'comprador';
   userPanelText.textContent = isAdmin
-    ? `Sessao administrativa ativa para ${user.razaoSocial || user.email}. Voce visualiza todas as interacoes do catalogo e segue com perfil ${accountType}.`
-    : `Sessao ${accountType} ativa para ${user.razaoSocial || user.email}. Seus favoritos, mensagens e atalhos da conta ficam vinculados ao usuario logado.`;
+    ? `Sessão administrativa ativa para ${user.razaoSocial || user.email}. Você visualiza todas as interações do catálogo e segue com perfil ${accountType}.`
+    : `Sessão ${accountType} ativa para ${user.razaoSocial || user.email}.`;
   userPanelLink.textContent = 'Abrir minha conta';
   userPanelLink.href = resolveAccountPath();
 }
@@ -230,7 +260,7 @@ async function toggleFavorite(productId) {
 
   if (!user) {
     if (typeof window.showToast === 'function') {
-      window.showToast('Faca login para favoritar produtos.', 'Bad_Toast');
+      window.showToast('Faça login para favoritar produtos.', 'Bad_Toast');
     }
     return;
   }
@@ -287,7 +317,7 @@ async function toggleFavorite(productId) {
     console.error(error);
 
     if (typeof window.showToast === 'function') {
-      window.showToast('Nao foi possivel atualizar os favoritos.', 'Bad_Toast');
+      window.showToast('Não foi possível atualizar os favoritos.', 'Bad_Toast');
     }
   }
 }
@@ -307,7 +337,7 @@ function renderProducts() {
       <div class="catalogo__vazio">
         <div>
           <h3>Nenhum produto encontrado</h3>
-          <p>Ajuste a busca ou troque a categoria para visualizar outras solucoes do marketplace.</p>
+          <p>Ajuste a busca ou troque a categoria para visualizar outras soluções do marketplace.</p>
         </div>
       </div>
     `;
@@ -401,6 +431,7 @@ syncMarketplaceProducts().then(() => {
 
 searchInput?.addEventListener('input', renderProducts);
 categorySelect?.addEventListener('change', renderProducts);
+priceSelect?.addEventListener('change', renderProducts);
 companySelect?.addEventListener('change', renderProducts);
 modalitySelect?.addEventListener('change', renderProducts);
 

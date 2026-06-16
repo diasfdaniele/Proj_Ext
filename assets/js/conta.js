@@ -1,7 +1,5 @@
 'use strict';
 
-
-
 const heroText = document.getElementById('conta-hero-texto');
 const heroTitle = document.getElementById('conta-titulo');
 const heroBadge = document.querySelector('.conta-hero .section-badge');

@@ -1,7 +1,5 @@
-// 'use strict';
-// Versão compatível com Firebase compat (CDN)
+// Versão compatível com Firebase CDN
 // Firebase já está inicializado via firebase.js
-// Usa window.firebase
 
 // Usa auth e db globais definidos em firebase.js
 const googleLoginButton = document.getElementById('btn-google-login');
@@ -164,7 +162,7 @@ if (form && email && senha) {
     const senhaValor = senha.value.trim();
 
     if (!emailValor || !senhaValor) {
-      showToast('Preencha email e senha para entrar.', 'Bad_Toast');
+      showToast('Preencha e-mail e senha para entrar.', 'Bad_Toast');
       return;
     }
 
@@ -176,7 +174,7 @@ if (form && email && senha) {
         try {
           authUser = await tryPersistAdminAuth(emailValor, senhaValor);
         } catch (error) {
-          console.warn('Nao foi possivel persistir o admin no Firebase Auth:', error?.code || error?.message || error);
+          console.warn('Não foi possível persistir o admin no Firebase Auth:', error?.code || error?.message || error);
         }
 
         if (authUser && window.db) {
@@ -200,7 +198,7 @@ if (form && email && senha) {
         }, 800);
       } catch (erro) {
         console.error(erro);
-        showToast('Nao foi possivel acessar a conta administrativa.', 'Bad_Toast');
+        showToast('Não foi possível acessar a conta administrativa.', 'Bad_Toast');
       } finally {
         setLoadingState(false);
       }

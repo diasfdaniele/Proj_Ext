@@ -74,6 +74,7 @@ const storageKeys = {
   leitura: 'empre:leitura',
   produtosMarketplace: 'empre:produtos-marketplace'
 };
+const firestoreCartCollection = 'carrinhos';
 
 let tamanhoFonte = Number(localStorage.getItem(storageKeys.fonte)) || 16;
 
@@ -107,6 +108,82 @@ function readSessionUser() {
     return parsed && typeof parsed.uid === 'string' ? parsed : null;
   } catch {
     return null;
+  }
+}
+
+function resolveFirestoreDb() {
+  if (window.db) {
+    return window.db;
+  }
+
+  if (window.firebase && typeof window.firebase.firestore === 'function') {
+    try {
+      window.db = window.firebase.firestore();
+      return window.db;
+    } catch (error) {
+      console.error('Carrinho: falha ao resolver Firestore no script global.', error?.code || error?.message || error);
+    }
+  }
+
+  return null;
+}
+
+function sanitizeCartItemsForFirestore(items) {
+  if (!Array.isArray(items)) {
+    return [];
+  }
+
+  return items
+    .filter((item) => item && typeof item.id === 'string')
+    .map((item) => ({
+      category: String(item.category || ''),
+      categoryLabel: String(item.categoryLabel || ''),
+      company: String(item.company || ''),
+      description: String(item.description || ''),
+      id: String(item.id),
+      initials: String(item.initials || ''),
+      name: String(item.name || 'Produto'),
+      price: String(item.price || 'Sob consulta'),
+      purchaseModeLabel: String(item.purchaseModeLabel || ''),
+      quantity: Math.max(1, Number(item.quantity) || 1),
+      selectedImage: String(item.selectedImage || ''),
+      selectedVariation: String(item.selectedVariation || ''),
+      selectedVariationImage: String(item.selectedVariationImage || '')
+    }));
+}
+
+async function syncCartToFirestore(items = [], user = null) {
+  const activeUser = user || readSessionUser() || window.auth?.currentUser || null;
+
+  if (!activeUser?.uid) {
+    return false;
+  }
+
+  const firestoreDb = resolveFirestoreDb();
+  if (!firestoreDb) {
+    return false;
+  }
+
+  const sanitizedItems = sanitizeCartItemsForFirestore(items);
+
+  try {
+    const payload = {
+      itens: sanitizedItems,
+      uid: activeUser.uid,
+      email: activeUser.email || null,
+      atualizadoEm: new Date().toISOString(),
+      status: sanitizedItems.length ? 'pendente' : 'vazio'
+    };
+
+    if (window.firebase?.firestore?.FieldValue?.serverTimestamp) {
+      payload.atualizadoEmServer = window.firebase.firestore.FieldValue.serverTimestamp();
+    }
+
+    await firestoreDb.collection(firestoreCartCollection).doc(activeUser.uid).set(payload, { merge: true });
+    return true;
+  } catch (error) {
+    console.error('Carrinho: falha ao sincronizar no Firestore.', error?.code || error?.message || error);
+    return false;
   }
 }
 
@@ -410,6 +487,7 @@ function saveCartItems(items) {
   const { itemsKey } = getUserCartStorageKeys(user);
   localStorage.setItem(itemsKey, JSON.stringify(items));
   syncCartCountFromItems();
+  void syncCartToFirestore(items, user);
 }
 
 
@@ -659,6 +737,7 @@ window.atualizarQuantidadeCarrinho = updateCartItemQuantity;
 window.limparCarrinho = clearCart;
 window.mostrarToast = mostrarToast;
 window.obterUsuarioLogado = readSessionUser;
+window.sincronizarCarrinhoNoFirestore = syncCartToFirestore;
 window.obterProdutosMarketplace = readMarketplaceProducts;
 window.salvarProdutoMarketplace = saveMarketplaceProduct;
 window.removerProdutoMarketplace = removeMarketplaceProduct;

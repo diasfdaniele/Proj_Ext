@@ -73,7 +73,7 @@ function mergeMarketplaceProducts(localItems, remoteItems) {
 
   return Array.from(merged.values());
 }
-// Lista de produtos locais pré-cadastrados com múltiplas imagens
+// Lista de produtos locais pré-cadastrados para exibição de produtos com imagens
 window.produtosLocaisMarketplace = [
   {
     id: 'piso-tátil-alerta',
@@ -156,7 +156,7 @@ window.produtosLocaisMarketplace = [
 
 ];
 
-// Produtos cadastrados por vendedores (persistidos em localStorage)
+// Produtos cadastrados por vendedores 
 window.produtosMarketplaceCadastrados = readMarketplaceProductsFromStorage().filter((item) => item.sellerId !== 'local');
 
 // Função para obter todos os produtos do marketplace (locais + cadastrados)

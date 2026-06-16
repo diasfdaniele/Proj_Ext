@@ -1,4 +1,4 @@
-/* Empr-E – style.css */
+/* Empr-E - style.css */
 
 /* 1. DESIGN TOKENS / VARIÁVEIS CSS */
 :root {
@@ -11,7 +11,6 @@
   /* Cores secundárias */
   --azul-profundo: #0b183b;
   --azul-medio: #020711;
-  --azul-claro: #DBEAFE;
   --azul-palido: #EFF6FF;
 
   /* Neutros */
@@ -47,10 +46,9 @@
 
   /* Escalas de tamanho base */
   --tamanho-fonte-base: 16px;
-  --escala-fonte: 1; /* Controlada pelo JS */
+  --escala-fonte: 1; 
 
   /* Espaçamentos */
-  --espaco-xs: 0.25rem;
   --espaco-sm: 0.5rem;
   --espaco-md: 1rem;
   --espaco-lg: 1.5rem;
@@ -77,7 +75,6 @@
   /* Transições */
   --transicao-rapida: 150ms ease;
   --transicao-normal: 250ms ease;
-  --transicao-lenta: 400ms ease;
 
   /* Layout */
   --largura-container: 1200px;
@@ -146,7 +143,7 @@ button {
   font-family: inherit;
 }
 
-/* 3. FOCO VISÍVEL (WCAG 2.4.7) */
+/* 3. FOCO VISÍVEL */
 .skip-link:focus,
 :focus-visible {
   outline: 3px solid var(--laranja-vivo);
@@ -876,8 +873,13 @@ body.modo-alto-contraste .login-link{
 .btn-menu-mobile {
   display: none;
   flex-direction: column;
-  gap: 5px;
-  padding: 8px;
+  gap: 4px;
+  width: 34px;
+  height: 30px;
+  padding: 6px;
+  flex: 0 0 34px;
+  justify-content: center;
+  align-items: center;
   border-radius: var(--raio-sm);
   background: transparent;
   border: 1.5px solid var(--cinza-200);
@@ -2545,7 +2547,8 @@ body.modo-simplificado * {
 
   .nav { display: none; }
   .btn-menu-mobile { display: flex; }
-  .header__actions .btn--outline { display: none; }
+  .header__actions .btn--primary{ display:none;  }
+  .header__actions .btn--outline { display: inline-flex; }
   .header__actions .btn-link-facil { display: inline-flex; }
 
   .topo-links-fixos {
@@ -2599,10 +2602,94 @@ body.modo-simplificado * {
     --altura-header: 64px;
   }
 
-  .barra-acessibilidade__label { display: none; }
-  .btn-acess span { display: inline; font-size: 0.68rem; }
-  .btn-acess svg { width: 14px; height: 14px; }
-  .btn-acess { padding: 0.3rem 0.5rem; }
+  /* =========================
+     BARRA DE ACESSIBILIDADE
+     ========================= */
+
+  .barra-acessibilidade__label {
+    display: none;
+  }
+
+  .barra-acessibilidade__inner {
+    overflow-x: auto;
+    overflow-y: hidden;
+    white-space: nowrap;
+    -webkit-overflow-scrolling: touch;
+    scrollbar-width: none;
+  }
+
+  .barra-acessibilidade__inner::-webkit-scrollbar {
+    display: none;
+  }
+
+  .btn-acess {
+    padding: 0.3rem 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .btn-acess span {
+    display: inline;
+    font-size: 0.68rem;
+  }
+
+  .btn-acess svg {
+    width: 14px;
+    height: 14px;
+  }
+
+  /* =========================
+     HEADER
+     ========================= */
+
+  .header__container {
+    gap: 0.75rem;
+  }
+
+  .header__logo {
+    flex-shrink: 0;
+  }
+
+  .brand-logo {
+    width: 105px;
+    height: auto;
+  }
+
+  /* Mostra apenas Entrar */
+  .header__actions .btn--primary {
+    display: none;
+  }
+
+  .header__actions {
+    gap: 0.5rem;
+    flex-shrink: 0;
+  }
+
+  .header__actions .btn-carrinho {
+    display: none;
+  }
+
+  .btn-header-auth {
+    min-width: auto;
+    padding: 0.75rem 1rem;
+    font-size: 0.85rem;
+  }
+
+  .btn-menu-mobile {
+    width: 34px;
+    height: 30px;
+    padding: 6px;
+    gap: 4px;
+    flex-shrink: 0;
+    flex: 0 0 34px;
+  }
+
+  .btn-menu-mobile__bar {
+    width: 20px;
+  }
+
+  /* =========================
+     LINKS FIXOS
+     ========================= */
 
   .topo-acoes-conteudo {
     margin-top: 0.7rem;
@@ -2632,45 +2719,60 @@ body.modo-simplificado * {
     padding: 0.12rem 0.06rem;
   }
 
+  /* =========================
+     HERO
+     ========================= */
+
   .hero {
-    padding: var(--espaco-2xl) 0 var(--espaco-2xl);
+    padding: var(--espaco-2xl) 0;
   }
 
-  .hero__titulo { font-size: 1.875rem; }
-  .hero__subtitulo { font-size: 1rem; }
+  .hero__titulo {
+    font-size: 2.5rem;
+    line-height: 1.05;
+    letter-spacing: -0.03em;
+  }
+
+  .hero__subtitulo {
+    font-size: 1rem;
+    line-height: 1.6;
+  }
+
+  .hero__acoes {
+    flex-direction: column;
+  }
+
+  .hero__acoes .btn {
+    width: 100%;
+    justify-content: center;
+  }
 
   .hero__numeros {
     gap: var(--espaco-md);
     flex-wrap: wrap;
   }
 
-  .hero__numero-divisor { display: none; }
+  .hero__numero-divisor {
+    display: none;
+  }
+
+  /* =========================
+     GRIDS
+     ========================= */
 
   .categorias__grid {
     grid-template-columns: repeat(2, 1fr);
   }
 
-  .sobre__pilares {
-    grid-template-columns: 1fr;
-  }
-
-  .empresas__grid {
-    grid-template-columns: 1fr;
-  }
-
+  .sobre__pilares,
+  .empresas__grid,
   .diferenciais__grid {
     grid-template-columns: 1fr;
   }
 
-  .footer__grid {
-    grid-template-columns: 1fr;
-    gap: var(--espaco-xl);
-  }
-
-  .footer__rodape {
-    flex-direction: column;
-    align-items: flex-start;
-  }
+  /* =========================
+     CTA FINAL
+     ========================= */
 
   .cta-final__acoes {
     flex-direction: column;
@@ -2682,13 +2784,43 @@ body.modo-simplificado * {
     justify-content: center;
   }
 
-  .hero__acoes {
-    flex-direction: column;
+  /* =========================
+     FOOTER
+     ========================= */
+
+  .footer__grid {
+    grid-template-columns: 1fr;
+    gap: var(--espaco-xl);
   }
 
-  .hero__acoes .btn {
-    width: 100%;
-    justify-content: center;
+  .footer__rodape {
+    flex-direction: column;
+    align-items: flex-start;
+  }
+
+  /* =========================
+     MENU MOBILE
+     ========================= */
+
+  .menu-mobile {
+    max-height: 80vh;
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 1024px) and (orientation: landscape) {
+  .menu-mobile {
+    max-height: calc(100vh - var(--altura-header) - var(--altura-barra-acess));
+    overflow-y: auto;
+    -webkit-overflow-scrolling: touch;
+  }
+}
+
+@media (max-width: 640px) {
+  .header__inner {
+    grid-template-columns: 1fr auto auto;
+    column-gap: 0.5rem;
   }
 }
 

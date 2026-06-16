@@ -119,7 +119,7 @@ async function fetchUserProfileByUid(uid) {
     const snapshot = await window.db.collection('usuarios').doc(uid).get();
     return snapshot.exists ? snapshot.data() : null;
   } catch (error) {
-    console.error('Falha ao buscar perfil do usuario para pre-preenchimento:', error?.code || error?.message || error);
+    console.error('Falha ao buscar perfil do usuário para pré-preenchimento:', error?.code || error?.message || error);
     return null;
   }
 }
@@ -309,9 +309,9 @@ function updatePaymentMethodState(items = getCartItems()) {
     submitButton.textContent = isPix
       ? 'Confirmar pagamento PIX'
       : isCard
-        ? 'Simular pagamento com cartao'
+        ? 'Simular pagamento com cartão'
         : isBoleto
-          ? 'Solicitar emissao de boleto'
+          ? 'Solicitar emissão de boleto'
           : 'Confirmar compra';
   }
 
@@ -325,7 +325,7 @@ async function fetchAddressByCep(rawCep) {
 
   if (cep.length !== 8) {
     if (cepStatus) {
-      cepStatus.textContent = 'Informe um CEP com 8 digitos para buscar o endereco.';
+      cepStatus.textContent = 'Informe um CEP com 8 dígitos para buscar o endereço.';
     }
     return;
   }
@@ -339,7 +339,7 @@ async function fetchAddressByCep(rawCep) {
     const data = await response.json();
 
     if (!response.ok || data.erro) {
-      throw new Error('CEP nao encontrado');
+      throw new Error('CEP não encontrado');
     }
 
     if (addressFields.logradouro) {
@@ -359,11 +359,11 @@ async function fetchAddressByCep(rawCep) {
     }
 
     if (cepStatus) {
-      cepStatus.textContent = 'Endereco preenchido a partir do CEP. Revise e complemente o numero.';
+      cepStatus.textContent = 'Endereço preenchido a partir do CEP. Revise e complemente o número.';
     }
   } catch {
     if (cepStatus) {
-      cepStatus.textContent = 'Nao foi possivel localizar esse CEP. Preencha o endereco manualmente.';
+      cepStatus.textContent = 'Não foi possível localizar esse CEP. Preencha o endereço manualmente.';
     }
   }
 }
@@ -372,7 +372,7 @@ function createEmptyState() {
   return `
     <div class="pagamento-vazio">
       <h3>Nenhum item pronto para checkout</h3>
-      <p>Volte ao catalogo, escolha produtos e retorne para concluir a compra.</p>
+      <p>Volte ao catálogo, escolha produtos e retorne para concluir a compra.</p>
       <a href="catalogo.html" class="btn btn--primary">Explorar produtos</a>
     </div>
   `;
@@ -380,7 +380,7 @@ function createEmptyState() {
 
 function createPaymentItem(item) {
   const quantity = Number(item.quantity) || 1;
-  const variationLabel = item.selectedVariation ? `<div class="pagamento-item__meta">Variacao: ${item.selectedVariation}</div>` : '';
+  const variationLabel = item.selectedVariation ? `<div class="pagamento-item__meta">Variação: ${item.selectedVariation}</div>` : '';
 
   return `
     <article class="pagamento-item" aria-label="${item.name}">
@@ -409,7 +409,7 @@ function updateSummary(items) {
   if (paymentSummaryText) {
     paymentSummaryText.textContent = items.length
       ? `${totalItems} item(ns) carregados do carrinho para este checkout.`
-      : 'Seus itens de checkout serao exibidos aqui.';
+      : 'Seus itens de checkout serão exibidos aqui.';
   }
 
   if (paymentAlert) {
@@ -471,10 +471,10 @@ paymentForm?.addEventListener('submit', async (event) => {
       window.showToast(`Pedido registrado com sucesso (ID: ${orderId}).`, 'Good_Toast');
     }
   } catch (error) {
-    console.error('Falha ao salvar pedido no Firestore:', error?.code || error?.message || error);
+    console.error('Falha ao salvar pedido:', error?.code || error?.message || error);
 
     if (typeof window.mostrarToast === 'function') {
-      window.showToast('Pedido processado localmente. Nao foi possivel registrar no Firebase agora.', 'Bad_Toast');
+      window.showToast('Pedido processado localmente. Não foi possível registrar no Firebase agora.', 'Bad_Toast');
     }
   }
 
@@ -483,10 +483,10 @@ paymentForm?.addEventListener('submit', async (event) => {
   if (typeof window.mostrarToast === 'function') {
     window.showToast(
       method === 'pix'
-        ? 'Pagamento PIX simulado com sucesso. Em producao, conecte a um PSP ou gateway com cobranca real.'
+        ? 'Pagamento PIX simulado com sucesso!'
         : method === 'cartao'
-          ? 'Transacao de cartao simulada com sucesso. Para teste real, use sandbox de um gateway.'
-          : 'Fluxo de boleto preparado com sucesso. Em producao, gere o titulo pelo financeiro ou gateway.',
+          ? 'Transação de cartão simulada com sucesso!'
+          : 'Fluxo de boleto preparado com sucesso!',
       'Good_Toast'
     );
   }
@@ -512,13 +512,13 @@ copyPixButton?.addEventListener('click', async () => {
   try {
     await navigator.clipboard.writeText(pixCodeField.value);
     if (typeof window.mostrarToast === 'function') {
-      window.showToast('Codigo PIX copiado para a area de transferencia.', 'Good_Toast');
+      window.showToast('Código PIX copiado para a área de transferência.', 'Good_Toast');
     }
   } catch {
     pixCodeField.select();
     document.execCommand('copy');
     if (typeof window.mostrarToast === 'function') {
-      window.showToast('Codigo PIX copiado para a area de transferencia.', 'Good_Toast');
+      window.showToast('Código PIX copiado para a área de transferência.', 'Good_Toast');
     }
   }
 });

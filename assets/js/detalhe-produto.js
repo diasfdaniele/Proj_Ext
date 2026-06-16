@@ -42,7 +42,7 @@ function renderDetalheProduto() {
   const produto = getAllProductsDetalhe().find(p => p.id === id);
   const container = document.getElementById('produto-detalhe');
   if (!produto) {
-    container.innerHTML = '<div class="produto-detalhe__vazio"><h2>Produto nao encontrado</h2><p>Volte ao catalogo para continuar navegando.</p></div>';
+    container.innerHTML = '<div class="produto-detalhe__vazio"><h2>Produto não encontrado</h2><p>Volte ao catálogo para continuar navegando.</p></div>';
     return;
   }
 
@@ -79,7 +79,7 @@ function renderDetalheProduto() {
     </div>
     <div class="produto-detalhe__info">
       <div class="produto-detalhe__breadcrumb">
-        <a href="catalogo.html" class="btn btn--ghost btn--sm">Voltar ao catalogo</a>
+        <a href="catalogo.html" class="btn btn--ghost btn--sm">Voltar ao catálogo</a>
       </div>
       <span class="produto-detalhe__categoria">${produto.categoryLabel || 'Marketplace Empr-E'}</span>
       <h2 class="produto-detalhe__titulo">${produto.name}</h2>
@@ -88,7 +88,7 @@ function renderDetalheProduto() {
       <p class="produto-detalhe__descricao">${produto.description}</p>
       <div class="produto-detalhe__resumo">
         <div class="produto-detalhe__painel">
-          <span class="produto-detalhe__painel-label">Preco</span>
+          <span class="produto-detalhe__painel-label">Preço</span>
           <div class="produto-detalhe__preco">${produto.price || 'Sob consulta'}</div>
         </div>
         <div class="produto-detalhe__painel">
@@ -162,7 +162,7 @@ function renderDetalheProduto() {
         selectedVariationImage: currentImage || null,
         selectedVariation: currentVariation?.nome || ''
       });
-      showToast('Produto Adicionado ao Carrinho!', 'Good_Toast', 900);
+      showToast('Produto adicionado ao carrinho!', 'Good_Toast', 900);
     }
   });
 }
